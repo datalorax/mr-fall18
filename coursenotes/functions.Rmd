@@ -1,0 +1,381 @@
+---
+title: "Functions to get comfy with"
+author: "Daniel Anderson"
+date: "10/15/2018"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This document outlines functions you should be familiar with and comfortable 
+using as we go through the content. There will be a heavy focus on the
+[tidyverse](https://www.tidyverse.org), which I have oriented the code-base
+around for the course.
+
+# Loading packages
+There are thousands of packages available to you once you install R. To use 
+them, you must install them once. You can install a package using
+`install.packages`. For example, if you wanted to install the 
+[{lme4}](https://github.com/lme4/lme4) for multilevel modeling, you could do so
+with 
+
+```{r install-package, eval = FALSE}
+install.packages("lme4")
+```
+
+You only have to run this code once. However, you don't actually have access to
+the functions within {lme4} until you load the package. **You must load 
+packages each time you want to use them**. Load a package with the `library`
+function
+
+```{r library, eval = FALSE}
+library(lme4)
+```
+
+For the purposes of this class, we will primarily be using the following
+packages. You will want to load these packages in just about every script (and
+make sure they're all installed using the code above for each individual
+package).
+
+```{r load-packages, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+```
+
+# Importing data
+You should be comfortable with importing data. I've recommend you use RStudio
+projects with the {here} package and a consistent folder structure. See the
+course notes entitled "Workflows & Importing Data" for more information.
+
+# Linear model `lm`
+
+The workhorse for this class is `lm`, which stands for linear model, and is how
+you fit linear regression models within R. The basics arguments are a formula,
+outlining the model to be fit, and the data source for the model. The formula
+is used as follows
+
+```{r eval = FALSE}
+outcome ~ predictor1 + predictor2 + ... predictor_N
+```
+where outcome represents the column name (from your dataset) for your dependent
+variable, the tilde (`~`) essentially represents the equals sign, usually read
+"modeled as", and  `predictor1 + predictor2 + ... predictor_N` represent all 
+the variables in the model that are presumed to relate to the outcome/dependent
+variable, with each variable separated by `+`. 
+
+### `lm` example
+
+Using the mtcars dataset from base R, we can fit a model using engine
+displacement, horsepower, drag ration, and weight to predict miles per gallon
+using the following code
+
+```{r m1a}
+m1 <- lm(formula = mpg ~ disp + hp + drat + wt, 
+         data = mtcars)
+```
+
+Notice I have stored the results of this model into an object, which I've 
+called `m1`, using the assignment operator `<-`. I have also explicitly named
+the arguments here, but because this is the order the arguments appear in by
+default (see `?lm` for help documentation listing the arguments and their
+default ordering), I could also omit the argument names. In other words, the
+code below is equivalent
+
+```{r m1b}
+m1 <- lm(mpg ~ disp + hp + drat + wt, mtcars)
+```
+
+This is how I will more typically write models. Notice the predictors are
+separated with `+`, and the comma separates the formula from the data source.
+
+### Seeing model output
+Now that we've fit the model, we likely want to see the output. We do that by
+calling functions on the `m1` object we created, which as stored the results of
+our model. The most basic function, is summary
+
+```{r summary}
+summary(m1)
+```
+
+In the slides, however, I typically use `arm::display` for no other reason than
+that it is more compact and so it fits on the slides easier.
+
+```{r display1}
+arm::display(m1, detail = TRUE)
+```
+
+Note in the above, I'm using name-spaceing `::`. In other words, I'm accessing
+and using a function from a package without explicitly loading it. The below
+code is equivalent
+
+```{r no_namespace, eval = FALSE}
+library(arm)
+display(m1, detail = TRUE)
+```
+
+If you like the output from `arm::display` you are encouraged to use it, but
+`summary` works just as well.
+
+### Categorical variables
+To model categorical variables, you have to first define each column as a
+factor. See the section on factors below.
+
+
+# The pipe (`%>%`)
+The pipe takes an argument from the left side, and feeds it into a function on
+the right side as its first argument. For example, the following two lines of
+code are the same. They both display the first six rows of the *mtcars* data
+frame using the `head` function.
+
+```{r pipe1}
+head(mtcars)
+mtcars %>%
+	head()
+```
+
+If you pipe an argument into a function, you can supply other arguments to the
+function immediately. For example, the following are also equivalent.
+
+```{r pipe2}
+head(mtcars, 2)
+mtcars %>%
+	head(2)
+```
+
+### Why use the pipe?
+The pipe becomes extremely useful when you have multiple "things" you want to
+accomplish with a dataset without using a bunch of intermediary steps. It also
+makes the code much, much cleaner. For example, the below works, but is very
+difficulty to parse in your head - i.e., what's actually happening? You pretty
+much have to run the code to find out.
+
+```{r pipe3}
+summarize(group_by(filter(select(mtcars, mpg, cyl, gear), cyl < 8), gear), mean = mean(mpg))
+```
+
+By contrast, the same code could be written as
+
+```{r pipe4}
+mtcars %>%
+	select(mpg, cyl, gear) %>%
+	filter(cyl < 8) %>%
+	group_by(gear) %>%
+	summarize(mean = mean(mpg))
+```
+
+The above code chunk makes it far more clear that we are taking the mtcars
+dataframe, selecting the mpg, cyl, and gear columns from it, filtering for rows
+where the cylinders are less than 8, and grouping by the gear category so we 
+can compute a summary variable (the mean) separately for each gear.
+
+One of the confusing parts about the pipe is that some people keep thinking 
+back to the original data frame that was fed into the "pipeline", but each time
+the modified data frame is what is passed to the next function, not the 
+original data frame. This can be more clear by running the pipeline line by
+line.
+
+# `mutate`
+The `mutate` function is used to create or modify existing variables. For
+example, imagine we wanted to create a variable in the mtcars dataset that
+measured the power to weight ratio, using `hp` and `wt`. We could do so as
+follows:
+
+```{r mutate1}
+mtcars %>%
+	mutate(power_wt_ratio = hp/wt)
+```
+
+The name that comes after `mutate` will become the new column name in the
+dataset, and it will be defined by whatever operations are on the right hand
+side of the equals sign.
+
+What is maybe confusing, however, is that if we now look at the mtcars dataset,
+the variable is not there
+
+```{r mutate2}
+head(mtcars)
+```
+
+This is because in the previous code, we didn't actually store the data into a
+new object. **You must use the assignment operator to store the result**. The
+code below will create the new variable and store it in a new object, 
+`mtcars2`.
+
+```{r mutate3}
+mtcars2 <- mtcars %>%
+	mutate(power_wt_ratio = hp/wt)
+head(mtcars2)
+```
+
+Note that we now have two data objects, `mtcars` and `mtcars2`, with the former
+being the original data frame and the latter being the modified data frame with
+our new object.
+
+```{r mutate4}
+head(mtcars)
+head(mtcars2)
+```
+
+Of course, we also could have just overwritten the original `mtcars` data frame
+instead.
+
+### Overwriting existing variables
+You can use `mutate` in pretty much the exact same way to overwrite existing
+variables as well. For example, let's say we wanted to standardize the
+horsepower variable so it had a mean of zero and a standard deviation of one. 
+Standardization is defined by $x_s = \frac{x_i - \bar{X}}{sd(X)}$. In words,
+this means we subtract the mean from each value of a variable, then divide that
+value by the standard deviation. The below code will overwrite the `hp` 
+variable to standardize it.
+
+```{r mutate5}
+mtcars <- mtcars %>%
+	mutate(hp = (hp - mean(hp)) / sd(hp))
+head(mtcars)
+```
+Note that I have not only overwritten the `hp` column within mtcars, but I've
+actually overwritten the `mtcars` object (by re-assigning it with `<-`). 
+
+# `group_by` and `summarize`
+One of the ways to verify that the summarization has worked properly is to
+calculate the mean and standard deviation of the variable. If it has worked as
+it should, the mean should be zero and the standard deviation should be one. We
+can calculate any summary statistics (e.g., mean, median, min/max, etc.) using
+the summarize function. 
+
+One of the slightly confusing parts about summarize is that **summarize 
+will create a new data frame for you**. This means you need to provide it with
+column names. To compute the mean and the standard deviation of the
+standardized variable we would create a data frame that has two columns, one 
+for the mean and one for the standard deviation, as follows
+
+```{r summarize1}
+mtcars %>%
+	summarize(mean_hp = mean(hp),
+	          sd_hp   = sd(hp))
+```
+
+Values that are very small or very large in R display in scientific notation.
+You can turn this off if you want with `options(scipen = 999)`. Regardless, the
+above says that our mean is very very close to zero (and would round to zero 
+out to 16 decimal places). 
+
+Even though it's only one row, the output is actually a data frame. Note
+however, that I have not stored the results in an object. Rather, I have just
+printed the results to the screen. If you did want to store it in an object, 
+you certainly could, but **it is imerative that you not overwrite your data
+object with the summarized data frame** through something like
+
+```{r summarize2, eval = FALSE}
+mtcars <- mtcars %>%
+	summarize(mean_hp = mean(hp),
+	          sd_hp   = sd(hp))
+```
+
+If you ran the above, you would not longer have your raw data, but just a
+summary of the data. You would then need to go back up into your code and
+re-import the data, and change the name of the summarized object to something
+else (e.g., `hp_smry`).
+
+### Summaries by a variable
+One of the nice parts about the tidyverse is that it allows you to be very
+efficient and make large changes with just a short amount of code. For example,
+let's say that I was interested in group means. That is, rather than knowing 
+the overall mean and standard deviation of our standardized horsepower
+variables, which we expected to be 0/1, we might want to know the mean for cars
+within each cylinder category. We can do this by just adding one additional 
+line to the code above, stating the variable we want to "group by" - i.e., the
+variable we want separate summaries by.
+
+```{r summarize3}
+mtcars %>%
+	group_by(cyl) %>%
+	summarize(mean_hp = mean(hp),
+	          sd_hp   = sd(hp))
+```
+
+Part of what is nice about this, is that I can swap out the variable easily.
+Let's look instead by `gear`.
+
+```{r summarize4}
+mtcars %>%
+	group_by(gear) %>%
+	summarize(mean_hp = mean(hp),
+	          sd_hp   = sd(hp))
+```
+
+Or, maybe I want to look by combinations of `cyl` and `gear`. I can also do 
+that easily by just adding the two variables to `group_by`, separated by a
+comma.
+
+```{r summarize5}
+mtcars %>%
+	group_by(cyl, gear) %>%
+	summarize(mean_hp = mean(hp),
+	          sd_hp   = sd(hp))
+```
+
+Notice in this case we get some `NA` values, likely because there's no data in
+those in those particular combinations.
+
+# `factor`
+When you're modeling categorical data in R, you have to first define it as a
+factor. That will then create an internal contrast matrix for you, dummy-coding
+the data. This is particularly important when the categorical variable is
+defined by numbers. By default, the `lm` function will treat any numbers as
+continuous data. For example, if we fit the following model
+
+```{r lm-wrong}
+wrong_coding <- lm(mpg ~ cyl + gear, mtcars)
+summary(wrong_coding)
+```
+
+You can see we get a single coefficient for `cyl` and `gears`. These are then
+interpreted just like a standard continuous variable. So we would say something
+like, "For every one unit increase in cylinders, miles per gallon is expected
+to decrease by `r round(abs(coef(wrong_coding)[2]), 2)` units, while
+controlling for the number of gears." You could make a case that this is what
+you want, but it may be better to conceptualize both of these variables as
+categorical variables. We do that by re-defining the variables as factors.
+
+```{r factor1}
+mtcars <- mtcars %>%
+	mutate(cyl = factor(cyl),
+	       gear = factor(gear))
+```
+
+Then, when we re-fit the model, `lm` will view the variables as categorical and
+provide separate coefficients for each category (minus a reference category).
+
+```{r lm2}
+m2 <- lm(mpg ~ cyl + gear, mtcars)
+summary(m2)
+```
+
+Notice that the code for fitting the model *has not changed*. What has changed,
+is the underlying data. 
+
+Once we have defined a variable as a factor (and not before then), we can use
+the `levels` function to see what  unique levels are represented within the
+factor.
+
+```{r levels}
+levels(mtcars$cyl)
+levels(mtcars$gear)
+```
+
+This is helpful for interpreting our model, because the reference group is the
+one that is "left out" -- i.e., the category that does not have a coefficient.
+Here that would be `cyl == 4` and `gear == 3`. So we would say the average 
+miles per gallon for cars with four cylinders and three gears was 
+`r round(coef(m2)[1], 2)`. All of the coefficients are the relatie to this 
+mean. So cars with six cylinders had, on average, 
+`r abs(round(coef(m2)[2], 2))` miles per gallon less, controlling for gear.  
+
+
