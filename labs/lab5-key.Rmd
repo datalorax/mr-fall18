@@ -1,0 +1,152 @@
+---
+title: "Lab 5 Key"
+author: "Daniel Anderson"
+date: "10/14/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+Copy and paste your code from class to load the hsb2 data into the chunk below. This will get you access to the data within your R Markdown file. Make sure you store your data in an object called `d`.
+
+```{r load-data}
+library(tidyverse)
+library(here)
+library(rio)
+theme_set(theme_minimal())
+
+d <- import(here("data", "hsb2.sav"),
+            setclass = "tbl_df") %>% 
+  characterize()
+```
+
+```{r head}
+head(d)
+```
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+1. Display a histogram of `write`
+
+```{r hist-write}
+ggplot(d, aes(x = write)) +
+  geom_histogram(bins = 30, 
+                 alpha = 0.7)
+```
+
+Does the distribution approximate normality?
+
+---
+The distribution is slightly negatively skewed, but overall approximates 
+normality sufficiently.
+---
+
+
+2. Display a scatterplot with `write` on the x-axis and `read` on the y-axis. Display separate plots by `schtyp` (whether the school is private or public) with both a linear and nonlinear regression line overlayed for each.
+
+```{r scatter}
+ggplot(d, aes(x = write, y = read)) +
+  geom_point(color = "gray70") +
+  #geom_smooth() +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = "magenta") +
+  facet_wrap(~schtyp)
+```
+
+Does assumption of linearity appear tenable in each case?
+
+---
+Yes, the standard errors are overlapping pretty much throughout for both plots.
+---
+
+
+Does the assumption of homoskedasticity appear tenable?
+
+---
+There is some evidence that the assumption is volated for private schools, but
+overall it looks okay. We will need to follow up with further plots after
+fitting the model
+---
+
+
+3. In the code chunk below, fit a model with `schtyp` (whether the school is private or public) and `write` predicting `read`. Set public schools as the reference group.
+
+```{r fit-mod}
+d <- d %>% 
+  mutate(schtyp = factor(schtyp),
+         schtyp = relevel(schtyp, ref = "public"))
+
+m1 <- lm(read ~ write + schtyp, data = d)
+summary(m1) 
+```
+
+Fill out the below, providing your interpretation of each:
+
+The intercept represents: 
+  * The average score for students attending public who scored a zero on the 
+    writing measure
+
+The coefficeint for `write` represents: 
+  * For every one unit increase on the writing measure students scored, on 
+    average, 0.64 points higher on the reading measure, when controlling for
+    school type (public versus private).
+    
+The standard error around the `write` coefficient indicates:
+  * The uncertainty of the estimate - technically, the standard deviation of
+    the theoretical sampling distribution.
+    
+The model accounted for 35% of the variance in reading scores, indicating
+the joint contribution of school type and writing scores significantly 
+predicted students reading scores ($p < 0.01$).
+
+
+4. Use the model to calculate confidence intervals around the coefficeints.
+
+```{r cis}
+confint(m1)
+```
+
+Interpret the CI for the intercept
+
+---
+We can be 95% confident that the true population mean on the reading measure 
+for students in public schools who scored a zero on the writing measure is
+somewhere between 11.65 and 24.74.
+---
+
+5. Produce a plot of the fitted values against the model residuals. 
+
+```{r fitted-resids}
+pd <- fortify(m1)
+
+ggplot(pd, aes(.fitted, .resid)) +
+  geom_point() +
+  geom_smooth()
+```
+
+Interpret the plot.
+
+---
+There is no visible relation between the fitted values and the model residuals,
+and the variance around the LOESS regression line appears roughly even.
+---
+
+6. Use Cook's Distance to identify influential cases. What cases are most influential?
+
+```{r cooks_d}
+d <- d %>% 
+  mutate(cooks_d = cooks.distance(m1))
+d
+ggplot(d, aes(id, cooks_d)) +
+  geom_label(aes(label = id))
+```
+
+Case 175 is the most influential. However, the value is somewhere around 0.06,
+which is very small and likely not unduly influential.

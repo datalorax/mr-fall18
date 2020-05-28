@@ -1,0 +1,135 @@
+---
+title: "Lab 6"
+author: "Your Name Here"
+date: "10/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+Copy and paste your code from class to load the *glo_sim.sav* data into the 
+chunk below. 
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(here)
+library(rio)
+
+d <- import(here(),
+            setclass = "tbl_df") 
+```
+
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+```{r head}
+head(d)
+```
+
+# Scenario
+A randomized control trial is being conducted on an intervention designed to 
+reduce girls engagement in risky sexual behavior. The variable `condition`
+within the dataset states whether the participant was in the control or
+intervention condition. 
+
+Fit a model evaluating the effect of the intervention, controlling for the age
+of the participant and their adverse childhood experiences score (aces), on
+their sexual risk score.
+
+```{r hist-write}
+d <- d %>% 
+  mutate()
+
+m1 <- 
+
+```
+
+
+Calculate the squared semipartial correlations
+
+```{r scatter}
+library(lmSupport)
+
+
+```
+
+In the space below, briefly explain the results of the investigation. Interpret
+the coefficient for the intervention. Reference the unique variance accounted
+for by the intervention, as well as the uncertainty of the estimate.
+
+
+---
+
+Delete this text and place your response here.
+
+---
+
+Modify the code below to produce a coefficient plot
+
+```{r coefplot}
+tidy_pd <- tidy()
+
+ggplot(tidy_pd, aes()) +
+
+```
+
+
+In the chunk below, fit the same model as above, but with the intervention
+variable removed. 
+
+```{r reduced-mod}
+reduced_m1 <- 
+```
+
+
+In the chunk below provde a summary of the full model and the reduced model. 
+Calculate the difference in the Model $R^2$ from the two models.
+
+```{r model-summaries}
+
+```
+
+
+In the space below, describe how your calculation corresponded to the squared
+semi-partial correlation you calculated previously. Explain why the values
+are or are not similar.
+
+---
+
+Delete this text and place your response here.
+
+---
+
+
+Produce a plot to inspect outliers in the code chunk below. I've provided some
+sample code can use, or you can use alternative methods if you'd prefer.
+
+```{r }
+d <- d %>%
+	mutate()
+
+ggplot(d, aes() +
+		geom_label(aes(label = ))
+```
+
+Produce a plot of the fitted values against the model residuals in the chunk
+below
+
+```{r }
+ggplot( ,aes( )) +
+	
+```
+
+Do you notice anything in these plots that appears concerning?
+
+---
+
+Delete this text and place your response here.
+
+---

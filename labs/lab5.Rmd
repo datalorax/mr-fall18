@@ -1,0 +1,91 @@
+---
+title: "Lab 5"
+author: "Daniel Anderson"
+date: "10/14/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+Copy and paste your code from class to load the hsb2 data into the chunk below. This will get you access to the data within your R Markdown file. Make sure you store your data in an object called `d`.
+
+```{r load-data}
+d <- 
+```
+
+```{r head}
+head(d)
+```
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+1. Display a histogram of `write`
+
+```{r hist-write}
+ggplot(d, aes())
+```
+
+Does the distribution approximate normality?
+
+2. Display a scatterplot with `write` on the x-axis and `read` on the y-axis. Display separate plots by `schtyp` (whether the school is private or public) with both a linear and nonlinear regression line overlayed for each.
+
+```{r scatter}
+ggplot(d, aes()) +
+  facet_wrap(~ )
+```
+
+Does assumption of linearity appear tenable in each case?
+
+Does the assumption of homoskedasticity appear tenable?
+
+3. In the code chunk below, fit a model with `schtyp` (whether the school is private or public) and `write` predicting `read`. Set public schools as the reference group.
+
+```{r fit-mod}
+d <- d %>% 
+  mutate(schtyp = )
+
+m1 <-
+summary(m1) 
+```
+
+Fill out the below, providing your interpretation of each:
+
+The intercept represents:
+The coefficeint for `write` represents:
+The standard error around the `write` coefficient indicates:
+The model accounted for ___% of the variance in reading scores, indicating:
+
+
+4. Use the model to calculate confidence intervals around the coefficeints.
+
+```{r cis}
+
+```
+
+Interpret the CI for the intercept
+
+5. Produce a plot of the fitted values against the model residuals. 
+
+```{r fitted-resids}
+pd <- fortify()
+
+ggplot(pd, aes())
+```
+
+Interpret the plot.
+
+6. Use Cook's Distance to identify influential cases. What cases are most influential?
+
+```{r cooks_d}
+d <- d %>% 
+  mutate(cooks_d = )
+
+ggplot(d, aes()) +
+  geom_label(aes(label = ))
+```

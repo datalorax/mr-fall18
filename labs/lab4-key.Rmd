@@ -1,0 +1,237 @@
+---
+title: "Week 4 Lab"
+author: "Key"
+date: "10/8/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+# Data prep
+Place the `adoption.csv` dataset into the "data" folder in your RStudio
+project. Complete the code below to load the data.
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(here)
+library(rio)
+
+d <- import(here("data", "adoption.csv"),
+            setclass = "tbl_df")
+```
+
+Look at the first six rows of the dataset to ensure it read in correctly
+```{r head}
+head(d)
+```
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+See the `about-adoption.html` for more information about the data.
+
+# The scenario
+You're working with your colleague on an adoption study related to toddler
+behavior problems. You want to address the following three research questions.
+
+1. What is the relation between prenatal drug use by the mother and child
+	behavior problems at 18 months old, after controlling for birth mother
+	psychopathology ratings?
+
+2. How does the structure provided by the adoptive parents and their openness
+	to adoption relate to toddler behavior problems?
+
+3. How does the distress children display to limitations and novel situations
+	relate to their overall behavior problems, when controlling for the structure
+	provided by adoptive parents?
+
+
+# Lab problems
+1. In the code chunk below, fit a model addressing Research Question 1. Set no
+	prenatal drug use as the reference group.
+
+```{r fit-rq1}
+d <- d %>% 
+  mutate(prenatal_drug = factor(prenatal_drug),
+         prenatal_drug = relevel(prenatal_drug, 
+                                 ref = "No Parent Prenatal drug use"))
+m1 <- lm(behav_prob_score ~ prenatal_drug + bm_psychopathology, d)
+summary(m1)
+```
+
+* Provide interpretations for the intercept and slope(s) in the space provided
+below.
+	+ Include tests of significance within your discussion
+* Discuss the model $R^2$. Does the model account for more than chance
+	variation?
+
+
+----
+
+### Explanation
+
+The expected problem behavior score when parents did not use drugs and 
+psychopathology ratings were zero was 45.29, which was the model intercept.
+Children whose birth mother used drugs prenatally scored 0.06 points less on
+the behavior problems measure, on average, but this difference was not 
+significant. For every one unit increase in birth mother psychopathology
+ratings students behavior problem scores were reduced by 0.14 points, on 
+average, which was also not significant. Overall, the model accounted for
+less than 1% of the total variability in behavioral problem scores, which
+was not significant (p = 0.96), indicating the model did not account for 
+more than chance variation in the outcome.
+
+----
+
+
+In the code chunk below, calculate confidence intervals for the coefficients.
+
+```{r confint-rq1}
+confint(m1)
+```
+
+Provide an interpretation of these confidence intervals
+
+----
+
+### Explanation
+The expected problem behavior score when parents did not use drugs and 
+psychopathology ratings were zero was 45.29. We can be 95% confident that the
+true mean for this group actually lied between 44.12 and 46.46. Similarly
+we can be 95% confidence that the difference between this mean, and the mean
+for children whose mother used drugs prenatally, was between 1.64 points less
+and 1.53 points more.
+
+
+----
+
+
+2. In the code chunk below, fit a model addressing Research Question 2.
+
+```{r fit-rq2}
+m2 <- lm(behav_prob_score ~ struc_parenting + openness, d)
+summary(m2)
+```
+
+* Interpret the model (including the intercept, slopes, model $R^2$, and
+significance of both the individual coefficients and the model overall).
+
+----
+
+### Explanation
+
+The average problem behavior score for children with parents who scored a zero
+on the structured parenting measure and a zero on the opennness measure was 
+45.21, which represented the model intercept. For every one unit increase
+in structured parenting, child behavior problems dropped by 0.08 units, on 
+average, when controlling for openness ratings. However, this relation was
+not significant. Similarly, a one-unit increase in opnness scores corresponded
+to, on average, a 0.97 unit increase in child behavior problem scores, when
+controlling for structured parenting scores. This relation was significant,
+indicating the relation was unlikely due to random sampling variability. 
+Overall, however, the model only accounted for approximately 2% of the total
+variability, which was not significant.
+
+----
+
+
+Use the code chunk below to provide confidence intervals.
+
+```{r ci-rq2}
+confint(m2)
+```
+
+Provide an interpretation of the confidence intervals.
+
+
+----
+
+### Explanation
+
+The average problem behavior score for children with parents who scored a zero
+on the structured parenting measure and a zero on the opennness measure was 
+45.21, and we can be 95% confident that the true population mean was lied
+somewhere between 44.47 and 45.96. A one-unit increase in opnness scores 
+corresponded to, on average, a 0.97 unit increase in child behavior problem 
+scores, when controlling for structured parenting scores, and we can be 95%
+confident that the true mean change with every one unit increase ranged from
+0.15 to 1.79.
+
+
+----
+
+3. How does the distress children display to limitations and novel situations
+	relate to their overall behavior problems, when controlling for the structure
+	provided by adoptive parents?
+
+3. In the code chunk below, fit a model addressing Research Question 3.
+
+```{r fit-rq3}
+m3 <- lm(behav_prob_score ~ distresslim + distressnov, d)
+summary(m3)
+```
+
+* Interpret the model (including the intercept, slopes, model $R^2$, and
+significance of both the individual coefficients and the model overall).
+
+
+----
+
+### Explanation
+
+The average problem behavior score for children who displayed no distress to
+limitations and no distress to novel siutations was 45.12, which represented the
+model intercept. For every one unit increase in distress to limitations, child
+behavior problems increased by 2.84 units, on average, when controlling for
+openness ratings, which was significant (t = 6.851, p < 0.05). A one-unit
+increase in distress to novel situations corresponded to, on average, a 0.07
+unit drop in child behavior problem scores, on average, when controlling for
+structured parenting scores, which was not significant. Overall, the model only
+accounted for approximately 15% of the total variability, which was significant,
+F(2, 295) = 26.17, p < 0.05.
+
+----
+
+
+Use the code chunk below to provide confidence intervals.
+
+```{r ci-rq3}
+confint(m3)
+```
+
+Provide an interpretation of the confidence intervals.
+
+
+----
+
+### Explanation
+
+The average problem behavior score for children who displayed no distress to
+limitations and no distress to novel siutations was 45.12. The true population 
+mean likely lied between 44.43 and 45.81, which represented the lower and 
+upper bounds of the 95% confidence interval. Similarly, the average increase
+in child behavior problems with a one unit increase in distress to limitations
+was 2.84; the 95% confidence intervals indicated this effect may be between 
+2.02 and 3.66.
+
+----
+
+
+4. If time allows, use the data to address an additional research question of
+	your choice, using the code chunk below. Provide confidence intervals, and
+	interpret the coefficients, significance, model $R^2$, and CIs.
+
+```{r new-rq}
+
+
+```
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----

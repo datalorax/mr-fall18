@@ -1,0 +1,110 @@
+---
+title: "Lab 8"
+author: "Your Name Here"
+date: "11/13/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+In the code chunk below, load the appropriate libraries and import the 
+depression dataset.
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+d <- 
+
+```
+
+## Scenario
+You'd like to evaluate the impact of income and age on depression scores. To do
+this, you'd like to show the unique effect of these variables beyond 
+other demographic variables.
+
+1. Fit a model predicting depression scores that contains the following set
+of variables (as control variables). `relig`, `drink`, `health`, and `chronill`.
+
+```{r m1-fit}
+m1 <- lm()
+```
+
+2. Fit a second model that includes your two variables of interest, `income` 
+and `age`, in addition to the control variables from your first model
+
+```{r m2-fit}
+m2 <- 
+```
+
+3. Provide a test of the difference between the model $R^2$ for these models.
+Do you see significant differences?
+
+```{r test}
+
+```
+
+Calculate Akaike Weights for the two models
+
+```{r aic-weights1}
+
+```
+
+Provide a substantive interpretation of the model comparisons below.
+
+---
+
+Delete this text and place your response here.
+
+---
+
+4. Fit a third model that models the effect of income as dependent on age (the
+ idea being that at certain ages not having enough money may be more impactful
+ on depression than others). Include all the same variables that were 
+ previously in your model.
+ 
+```{r m3}
+
+```
+
+5. Provide a test of the difference between the model $R^2$ for the model with
+the interaction compared to the model without.
+
+```{r test-m3}
+
+```
+
+Calculate Akaike Weights for all three models
+
+```{r aic-weights2}
+
+```
+
+Provide a substantive interpretation of the model comparisons below.
+
+---
+
+Delete this text and place your response here.
+
+---
+
+6. Provide a plot of the interaction
+
+```{r int-plot}
+library(visreg)
+
+```
+
+Provide a substantive interpretation of the plot.
+
+---
+
+Delete this text and place your response here.
+
+---

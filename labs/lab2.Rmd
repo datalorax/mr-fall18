@@ -1,0 +1,114 @@
+---
+title: "Lab 2"
+author: "Your Name Here"
+date: "9/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE, error = TRUE)
+```
+
+Before getting started, place this file in the project folder we started during
+class. Click the "knit" button near the top of RStudio. You should get an HTML
+output. If not raise your hand and I will come help you. Once you have
+successfully knit the file, you can proceed with the rest of the lab.
+
+
+## Scenario
+Due to staffing shortages, the California Department of Education is looking
+into increasing the number of emergency credentialed hires. They provide you
+with a dataset, `elemapi.sav`, which includes a random sample of schools in
+California and their corresponding API score, which is an accountability index
+used to judge school quality. The dataset also contains a number of other
+variables, including a column `emer` corresponding to the percentage of
+emergency hires in each school. They have asked for your advice as to whether
+such an approach would be a good idea or not, and have asked you to support
+your position with evidence from the supplied data.
+
+
+1. Load the data. Below, I've gotten you started by loading the packages you'll
+  need, as well as code you will need to fill in.
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+
+d <- import(here(),
+            setclass = )
+```
+
+1. Use a few functions to explore the data (e.g., show the first few rows, show
+	 the structure, dimensions, etc.)
+
+```{r, show-data}
+
+```
+
+2. Fill in and extend the ggplot code below to produce a scatterplot of the
+relation between the percentage of emergency hires in a school and their
+corresponding API score
+
+```{r plot1}
+ggplot(d, aes()) +
+```
+
+Copy and paste the code you wrote above and paste it in the chunk below. Add a
+layer displaying the *linear* relation between the variables. 
+
+```{r plot2}
+
+```
+
+What do you make of this relation? Write your interpretation below.
+
+
+3. Fill in the code chunk below to fit the corresponding model.
+
+```{r m1}
+m1 <- 
+```
+Display a summary of the model. What do you make of the model? Put your
+interpretation below, specifically stating what the coefficients (intercept and
+slope) represent.
+
+
+
+4. After providing your results and interpretation to the state department, one
+member of the team states that she is concerned that the results are confounded
+by the sample of students within the school. She cites previous research
+indicating that the percentage of students eligible for free or reduced price
+lunch at the school strongly predicts the school API score. She would like you
+to re-do the analysis, controlling for this variable (in the dataset as
+"meals").
+
+Fit the model requested below
+
+```{r m2}
+m2 <- 
+```
+
+Display a summary of the model. What do you make of the results? Has your
+interpretation changed? Put your interpretation below, specifically stating
+what each coefficient represents, and why this has or has not changed your
+interpretation.
+
+
+
+5. Display the conditional slope of the percentage of emergency credentialed
+hire and their corresponding API scores, controlling for the proportion of
+students eligible for free or reduced price lunch. 
+
+```{r plot3}
+library(visreg)
+
+```
+
+
+6. Copy and paste all the code you used during class in the code chunk below.
+
+```{r class-notes}
+
+
+```

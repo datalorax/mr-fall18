@@ -1,0 +1,128 @@
+---
+title: "Lab 7"
+author: "Your Name Here"
+date: "11/06/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+In the code chunk below, load the appropriate libraries and import the elemapi 
+dataset.
+
+```{r load-data, message = FALSE, warning = FALSE}
+
+
+d <- 
+
+```
+
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+```{r head}
+head(d)
+```
+
+# Scenario
+The state department of education in California is interested in evaluating the average gain in API scores (an accountability index) by lunch category. Each row in this dataset represents a school.
+
+Use ggplot to visualize the relation between API 99 and API 00 by meal 
+category. 
+
+```{r plot1}
+ggplot()
+```
+
+In the space below, explain if it appears that an interaction is justified or 
+not
+
+---
+
+Delete this text and place your response here.
+
+---
+
+
+Fit the following model in the code chunk below. Fit the model with schools 
+between 47-80% as the reference group.
+
+$$
+api_{2000_i} = b_0 + b_1(api_{1999_i}) + b_2(meal_{cat_i}) + e
+$$
+
+```{r m1}
+d <- d %>% 
+  mutate()
+
+m1 <- lm()
+summary(m1)
+```
+
+In the space below, explain why this model does or does not correspond with the 
+plots you displayed above.
+
+---
+
+Delete this text and place your response here.
+
+---
+
+
+Is the intercept meaningful in `m1`? Why or why not?
+
+---
+
+Delete this text and place your response here.
+
+---
+
+In the code chunk below, re-fit the model to make the intercept meaningful.
+
+```{r meaningful-intercept}
+d <- d %>% 
+  mutate()
+
+m1c <- 
+summary(m1c)
+```
+
+Interpret the intercept in the space below.
+
+
+---
+
+Delete this text and place your response here.
+
+---
+
+
+In the code chunk below, extend the model above to specify meal category as a
+moderator of the API 1999 slope.
+
+
+```{r hist-write}
+m2 <- lm()
+summary(m2)
+```
+
+In the code chunk below, include any other follow-up investigations you would 
+like to help you interpret the model. Following these analyses, interpret the
+model as a whole in the space below the code chunk.
+
+```{r follow-up}
+
+```
+
+
+---
+
+Delete this text and place your response here.
+
+---

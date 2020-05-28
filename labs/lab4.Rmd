@@ -1,0 +1,182 @@
+---
+title: "Week 4 Lab"
+author: "Your Name Here"
+date: "10/8/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+# Data prep
+Place the `adoption.csv` dataset into the "data" folder in your RStudio
+project. Complete the code below to load the data.
+
+```{r load-data}
+library(tidyverse)
+library(here)
+library(rio)
+
+d <- import(here(),
+            setclass = )
+```
+
+Look at the first six rows of the dataset to ensure it read in correctly
+```{r head}
+
+```
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+See the `about-adoption.html` for more information about the data.
+
+# The scenario
+You're working with your colleague on an adoption study related to toddler
+behavior problems. You want to address the following three research questions.
+
+1. What is the relation between prenatal drug use by the mother and child
+	behavior problems at 18 months old, after controlling for birth mother
+	psychopathology ratings?
+
+2. How does the structure provided by the adoptive parents and their openness
+	to adoption relate to toddler behavior problems?
+
+3. How does the distress children display to limitations and novel situations
+	relate to their overall behavior problems, when controlling for the structure
+	provided by adoptive parents?
+
+
+# Lab problems
+1. In the code chunk below, fit a model addressing Research Question 1. Set no
+	prenatal drug use as the reference group.
+
+```{r fit-rq1}
+
+```
+
+* Provide interpretations for the intercept and slope(s) in the space provided
+below.
+	+ Include tests of significance within your discussion
+* Discuss the model $R^2$. Does the model account for more than chance
+	variation?
+
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----
+
+
+In the code chunk below, calculate confidence intervals for the coefficients.
+
+```{r confint-rq1}
+
+```
+
+Provide an interpretation of these confidence intervals
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----
+
+
+2. In the code chunk below, fit a model addressing Research Question 2.
+
+```{r fit-rq2}
+
+```
+
+* Interpret the model (including the intercept, slopes, model $R^2$, and
+significance of both the individual coefficients and the model overall).
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----
+
+
+Use the code chunk below to provide confidence intervals.
+
+```{r ci-rq2}
+
+
+```
+
+Provide an interpretation of the confidence intervals.
+
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----
+
+
+3. In the code chunk below, fit a model addressing Research Question 3.
+
+```{r fit-rq3}
+
+```
+
+* Interpret the model (including the intercept, slopes, model $R^2$, and
+significance of both the individual coefficients and the model overall).
+
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----
+
+
+Use the code chunk below to provide confidence intervals.
+
+```{r ci-rq3}
+
+
+```
+
+Provide an interpretation of the confidence intervals.
+
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----
+
+
+4. If time allows, use the data to address an additional research question of
+	your choice, using the code chunk below. Provide confidence intervals, and
+	interpret the coefficients, significance, model $R^2$, and CIs.
+
+```{r new-rq}
+
+
+```
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response
+
+----

@@ -1,0 +1,60 @@
+---
+title: "lab1"
+author: "Your Name Here"
+date: "9/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+
+
+Another dataset built into R is called Iris, and has measurements of different
+iris flowers.
+
+1. View the iris dataset by running the following lines of code.
+
+```{r view-iris}
+head(iris)
+View(iris)
+```
+
+2. Complete the following code to add points to the plot, making a scatterplot
+showing the relation between the sepal width and the sepal length.
+	+ Continue to modify the code to overlay a linear regression model.
+	+ Is the relation positive or negative?
+	+ Describe in words the strength of the association
+
+```{r scatter1}
+ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length)) +
+```
+
+3. Estimate the correlation by completing the following code.
+
+```{r corr}
+cor(iris$ , iris$ )
+```
+
+How does the strength of this relation correspond to Cohen's standards?
+
+
+4. Modify the following code to estimate a linear regression model, with sepal
+width predicting sepal length.
+
+```{r model}
+m <- lm(formula = , data = )
+```
+
+5. Interpret the intercept and regression coefficient in words.
+	+ What proportion of the variability is sepal length is accounted for by the
+		sepal width?
+
+6. Use the `predict` with the fitted model to predict each sepal length in the
+	 dataset.
+	 + Calculate the regression sum of squares
+	 + Calculate the residual sum of squares
+	 + Calculate the total variance
+	 + Calculate $R^2$
+	 + Calculate the residual standard error

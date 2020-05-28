@@ -1,0 +1,118 @@
+---
+title: "Lab 9"
+author: "Your Name Here"
+date: "11/13/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+In the code chunk below, load the appropriate libraries and import the 
+longitudinal.csv dataset.
+
+```{r load-data, message = FALSE, warning = FALSE}
+
+d <- 
+```
+
+## Scenario
+You'd like to evaluate how much students change from one timepoint to the next. 
+You've been advised that the best way to do this is with multi-level modeling,
+but you haven't taken that class yet, so you want to play around with some 
+preliminary modeling. 
+
+1. Use ggplot to display the relation between wave and math scores.
+
+```{r vis}
+ggplot(d, aes())
+```
+
+Discuss what you see in the plot below
+
+---
+
+Delete this text and place your response here.
+
+---
+
+2. Fit a linear model with wave predicting their math score. This is model for
+the average growth across time points. It will assume that all students started
+at the same point and made the same growth over time (which is why you need
+multilevel modeling to get away from these assumptions).
+   
+```{r growth}
+m1 <- 
+
+```
+
+Interpret the model below.
+
+---
+
+Delete this text and place your response here.
+
+---
+
+3. Model a quadratic trend below. Display a summary of the models and 
+interpret them below.
+
+```{r quadratic}
+m2 <- lm()
+
+```
+
+---
+
+Delete this text and place your response here.
+
+---
+
+
+4. Display the fitted quadratic model over the observed data points. Overlay
+   a linear trend as well (make the lines different colors to distinguish them)
+
+```{r fitted}
+d <- d %>% 
+  mutate()
+
+ggplot(d, aes())
+```
+
+
+5. Compare the competing models (linear versus quadratic)
+
+```{r compare}
+
+```
+
+Which model would you preference? State why below.
+
+---
+
+Delete this text and place your response here.
+
+---
+
+6. Moving forward with your chosen model, model the different intercepts/slopes
+for each free/reduced price lunch category. Set Non-FRL as the reference group.
+
+```{r different-slopes}
+d <- d %>% 
+  mutate()
+
+m3 <- lm()
+```
+
+Provide an interpretation of the coefficients below.
+
+---
+
+Delete this text and place your response here.
+
+---

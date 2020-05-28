@@ -1,0 +1,125 @@
+---
+title: "Lab 8"
+author: "Key"
+date: "11/13/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+In the code chunk below, load the appropriate libraries and import the 
+depression dataset.
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+d <- import(here("data", "depression.xlsx"),
+            setclass = "tbl_df") %>% 
+  characterize()
+d
+```
+
+## Scenario
+You'd like to evaluate the impact of income and age on depression scores. To do
+this, you'd like to show the unique effect of these variables beyond 
+other demographic variables.
+
+1. Fit a model predicting depression scores that contains the following set
+of variables (as control variables). `relig`, `drink`, `health`, and `chronill`.
+
+```{r m1-fit}
+m1 <- lm(depression_score ~ relig + drink + health + chronill, d)
+summary(m1)
+```
+
+2. Fit a second model that includes your two variables of interest, `income` 
+and `age`, in addition to the control variables from your first model
+
+```{r m2-fit}
+m2 <- update(m1, ~ . + income + age, d)
+summary(m2)
+```
+
+3. Provide a test of the difference between the model $R^2$ for these models.
+Do you see significant differences?
+
+```{r test}
+anova(m1, m2)
+```
+
+Calculate Akaike Weights for the two models
+
+```{r aic-weights1}
+library(sundry)
+aic_weights(m1, m2)
+```
+
+Provide a substantive interpretation of the model comparisons below.
+
+---
+
+The model including income and age significantly reduced the residual 
+variance, $F = 12.67, p < 0.05$. Akaike's informatin criteria was also 
+reduced by more than 21 points, providing very little support for the reduced
+model.
+
+---
+
+4. Fit a third model that models the effect of income as dependent on age (the
+ idea being that at certain ages not having enough money may be more impactful
+ on depression than others). Include all the same variables that were 
+ previously in your model.
+ 
+```{r m3}
+m3 <- update(m2, ~ . + income:age)
+summary(m3)
+```
+
+5. Provide a test of the difference between the model $R^2$ for the model with
+the interaction compared to the model without.
+
+```{r test-m3}
+anova(m2, m3)
+```
+
+Calculate Akaike Weights for all three models
+
+```{r aic-weights2}
+aic_weights(m1, m2, m3)
+```
+
+Provide a substantive interpretation of the model comparisons below.
+
+---
+
+The residual variance was not significantly reduced by the inclusion of the 
+interaction, while AIC was reduced by roughly half a point. The AIC weights
+therefore indicated that both models with/without the interaction were equally
+probable, and the more parsimonious model is therefore preferred.
+
+---
+
+6. Provide a plot of the interaction
+
+```{r int-plot}
+library(visreg)
+visreg(m3, "income", by = "age", overlay = TRUE)
+```
+
+Provide a substantive interpretation of the plot.
+
+---
+
+As income increases depression scores generally decrease. However, as age increases, the impact of income becomes less negative. However, because the 
+interaction was not significant, these differences were likely due to random
+sampling variability, and it is likely that the effect of income does not 
+actually depend upon the age of the individual.
+
+---

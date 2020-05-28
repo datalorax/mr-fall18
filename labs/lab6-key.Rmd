@@ -1,0 +1,156 @@
+---
+title: "Lab 6 Key"
+author: "Daniel Anderson"
+date: "10/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Data prep
+
+Copy and paste your code from class to load the *glo_sim.sav* data into the 
+chunk below. 
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(here)
+library(rio)
+theme_set(theme_minimal())
+
+d <- import(here("data", "glo_sim.sav"),
+            setclass = "tbl_df") %>% 
+  characterize()
+d
+```
+
+
+Knit the file immediately. If you get an error from the chunk below, keep working until your data are loaded correctly (and get help if you need it).
+
+```{r head}
+head(d)
+```
+
+# Scenario
+A randomized control trial is being conducted on an intervention designed to 
+reduce girls engagement in risky sexual behavior. The variable `condition`
+within the dataset states whether the participant was in the control or
+intervention condition. 
+
+Fit a model evaluating the effect of the intervention, controlling for the age
+of the participant and their adverse childhood experiences score (aces), on
+their sexual risk score.
+
+```{r hist-write}
+d %>% 
+  mutate(condition = factor(condition),
+         condition = relevel(condition, ref = "Control"))
+m1 <- lm(sex_risk ~ condition + age + aces, d)
+summary(m1)
+```
+
+
+Calculate the squared semipartial correlations
+
+```{r scatter}
+library(lmSupport)
+modelEffectSizes(m1)
+```
+
+In the space below, briefly explain the results of the investigation. Interpret
+the coefficient for the intervention. Reference the unique variance accounted
+for by the intervention, as well as the uncertainty of the estimate.
+
+
+---
+
+The model suggests that, when controlling for ACEs and age,  girls in the 
+intervention condition had a significantly higher sexual risk scores 
+($b = 0.23, SE = 0.10, t = 2.23, p = 0.03$) than girls in the control
+condition. Overall, the model accounted for approximately 38% of the total 
+variability in sexual risk scores, while the intervention uniquely accounted
+for 2.7% of the total variability. 
+
+---
+
+Modify the code below to produce a coefficient plot
+
+```{r coefplot}
+library(broom)
+tidy_pd <- tidy(m1, conf.int = TRUE)
+
+ggplot(tidy_pd, aes(term, estimate)) + 
+  geom_hline(yintercept = 0, 
+             color = "cornflowerblue") +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high)) +
+  coord_flip()
+```
+
+
+In the chunk below, fit the same model as above, but with the intervention
+variable removed. 
+
+```{r reduced-mod}
+reduced_m1 <- lm(sex_risk ~  aces + age, d)
+```
+
+
+In the chunk below provde a summary of the full model and the reduced model. 
+Calculate the difference in the Model $R^2$ from the two models.
+
+```{r model-summaries}
+summary(m1)
+summary(reduced_m1)
+0.383 - 0.3563
+```
+
+
+In the space below, describe how your calculation corresponded to the squared
+semi-partial correlation you calculated previously. Explain why the values
+are or are not similar.
+
+---
+
+The difference in the $R^2$ values is exactly the same because the squared 
+semi-partial correlation represents the unique variance accounted for by the 
+model, which can also be estimated by looking at the differences in the model
+$R^2$ between two models with only one variable differing.
+
+---
+
+
+Produce a plot to inspect outliers in the code chunk below. I've provided some
+sample code can use, or you can use alternative methods if you'd prefer.
+
+```{r }
+d <- d %>%
+	mutate(cook_d = cooks.distance(m1))
+
+ggplot(d, aes(id, cook_d)) +
+		geom_label(aes(label = id))
+```
+
+Produce a plot of the fitted values against the model residuals in the chunk
+below
+
+```{r }
+ggplot(m1, aes(.fitted, .resid)) + 
+  geom_point() +
+  geom_smooth()
+```
+
+Do you notice anything in these plots that appears concerning?
+
+---
+
+No. Even the largest Cook's D is very small and likely not unduly influential. 
+Although there is possibly a slight relation with the fitted/residual plot, 
+and there is some evidence of heteroskedasticy, the violations are unlikely to
+have much effect on the overall model results.
+
+---

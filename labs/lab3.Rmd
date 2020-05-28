@@ -1,0 +1,120 @@
+---
+title: "Lab 3"
+author: "Your Name Here"
+date: "10/4/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+Your colleague, Dr. Nittenperl comes to you with a puzzled, frustrated look and
+a dataset in hand. She explains that she has been trying to determine the extent
+to which  gender, handed-ness, and type of project (i.e. scarf, hat, or sweater)
+relate to overall knitting speed for subjects in her latest study. She would
+like to determine how each variable predicts knitting speed and has run the
+analysis, but generated some highly improbable results. She is also struggling
+to interpret how working on a scarf vs. a sweater impacts knitting speed, and is
+unsure of how to interpret the b’s for her dichotomous variables. She asks if
+you can take a look at her dataset and results to help her solve this analytical
+puzzle.
+
+Dr. Nittenperl shares the following script. Run these lines of code after
+putting her dataset in a folder called "data" within your RStudio Project for
+this lab.
+
+```{r nittenperl-script}
+library(tidyverse)
+library(here)
+library(rio)
+
+d <- import(here("data", "coding-lab.sav"),
+            setclass = "tbl_df")
+
+m1a <- lm(speed ~ gender + handedness + project, data = d)
+summary(m1a)
+```
+
+1.	Based on the script above, explain what your colleague has
+done wrong as if you were explaining the situation to her. (Note: Be sure to
+explain how her errors are linked to the results she generated.)
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response to Question 1
+
+---
+
+
+2.	Suggest an alternate approach that will enable your colleague to
+run her regression. Provide the code for her to take this alternate approach
+below, and then run it yourself. 
+
+```{r mutate}
+d <- d
+  mutate(gender = ,
+         handedness = ,
+         project = )
+```
+
+Re-run the analysis with this alternate coding scheme and provide some sample
+interpretation for her after.
+
+```{r m1b}
+m1b <- 
+```
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response to Question 1
+
+---
+
+
+In talking further with your colleague, she reveals that what she would also
+really like to know the effect of gender on knitting speed, compared to average
+knitting speed across genders.
+
+3.	Recommend a coding process where she could run a simple linear regression
+that generates (a) an intercept that reflected the average knitting speed,
+regardless of gender, and (b) a parameter estimate that reflected the effect of
+gender on knitting speed compared to overall mean knitting speed. Specifically 
+mention which R function she should explore further.
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response to Question 1
+
+---
+
+If time allows, make the transformation below, run the model, and provide 
+her with sample interpretation.
+
+```{r m2}
+contrasts(d$gender) <- 
+m2 <- 
+```
+
+
+----
+
+### Explanation
+
+Delete this text and replace it with your response to Question 1
+
+---
+
+
+4. Copy/paste your notes from class into the code chunk below
+
+```{r class-notes}
+
+```
