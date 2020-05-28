@@ -1,0 +1,162 @@
+---
+title: "Diagnostics Exercise Key"
+author: "Daniel Anderson"
+date: "Due: November 6, 2018"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Content Knowledge
+
+1. Explain what a residual plot of the model residuals versus predicted values might look like when a model that violates the linearity assumption.
+
+<font color = "#3BAADE">
+
+The residual plot would have a systematic relationship, generally having a “U” shape, inverse U shape, or linear. 
+
+</font>
+
+
+2. Explain what a residual plot of studentized deleted residuals versus predicted values might look like when a model that violates the homoscedasticity (equal variance) assumption.
+
+<font color = "#3BAADE">
+
+The spread of residuals would not be equal around zero (e.g., the residuals might display a “cone” shape).
+
+</font>
+
+3. True/False: Regression models may be biased even when all model assumptions are met. Explain your answer
+
+<font color = "#3BAADE">
+
+**True**. Outlier cases that are the result of data entry or other error in the system (i.e., research design) may have undue influence on the regression results.
+
+</font>
+
+4. True/False: Outlier cases distort regression models and should be removed prior to interpretation. Explain your answer.
+
+<font color = "#3BAADE">
+
+**False**. Outlier cases should be investigated for their influence on the regression model. Further, “true” outlier cases can be quite meaningful. Discarding data should be done with care, not haphazardly. If a case is found to have undue influence on the regression results, and the case is either substantively not meaningful or can be traced back to an error, removal is likely warranted. 
+
+</font>
+
+
+# Applied Practice
+
+1. Use the code chunk below to import the "diagnostics.sav" dataset
+
+```{r diagnostic-practice, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+theme_set(theme_minimal())
+
+d <- import(here("data", "diagnostics.sav"),
+            setclass = "tbl_df") %>% 
+  characterize()
+```
+
+We will fit the following model
+
+$$
+weight_{yc} = b_0 + b1(weight_{m}) + b2(age_{yc}) + e_i
+$$
+Where
+* $weight_{yc}$ represents the weight of the youngest child, provided by the 
+  variable `ycweight`.
+* $weight_{m}$ represents the weight of the mother, provided by the variable
+  `mweight`.
+* $age_{yc}$ represents the age of the youngest child, provided by the variable
+  `ycage`.
+  
+2. In the code chunk below, I have started some ggplot code. Extend the code to
+display a histogram of `ycweight`. Produce two additional plots displaying 
+histograms of mother's weight and the youngest child age.
+
+```{r histograms}
+ggplot(d, aes(ycweight)) +
+  geom_histogram(alpha = 0.7)
+
+ggplot(d, aes(mweight)) +
+  geom_histogram(alpha = 0.7)
+
+ggplot(d, aes(ycage)) +
+  geom_histogram(alpha = 0.7)
+```
+
+3. Fit the corresponding model in the code chunk below. Estimate confidence 
+intervals for the parameter estimates.
+
+```{r model}
+m <- lm(ycweight ~ mweight + ycage, d)
+summary(m)
+confint(m)
+```
+
+Interpret the model below. Write as if you were reporting for publication.
+
+---
+
+<font color = "#3BAADE">
+
+When mothers had a weight of zero (an impossible value), and the youngest child
+was zero years old, their expected weight was -89.23 pounds, with a 95% 
+confidence interval spanning -140.24 pounds to -38.22 pounds. Thus, while the
+coefficeint was significant, it was estimated with considerable uncertainty.
+The weight of the youngest child was expected to increase approximately 0.43
+pounds for every one pound heavier the mother was, with a 95% CI ranging 
+from 0.19 to 0.67, controlling for the age of the child. Given that the CI
+did not cross zero, this value was  significant ($t(21) = 3.69, p = 0.001$).
+Age was entered primarily as a control variable and thus was not interpreted. 
+
+Overall, the model including age and mother's weight accounted for 
+approximately 72% of the total variability in the weight of youngest children, 
+which was also significant $F(2, 21) = 27.39, p < .001)$. 
+
+</font>
+---
+
+
+4. Calculate Cook's distance for every observation and plot the results. Do
+you see evidence for outliers?
+
+```{r cook_d}
+d <- d %>% 
+  mutate(cook_d = cooks.distance(m))
+
+ggplot(d, aes(id, cook_d)) +
+  geom_label(aes(label = id))
+```
+
+<font color = "#3BAADE">
+Yes, Case 42 is has a Cook's Distance of over 2.0, and is far different from
+other cases.
+</font>
+
+5. Refit the model with the most severe outlier removed. 
+
+```{r refit}
+m_ss <- lm(ycweight ~ mweight + ycage, d,
+           subset = id != 42)
+summary(m_ss)
+summary(m)
+```
+
+Describe (in one or two sentences) how the model results have or have not 
+changed and recommended some next steps. Should the outlier be removed? 
+Investigated more? 
+
+<font color = "#3BAADE">
+The model $R^2$ has increased and the intercept has changed dramatically, as
+has the coefficient for mother's weight, the primary variable under 
+investigation. This case should be investigated more. If it is found to be a 
+genuine value then the results should likely be reported with and without the 
+outlier case included.
+</font>

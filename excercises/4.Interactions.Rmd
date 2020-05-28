@@ -1,0 +1,161 @@
+---
+title: "Interactions"
+author: "Your Name Here"
+date: "Due: November 20, 2018"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+```
+
+
+# Content Knowledge
+
+1. Describe in everyday (non-statistical) language (a) what an interaction is,
+   (b) what it allows you to evaluate, and (c) how models with interactions differ
+   from models without interactions.
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+
+2. Briefly (3 sentences max) describe the process of centering and describe 
+   why it can be helpful.
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+
+3. Briefly (3 sentences max) describe the interpretation of standardized 
+   coefficients. Compare/contrast their interpretation in simple and multiple
+   linear regression.
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+
+# Applied Practice
+
+1. Use the code chunk below to import the "adoption.sav" dataset
+
+```{r data-import, message = FALSE, warning = FALSE}
+
+d <- 
+  
+
+```
+
+The specific research question for this study relates to the relation between
+structured parenting levels (`struc_parenting`) and children's distress to
+novel situation (`distressnov`) with children's overall behavioral problems 
+(the dependent variable). 
+
+In the code chunk below, produce at least two exploratory plots that relate to 
+the research purpose.
+
+```{r plots}
+ggplot(d, )
+
+```
+
+
+In the code chunk below, fit a model that addersses the research 
+purpose using a parallel slopes model. Fit the model such that the intercept
+represents the average behavior problem score for children who displayed 
+average distress to novel situations and had parents who provided average
+strucuture.
+
+```{r m1}
+d <- d %>% 
+  mutate()
+
+m1 <- 
+
+```
+
+Provide a full interpretation of the model below. Use the code chunk above to 
+run any other functions you may need to provide this interpretation (but do not
+change the model itself).
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+
+2. Refit the model in the code chunk below to specify structured parenting 
+   as a moderator of the distress to novel situations slope. 
+   
+```{r m2}
+m2 <- 
+  
+```
+
+Interpret the refit model below, relative to the first model. Make sure to,
+at minimum, interpret the coefficient for the interaction. You may again run
+any other functions you'd like to aid your interpretation within the chunk 
+above.
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+3. Calculate standardized coefficients for m2 in the code chunk below, then 
+interpret the standardized coefficients for the interaction term below.
+
+```{r standardized-coefs}
+
+```
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+
+3. Modify the code below to produce a coefficient plot of m2.
+
+```{r coefplot}
+library(broom)
+tidy_pd <- tidy()
+
+ggplot(tidy_pd, )
+```
+
+4. Investigate the assumptions of m2 in the code chunk below. Following your
+investigation, report whether or not you think the model meets the assumptions.
+
+```{r model-diagnostics}
+
+```
+
+
+----
+
+Delete this text and place your response here.
+
+----
+
+

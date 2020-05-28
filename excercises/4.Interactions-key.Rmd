@@ -1,0 +1,258 @@
+---
+title: "Interactions"
+author: "Key"
+date: "Due: November 20, 2018"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE)
+?tidyr::separate
+```
+
+
+And according to [@wind18] blah balh 
+
+# Content Knowledge
+
+1. Describe in everyday (non-statistical) language (a) what an interaction is,
+   (b) what it allows you to evaluate, and (c) how models with interactions differ
+   from models without interactions.
+
+----
+
+An interaction allows the analyst to evaluate if the effect or impact of 
+something, say, an intervention, depends on something else. In other words, 
+under certain conditions the effect may be very large, but under other
+conditions it is small. Including models with interaction terms allows the
+analyst to evaluate whether this is the case or not be evaluating how an effect 
+or relation differs (or does not differ) across levels of another variable. 
+These models differ from other models by essentially allowing one variable to 
+have multiple slopes, one for each level of the theoretical moderator, rather
+than parallel slopes across the variable.
+
+----
+
+
+2. Briefly (3 sentences max) describe the process of centering and describe 
+   why it can be helpful.
+
+----
+
+Centering is when you subtract a constant value - often the grand mean - from a 
+variable. It is helpful because (a) it can often help make the intercept more
+interpretable, and (b) it can reduce collinearity in the model, particularly 
+when variables are created from other varaibles in the data.
+
+----
+
+3. Briefly (3 sentences max) describe the interpretation of standardized 
+   coefficients. Compare/contrast their interpretation in simple and multiple
+   linear regression.
+
+----
+
+Standardized coefficients represent the expected standard deviation change in
+the outcome, given a one standard deviation increase in the corresponding IV.
+The interpretation in MR is the same as other coefficients - the expected SD
+change while controlling for all other variables in the model. In simple 
+linear regression, the standardized coefficient is equivalent to Pearson's
+correlation.
+
+----
+
+
+# Applied Practice
+
+1. Use the code chunk below to import the "adoption.sav" dataset
+
+```{r data-import, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+theme_set(theme_minimal())
+
+d <- import(here("data", "adoption.csv"),
+            setclass = "tbl_df") 
+head(d)
+```
+
+The specific research question for this study relates to the relation between
+structured parenting levels (`struc_parenting`) and children's distress to
+novel situation (`distressnov`) with children's overall behavioral problems 
+(the dependent variable). 
+
+In the code chunk below, produce at least two exploratory plots that relate to 
+the research purpose.
+
+```{r plots}
+ggplot(d, aes(struc_parenting, behav_prob_score)) +
+  geom_point(color = "gray70") +
+  geom_smooth(method = "lm")
+
+ggplot(d, aes(distressnov, behav_prob_score)) +
+  geom_point(color = "gray70") +
+  geom_smooth(method = "lm")
+
+d %>% 
+  mutate(distressnov_cut = cut(distressnov, 5)) %>% 
+  ggplot(aes(struc_parenting, behav_prob_score)) +
+  geom_point(color = "gray70") +
+  geom_smooth(method = "lm",
+              aes(color = distressnov_cut))
+
+d %>% 
+  mutate(distressnov_cut = cut(distressnov, 5)) %>% 
+  ggplot(aes(struc_parenting, behav_prob_score)) +
+  geom_point(color = "gray70") +
+  geom_smooth(method = "lm",
+              aes(color = distressnov_cut)) +
+  facet_wrap(~distressnov_cut) +
+  theme(legend.position = "top")
+```
+
+
+In the code chunk below, fit a model that addersses the research 
+purpose using a parallel slopes model. Fit the model such that the intercept
+represents the average behavior problem score for children who displayed 
+average distress to novel situations and had parents who provided average
+strucuture.
+
+```{r m1}
+d <- d %>% 
+  mutate(struc_parenting_c = scale(struc_parenting, scale = FALSE),
+         distressnov_c = scale(distressnov, scale = FALSE))
+
+m1 <- lm(behav_prob_score ~ struc_parenting_c + distressnov_c, data = d)
+summary(m1)
+confint(m1)
+lmSupport::modelEffectSizes(m1)
+```
+
+Provide a full interpretation of the model below. Use the code chunk above to 
+run any other functions you may need to provide this interpretation (but do not
+change the model itself).
+
+
+----
+
+Children who displayed distress to novel situations equal to the sample 
+average, with parents who exhibited structured parenting levels equal to the
+sample average, had an average behavioral problem score of 45.27. The lower
+and upper bounds of the 95% confidence interval were 44.52 and 46.01, 
+respectively. Structured parenting levels did not significantly relate to
+problem behavior scores, while controlling for distress to novel situations. 
+By contrast, distress to novel situations did significantly relate to child
+behavior problem scores, with a one unit increase in destress to novel 
+situations corresponding to, on average, a 0.91 unit increase in child
+behavior problem scores ($SE = 0.42, t(295) = 2.16, p = 0.03$). The model
+overall accounted for 1.6% of the total variance in child behavior problem
+scores, which was nearly entirely uniquely attributable to distress to novel
+situations.
+
+----
+
+
+2. Refit the model in the code chunk below to specify structured parenting 
+   as a moderator of the distress to novel situations slope. 
+   
+```{r m2}
+m2 <- lm(behav_prob_score ~ struc_parenting_c + distressnov_c +
+                            struc_parenting_c:distressnov_c, data = d)
+summary(m2)
+confint(m2)
+lmSupport::modelEffectSizes(m2)
+```
+
+Interpret the refit model below, relative to the first model. Make sure to,
+at minimum, interpret the coefficient for the interaction. You may again run
+any other functions you'd like to aid your interpretation within the chunk 
+above.
+
+
+----
+
+The model including the interaction changed the intercept marginally, to 45.31
+(95% CI: 44.57, 46.05). The interaction between structured parenting and 
+distress to novel situations was significant, indicating that a one unit 
+increase in structured parenting levels increased the distress to novel
+situations slope by 1.01 units ($SE = 0.44, t(294) = 2.31, p = 0.02$). Overall,
+the model accounted for approximately 33% of the total variability, with
+essentially none of the variaibility uniquely attributable to structured
+parenting, and the total variability being roughly evenly split between the
+interaction term and distress to novel situations.
+
+----
+
+3. Calculate standardized coefficients for m2 in the code chunk below, then 
+interpret the standardized coefficients for the interaction term below.
+
+```{r standardized-coefs}
+library(lm.beta)
+lm.beta(m2)
+```
+
+
+
+----
+
+A one standard deviation increase in structured parenting corresponded to, on average, a 0.13 standard deviation increase in the distress to novel situations
+slope.
+
+----
+
+
+3. Modify the code below to produce a coefficient plot of m2.
+
+```{r coefplot}
+library(broom)
+tidy_pd <- tidy(m2, conf.int = TRUE)
+
+ggplot(tidy_pd, aes(term, estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high)) +
+  geom_hline(yintercept = 0, color = "cornflowerblue") +
+  coord_flip()
+```
+
+4. Investigate the assumptions of m2 in the code chunk below. Following your
+investigation, report whether or not you think the model meets the assumptions.
+
+```{r model-diagnostics}
+ggplot(m2, aes(.fitted, .resid)) +
+  geom_point(color = "gray70") +
+  geom_smooth() +
+  geom_smooth(method = "lm",
+              color = "magenta")
+
+d <- d %>% 
+  mutate(cooks_d = cooks.distance(m2))
+
+ggplot(d, aes(id, cooks_d)) +
+  geom_label(aes(label = id))
+
+d %>% 
+  select(cooks_d) %>% 
+  arrange(desc(cooks_d))
+```
+
+
+
+----
+
+The plot of the fitted values against the model residuals displayed evidence of 
+a relation indicating possible divergence from the independence of observations
+assumption. However, when a linear model was fit to the relation instead of a 
+LOESS regression,  the line was nearly perfectly flat and centered on zero, 
+indicating that the relation observed with LOESS regression was likely due
+to a few outlier points.
+
+In terms of outliers, none of the points displayed evidnece of being unduly 
+influential on the regression space, with the largest Cook's D being less than
+0.07.
+
+----
+
+

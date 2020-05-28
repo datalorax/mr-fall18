@@ -1,0 +1,208 @@
+---
+title: "Coding Exercise"
+author: "Your Name Here"
+date: "October 2nd, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE, error = TRUE)
+```
+
+Before getting started, place this file in the project folder we started during
+class. Click the "knit" button near the top of RStudio. You should get an HTML
+output. If not raise your hand and I will come help you. Once you have
+successfully knit the file, you can proceed with the rest of the lab.
+
+
+## Scenario
+A local school district is interested in how their third grade students are 
+performing on an end-of-year tests. There have been major efforts to reduce
+achievement disaprities. For this particular investigation, they are 
+primarily interested in how large the achievement gaps remain on the end of 
+year tests. A secondary question, however, relates to how large student gains
+in reading are from the fall to the spring, while controlling for specific 
+student demographics.
+
+1. Place the "benchmarks.xlsx" dataset (from Canvas) into a folder in your 
+RStudio Project called "data". Using the code chunk below, fill in the 
+code to load the data into R and store it in an object, `d`. 
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(rio)
+library(here)
+d <- import(here(),
+            setclass = "tbl_df")
+```
+
+2. In the code-chunk below, use a few functions to explore the data.
+
+```{r, show-data}
+
+```
+
+# Research Question 1
+> What are the average differences on the spring reading measure among students
+receiving English language learner services by ethnicity?
+
+3. Modify the code chunk below to define all categorical variables as factors.
+
+```{r factorize, message = FALSE, warning = FALSE}
+library(tidyverse)
+d <- d %>% 
+  mutate(sped = ,
+         ethnicity = ,
+         frl = ,
+         ell = )
+```
+
+
+4. Write the code to display boxplots of students' spring reading scores 
+by ELL status and ethnicity. Hint: You will need to either use `facet_wrap` or
+add an additional aesthetic (`fill` or `color`) to the boxplot layer.
+
+```{r boxplots}
+ggplot(d, aes()) +
+  
+```
+
+4. Fit the corresponding model
+
+$$
+rdg_{spr} = b_0 + b_1(ELL_i) + b_2(Ethnicity_i) + e
+$$
+
+```{r m1a}
+m1a <- 
+  
+```
+
+Provide a substantive interpretation of the model below, making sure to 
+interpret the intercept and at least one slope from each group, as well as the
+model $R^2$.
+
+----
+
+#### Substantive Interpretation
+
+Enter your text here
+
+
+----
+
+5. Modify the code below to change the reference group to Students identifying
+as "White" who did not receive English language services. Remember, you'll need
+use the `relevel` function.
+
+```{r change-ref-group}
+d <- d %>% 
+  mutate(ell = ,
+         ethnicity = )
+```
+
+6. Re-fit the model
+
+```{r m1b}
+m1b <- 
+  
+```
+
+Has the variance accounted for by the model changed? Why?
+
+Provide a brief substantive interpretation of the re-fit model.
+
+
+----
+
+#### Substantive Interpretation
+
+Enter your text here
+
+----
+
+# Research Question 2
+> What is the average reading score gain from fall to spring, controlling for
+ethnicity?
+
+7. Write code using ggplot to visualize the relation between the fall and 
+spring reading scores, using spring as the outcome. Display the linear 
+regression line.
+
+```{r scatter1}
+ggplot(d, aes()) +
+  
+```
+
+Copy and paste the code you wrote above and paste it in the chunk below. Add 
+an additional aesthetic to the smoothed layer to display separate lines by 
+English language learner status (ell column).
+
+```{r scatter2}
+
+```
+
+Provide some substantive interpretation of the above plot.
+
+
+----
+
+#### Substantive Interpretation
+
+Enter your text here
+
+
+----
+
+8. Fill in the code chunk below to fit the following model to address the 
+research question.
+
+$$
+rdg_{spr_i} = b_0 + b_1(rdg_{fall_i}) + b_2(Ethnicity_i) + e
+$$
+
+```{r m2a}
+m2a <- 
+
+```
+
+Display a summary of the model. Put your interpretation below, specifically 
+stating what the coefficients (intercept and slope) represent. Does this model 
+correspond to the plot you've displayed above? Why or why not?
+
+
+----
+
+#### Substantive Interpretation
+
+Enter your text here
+
+----
+
+9. Modify the code chunk below to change the contrasts for ethnicity to effect
+coding .
+
+```{r effect-code}
+contrasts(d$ethnicity) <- 
+```
+
+10. Refit the model
+
+```{r effect-coded-mod}
+m2b <- 
+  
+```
+
+Interpret the model with the effect-coded ethnicity variable. Again note why 
+$R^2$ was or was not changed, state what the intercept represents, and 
+interpret the coefficients substantively.
+
+
+----
+
+#### Substantive Interpretation
+
+Enter your text here
+
+----
+
+Knit the document and upload it to Canvas.

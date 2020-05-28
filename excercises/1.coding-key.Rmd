@@ -1,0 +1,275 @@
+---
+title: "Coding Exercise"
+author: "Key"
+date: "October 2nd, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE, error = TRUE)
+```
+
+Before getting started, place this file in the project folder we started during
+class. Click the "knit" button near the top of RStudio. You should get an HTML
+output. If not raise your hand and I will come help you. Once you have
+successfully knit the file, you can proceed with the rest of the lab.
+
+
+## Scenario
+A local school district is interested in how their third grade students are 
+performing on an end-of-year tests. There have been major efforts to reduce
+achievement disaprities. For this particular investigation, they are 
+primarily interested in how large the achievement gaps remain on the end of 
+year tests. A secondary question, however, relates to how large student gains
+in reading are from the fall to the spring, while controlling for specific 
+student demographics.
+
+1. Place the "benchmarks.xlsx" dataset (from Canvas) into a folder in your 
+RStudio Project called "data". Using the code chunk below, write the 
+appropriate code to load the data into R and store it in an 
+object, `d`. As a reminder, you will need two packages to import the data: 
+{here} and {rio}. Look back to Lab 2 if you are having trouble.
+
+```{r load-data, message = FALSE, warning = FALSE}
+library(rio)
+library(here)
+d <- import(here("data", "benchmarks.xlsx"),
+            setclass = "tbl_df")
+```
+
+2. Use a few functions to explore the data (e.g., show the first few rows, show
+	 the structure, dimensions, etc.)
+
+```{r, show-data}
+head(d)
+str(d)
+```
+
+# Research Question 1
+> What are the average differences on the spring reading measure among students
+receiving English language learner services by ethnicity?
+
+3. Modify the code chunk below to define all categorical variables as factors.
+
+```{r factorize, message = FALSE, warning = FALSE}
+library(tidyverse)
+d <- d %>% 
+  mutate(sped = factor(sped),
+         ethnicity = factor(ethnicity),
+         frl = factor(frl),
+         ell = factor(ell))
+```
+
+
+4. Write the code to display boxplots of students' spring reading scores 
+by ELL status and ethnicity. Hint: You will need to either use `facet_wrap` or
+add an additional aesthetic (`fill` or `color`) to the boxplot layer.
+
+```{r boxplots}
+theme_set(theme_minimal())
+ggplot(d, aes(ell, rdg_spr)) +
+  geom_boxplot(aes(fill = ethnicity))
+
+ggplot(d, aes(ell, rdg_spr)) +
+  geom_boxplot() +
+  facet_wrap(~ethnicity)
+```
+
+4. Fit the corresponding model
+
+$$
+rdg_{spr} = b_0 + b_1(ELL_i) + b_2(Ethnicity_i) + e
+$$
+
+```{r m1a}
+m1a <- lm(rdg_spr ~ ell + ethnicity, d)
+arm::display(m1a, detail = TRUE)
+```
+
+Provide a substantive interpretation of the model below, making sure to 
+interpret the intercept and at least one slope from each group, as well as the
+model $R^2$.
+
+----
+
+#### Substantive Interpretation
+The combination of ELL status and students' identified ethnicity accounted for 
+23% of the total variance in the spring mathematics outcome. Students coded as
+American Indian, who were actively receiving ELL services, 
+scored 187.91 points on the spring outcome, on average (the model intercept).
+Controlling for ethnicity, students who were formerly ELL, and were therefore 
+on Monitor status, scored 11.71 points higher than this reference group, on 
+average, while students who never received ELL services scored 11.09 points 
+higher, on average. Both of these coefficients were significant, indicating
+the differences in the means between these groups was unlikely due to random
+sampling variability. Controlling for ELL services, students coded as *Asian* 
+had the highest achievement on the spring outcome, scoring 11.85 points higher 
+than the reference group, on average. Students coded as *White* also scored
+above the reference group, scoring 8.34 points higher, on average. All other
+coded ethnic groups scored below the reference group. However, none of the 
+ethnicities were significantly different than zero indicating that, after
+controlling for ELL status, the differences among different ethnic groups on
+the spring outcome were likely due to random sampling variability.
+
+
+----
+
+5. Modify the code below to change the reference group to Students identifying
+as "White" who did not receive English language services. Remember, you'll need
+use the `relevel` function.
+
+```{r change-ref-group}
+d <- d %>% 
+  mutate(ell = relevel(factor(ell), ref = "Non-ELL"),
+         ethnicity = relevel(factor(ethnicity), ref = "White"))
+```
+
+6. Re-fit the model
+
+```{r m1b}
+m1b <- lm(rdg_spr ~ ell + ethnicity, d)
+arm::display(m1b, detail = TRUE)
+```
+
+Has the variance accounted for by the model changed? Why?
+
+Provide a brief substantive interpretation of the re-fit model.
+
+
+----
+
+#### Substantive Interpretation
+The variance accounted for by the model is equivalent because the same groups
+are represented in the analysis. The coefficients themselves have changed 
+because they are in reference to a different group of students. Rather than
+representing the difference between the corresponding group and students coded 
+as American Indian, who were actively receiving ELL services, the coefficients
+now represent the differences between the corresponding group and students 
+coded as White who never recieved ELL services. This group scored, on average,
+207.34 points on the spring outcome. Controlling for ethnicity, students 
+actively receiving ELL services scored, on average, 11.09 lower than this group.
+Similarly, controlling for ELL status, students coded as Black scored 10.15 
+points below this reference group, on average.
+
+----
+
+# Research Question 2
+> What is the average reading score gain from fall to spring, controlling for
+ethnicity?
+
+7. Write code using ggplot to visualize the relation between the fall and 
+spring reading scores, using spring as the outcome. Display the linear 
+regression line.
+
+```{r scatter1}
+ggplot(d, aes(rdg_fall, rdg_spr)) +
+  geom_point(alpha = 0.6, 
+             stroke = 0,
+             size = 4,
+             color = "cadetblue") +
+  geom_smooth(method = "lm",
+              color = "cornflowerblue",
+              fill = "khaki")
+```
+
+Copy and paste the code you wrote above and paste it in the chunk below. Add 
+an additional aesthetic to the smoothed layer to display separate lines by 
+English language learner status (ell column).
+
+```{r scatter2}
+ggplot(d, aes(rdg_fall, rdg_spr)) +
+  geom_point(alpha = 0.3, 
+             stroke = 0,
+             size = 4,
+             color = "cadetblue") +
+  geom_smooth(method = "lm",
+              aes(color = ell)) +
+  scale_color_brewer(palette = "Dark2")
+```
+
+Provide some substantive interpretation of the above plot.
+
+
+----
+
+#### Substantive Interpretation
+
+The above plot appears to indicate that the relation between the fall and 
+spring scores depended upon ELL status, with the relation being markedly 
+steeper for students who never received ELL services. However, the intercepts
+for the three lines are also noticeably different. 
+
+
+----
+
+8. Fill in the code chunk below to fit the following model to address the 
+research question.
+
+$$
+rdg_{spr_i} = b_0 + b_1(rdg_{fall_i}) + b_2(Ethnicity_i) + e
+$$
+
+```{r m2a}
+m2a <- lm(rdg_spr ~ rdg_fall + ethnicity, d)
+arm::display(m2a, detail = TRUE)
+```
+
+Display a summary of the model. Put your interpretation below, specifically 
+stating what the coefficients (intercept and slope) represent. Does this model 
+correspond to the plot you've displayed above? Why or why not?
+
+
+----
+
+#### Substantive Interpretation
+
+The model indicates that students coded as White who scored a zero on the fall 
+test would be expected to score, on average, 135.73 points on the spring test.
+Controlling for students' coded ethnicity, their spring score would be expected
+to increase by 0.36 points for every one fall point. Controlling for their
+fall achievement, students coded as Hispanic scored 8.61 points lower than 
+students coded as White on the spring measure, which was significant 
+($p$ < 0.05). The model was fit with parallel slopes across ethnicities. For
+example, the predicted achievement of a student coded as White scoring 100 
+points on the fall measure would be $135.73 + 0.36*100 = 171.73$, while the 
+predicted acheivement of a student identifying as Black would be 
+$135.73 + 0.36*100 - 8.61 = 163.12$, and the difference at this point on the
+scale is equal to the coefficient, which is the modeled difference at all points
+on the scale. Therefore, this model does not correspond to the visual depiction
+above.
+
+----
+
+9. Modify the code chunk below to change the contrasts for ethnicity to effect
+coding .
+
+```{r effect-code}
+contrasts(d$ethnicity) <- contr.sum(6)
+```
+
+10. Refit the model
+
+```{r effect-coded-mod}
+m2b <- lm(rdg_spr ~ rdg_fall + ethnicity, d)
+arm::display(m2b, detail = TRUE)
+```
+
+Interpret the model with the effect-coded ethnicity variable. Again note why 
+$R^2$ was or was not changed, state what the intercept represents, and 
+interpret the coefficients substantively.
+
+
+----
+
+#### Substantive Interpretation
+The model $R^2$ again did not change, given that the same groups are 
+represented. The intercept now represents the weighted grand mean across 
+ethnicities. For example, the mean of the group means for a score of 200 would
+be expected to be $135.73 + 200*0.36 = 207.73$. Students coded as Asian with a
+fall score of 200 would be expected to score 4.74 points above this mean, on 
+average, while students coded as Hispanic who scored a 200 on the fall measure
+would be expected to score 8.61 points lower than this mean, on average. The
+latter was significant, indicating the differences were not likely due to 
+random sampling variability, while the former was not significant.
+
+----
