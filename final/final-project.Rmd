@@ -1,0 +1,145 @@
+---
+title: "Multiple Regression Final Project"
+subtitle: "100 points"
+author: "Your Name Here"
+date: "Due December 4th at 11:59PM"
+output: html_document
+---
+
+In the code chunk below, load the "online-training.csv" dataset.
+
+```{r load-data}
+
+```
+
+In this study, demographic data were collected and then the time students spent
+participating in a voluntary math game was recorded. Students could spend time
+watching videos related to the content or practice the the content through
+simulations. 
+
+You have two primary research interests with this data: (a) does time spent
+on the practice exercises/watching videos relate to their math achievement 
+in 2018, and (b) does participation in either activity help reduce achievement
+disparities between student subgroups.
+
+# Explore the data
+
+In the code chunk below, produce plots showing:
+
+* Univariate distributions of both hours variables (time spent engaging in
+	the intervention activity) and the math 2018 outcome. 
+* The relation between each hours variable and the math 2018 outcome
+* The same relation by FRL status, ELL status, and gender (as separate plots).
+
+
+### Produce plots (10 points)
+
+```{r plots}
+
+
+```
+
+### Substantive interpretation (10 points)
+
+---
+
+Delete this text and replace it with a brief overall substantive interpretation
+of the all the plots you produced.
+
+---
+
+# Fit the models 
+In the following code chunk, use multi-model inference to fit:
+
+* A demographics only model (including FRL, ELL, and Gender), followed by 
+* An intervention model, including both hours variables, and finally 
+* A model including the interaction between each of the hours variables and
+  ELL status. 
+
+#### Model fitting (15 points)
+
+```{r fit-models}
+
+
+```
+
+### Questions (15 points (5 points each))
+Address the following Questions from your multi-model inference.
+
+1. Which model displays the best fit to the data? Cite relevant statistical
+	 evidence supporting your conclusion.
+
+---
+
+Delete this text and replace it with your answer
+
+---
+
+
+
+2. What proportion of the variance was accounted for by the two hours 	
+	 variables? Was this significantly different from zero (cite relevant
+	 statistical output)?
+
+---
+
+Delete this text and replace it with your answer
+
+---
+
+
+
+
+3. Interpret the interaction for practice hours and ELL status.
+
+---
+
+Delete this text and replace it with your answer
+
+---
+
+
+
+# Model Diagnostics
+Investigate the assumptions of the model. Provide at least one plot for model
+assumptions and one plot investigating outliers. Following the code chunk state
+your overall conclusion.
+
+### Diagnostic plots (10 points)
+
+```{r }
+
+
+```
+
+
+### Diagnostics writeup (10 points)
+
+---
+
+Delete this text and replace it with your overall conclusion of model
+diagnostics.
+
+---
+
+# Results writeup (30 points; 10 points each)
+Use the code chunk below to calculate anything else you need to fully report 
+the results. 
+
+```{r extra-analyses}
+
+
+```
+
+1. In a Microsoft Word document, produce a table of coefficients showing each 
+	of your three models. Provide the coefficients along with their confidence
+	intervals.
+
+2. In the text of the word document, describe your modeling-building process,
+	including relevant statistics and discussing differences between models.
+
+3. Following your discussion of model building, provide an overall substantive
+	interpretation of the results (e.g., coefficients and confidence intervals
+	for the model you settle upon, etc.). Cite relevant statistics that may not 
+	be referenced in the table (and reference the table for relevant stats if you
+	need to).

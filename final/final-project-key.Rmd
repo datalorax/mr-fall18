@@ -1,0 +1,215 @@
+---
+title: "Multiple Regression Final Project"
+subtitle: "100 points"
+author: "Key"
+date: "Due December 4th at 11:59PM"
+output: html_document
+---
+
+In the code chunk below, load the "online-training.csv" dataset.
+
+```{r load-data}
+library(tidyverse)
+library(rio)
+library(here)
+theme_set(theme_minimal())
+d <- import(here("data", "online-training.csv"),
+            setclass = "tbl_df")
+d
+```
+
+In this study, demographic data were collected and then the time students spent
+participating in a voluntary math game was recorded. Students could spend time
+watching videos related to the content or practice the the content through
+simulations. 
+
+You have two primary research interests with this data: (a) does time spent
+on the practice exercises/watching videos relate to their math achievement 
+in 2018, and (b) does participation in either activity help reduce achievement
+disparities between student subgroups.
+
+# Explore the data (20 points)
+
+In the code chunk below, produce plots showing (a) univariate distributions of
+both hours variables and the math 2018 outcome, (b) the relation between each
+hours variable and the math 2018 outcome, and (c) the same relation by 
+FRL status, ELL status, and gender [as separate plots; there should be 11
+plots total]. (10 points)
+
+### Produce plots (10 points)
+
+```{r plots}
+ggplot(d, aes(practice_hours)) +
+	geom_histogram(alpha = 0.7)
+
+ggplot(d, aes(video_hours)) +
+	geom_histogram(alpha = 0.7)
+
+ggplot(d, aes(math18)) +
+	geom_histogram(alpha = 0.7)
+
+ggplot(d, aes(practice_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth() +
+	geom_smooth(method = "lm",
+	            color = "magenta") 
+
+ggplot(d, aes(video_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth() +
+	geom_smooth(method = "lm",
+	            color = "magenta") 
+
+ggplot(d, aes(practice_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth(aes(color = frl),
+	            method = "lm")
+
+ggplot(d, aes(practice_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth(aes(color = ell),
+	            method = "lm")
+
+ggplot(d, aes(practice_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth(aes(color = gender),
+	            method = "lm")
+
+ggplot(d, aes(video_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth(aes(color = frl),
+	            method = "lm")
+
+ggplot(d, aes(video_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth(aes(color = ell),
+	            method = "lm")
+
+ggplot(d, aes(video_hours, math18)) +
+	geom_point(color = "gray70") +
+	geom_smooth(aes(color = gender),
+	            method = "lm")
+```
+
+
+### Substantive interpretation (10 points)
+
+---
+
+The hours variable for video does not appear fully normally distributed.
+The relation between practice hours and math scores in 2018 appeared
+positive but it looks to be more approximating a cubic fit, versus a strictly
+linear fit. Overall there appears to be almost no relation between video hours
+and the outcome. It looks as though there may be an interaction between ELL 
+and (potentially) each hours variable, although it's somewhat less clear. 
+
+---
+
+# Fit the models (30 points)
+Use multi-model inference to fit (a) a demographics only model (including FRL,
+ELL, and Gender), followed by (b) an intervention model, including both hours 
+variables, and finally (c) a model including the interaction between each of 
+the hours variables and ELL status. Fit the models so the reference group
+represents students who were not FRL eligible, did not receive ELL services,
+were female, and engaged in the average number of practice and video hours.
+
+Use this approach to answer the questions following the code chunk.
+
+### Code (15 points)
+
+```{r fit-models}
+
+d <- d %>%
+	mutate(frl = relevel(factor(frl), ref = "Non-FRL"),
+	       ell = relevel(factor(ell), ref = "Non-ELL"),
+	       gender = relevel(factor(gender), ref = "Female"),
+	       practice_hours_c = scale(practice_hours, scale = FALSE),
+	       video_hours_c = scale(video_hours, scale = FALSE))
+
+demos <- lm(math18 ~ frl + ell + gender, d)
+intervention <- update(demos, ~ . + practice_hours_c + video_hours_c)
+interaction <- update(intervention, ~ . + practice_hours_c:ell +
+                      										video_hours_c:ell)
+
+anova(demos, intervention)
+anova(intervention, interaction)
+sundry::aic_weights(demos, intervention, interaction)
+
+summary(intervention)$r.squared - summary(demos)$r.squared
+
+```
+
+
+### Questions (15 points (5 points each))
+
+1. Which model displays the best fit to the data? Cite relevant statistical
+	 evidence supporting your conclusion.
+
+---
+
+The model including the intervention variables significantly reduced the
+residual variance relative to the model that only included demographic 
+variables ($F = 38.33, p < 0.05$). The model including the interaction did not
+fit significantly different than this model (i.e., the residual variance was
+not reduced above what would have been expected by chance variation 
+$F = 2.12, p = .12$). Akaike's information criteria indicated the model
+with/without the interaction were equally probable. Given this evidence, the
+more parsimonious model without the interaction was preferred.
+
+---
+
+
+
+2. What proportion of the variance was accounted for by the two hours 	
+	 variables? Was this significantly different from zero (cite relevant
+	 statistical output)?
+
+---
+
+14%, yes $F = 38.33, p < 0.05$
+
+---
+
+
+
+
+3. Interpret the interaction for practice hours and ELL status.
+
+---
+
+A one hour increase in practice time corresponded to, on average, a 20 point
+gain for ELL students relative to non-ELL students (i.e., a reduction and
+eventual reversal of the achievement gap). However, this interaction was not
+significant ($t(925) = 1.74, p = 0.08$).
+
+---
+
+
+# Model Diagnostics (20 points)
+Investigate the assumptions of the model. Provide at least one plot for model
+assumptions and one plot investigating outliers. Following the code chunk state
+your overall conclusion.
+
+### Diagnostic plots
+
+```{r }
+
+
+```
+
+
+# Results writeup (30 points; 10 points each)
+Use the code chunk below to calculate anything else you need to fully report 
+the results. 
+
+1. In a Microsoft Word document, produce a table of coefficients showing each 
+	of your three models. Provide the coefficients along with their confidence
+	intervals.
+
+2. In text, describe your modeling-building process, including relevant
+	statistics discussing differences between models.
+
+3. Following your discussion of model building, provide an overall substantive
+	interpretation of the results. Cite relevant statistics that may not be
+	referenced in the table (and reference the table for relevant stats if you
+	need to).
