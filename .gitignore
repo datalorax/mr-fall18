@@ -1,3 +1,7 @@
+readings/*
+final/student-feedback/*
+assignments/*
+.DS_Store
 # History files
 .Rhistory
 .Rapp.history
