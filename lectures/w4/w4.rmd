@@ -1,0 +1,779 @@
+---
+title: "Uncertainty and significance testing"
+author: "Daniel Anderson"
+date: "Week 4"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+```
+
+# Agenda 
+* A little bit of R
+  + Load some data
+  + radiant demo
+* Uncertainty 
+  + Standard errors
+  + Confidence intervals 
+  + p-values
+* Sample interpretations
+* Lab
+
+---
+# Thinking about learning objectives
+I would really like you to leave this class being able to do the following:
+1. Read in data to R
+1. Produce some basic visualizations of the data
+  + Distributions, scatterplots with linear models overlaid, boxplots, barplots
+
+
+--
+### Regression models
+.pull-left[
+Fit linear regression models with
+  + continuous and categorical variables
+  + interactions
+]
+.pull-right[
+Interpret models correctly
+  + coefficients
+  + model $R^2$
+  + SEs, CIs, and significance
+]
+
+---
+class: inverse middle center
+background-image:url(../img/chalkboard.jpg)
+background-size:cover
+
+# What questions do you have?
+
+---
+# First thing's first
+Let's get some data!
+
+[demo]
+
+Please follow along. We'll load the `hsb2.sav` file.
+
+```{r include = FALSE}
+library(here)
+library(tidyverse)
+library(rio)
+theme_set(theme_minimal(base_size = 25))
+d <- import(here("data", "hsb2.sav"),
+            setclass = "tbl_df") %>%
+      characterize()
+theme_set(theme_minimal(base_size = 25))
+```
+
+
+---
+# Variance of the estimate
+Recall the residual standard error 
+
+.Large[
+$$
+s\_{y.x} = \sqrt{\frac{\sum (Y - Y')^2}{df}} =  \sqrt{\frac{ss_{res}}{df}}
+$$
+
+$$
+df = n - k - 1
+$$
+
+]
+
+
+--
+* A quick note on notation
+  + When we use `arm::display()` it reports $k$ as the number of estimated
+    parameters. (this is pretty standard and actually what I usually use)
+  + Pedhazur uses $k$ to indicate the number of *predictors* in the model
+  + I'll stick with Pedhazur's even though it's a little unnatural for me.
+
+---
+## In the simple linear regression case
+* The standard error of $b$ is
+
+.Large[
+$$
+s\_b = \frac{s\_{y.x}}{\sqrt{\sum x^2}}
+$$
+]
+
+
+--
+In words... the model residual standard error divided by the (square root of
+the) sum of the squared deviations
+
+--
+### Quick verification
+.gray[Do it with me!]
+
+* First, let's fit a model with students' reading scores predicting their
+mathematics scores. 
+
+---
+
+```{r fit-m1, message = FALSE}
+m1 <- lm(math ~ read, d)
+```
+
+--
+
+```{r display-m1}
+arm::display(m1, detail = TRUE)
+```
+
+* Let's interpret the results
+
+---
+# Confirm
+
+.Large[
+$$
+s\_b = \frac{s\_{y.x}}{\sqrt{\sum x^2}}
+$$
+]
+
+--
+
+* We'll focus on calculating the denominator, and we'll just plug-in the
+numerator. 
+
+--
+* What's the sum of squares again?
+
+---
+First, calculate the deviations (note - we're creating a new variable, `dev`,
+  then selecting our original `read` variable and `dev` only).
+
+```{r calc-dev}
+mean(d$read)
+ss <- d %>%
+  select(read)
+
+ss %>%
+  mutate(dev = read - mean(read)) %>% #<<
+  head()
+```
+
+---
+# Square the deviations
+
+```{r square-dev}
+ss %>%
+  mutate(dev = read - mean(read),
+         dev2 = dev^2) %>% #<<
+  head()
+```
+
+---
+# Sum the squared deviations
+
+```{r sum-squared-dev}
+ss %>%
+  mutate(dev = read - mean(read),
+         dev2 = dev^2,
+         sum_squares = sum(dev2)) %>% #<<
+  head()
+```
+
+---
+# Square Root
+
+```{r denom}
+ss %>%
+  mutate(dev = read - mean(read),
+         dev2 = dev^2,
+         sum_squares = sum(dev2),
+         denom = sqrt(sum_squares)) %>% #<<
+  head()
+```
+
+---
+# SE estimate
+
+```{r se1}
+7.04 / 144.6355
+
+arm::display(m1, digits = 4, detail = TRUE)
+```
+
+---
+# In the MR case
+* We have to remove the shared variance
+
+.Large[
+$$
+s\_{b\_{y1.2}} = \frac{s\_{y.x}}{\sqrt{\sum x\_1^2(1-r\_{x\_1x\_2}^2)}}
+$$
+]
+
+---
+# Quick verification
+
+Let's fit a second model, this time with reading and writing predicting
+students' math scores
+
+--
+
+```{r m2-fit}
+m2 <- lm(math ~ read + write, d)
+arm::display(m2, detail = TRUE, digits = 4)
+```
+
+---
+```{r verify-se2}
+arm::display(m2, digits = 4, detail = TRUE)
+
+# Compute correlation
+x1x2_cor <- cor(d$read, d$write)
+
+# Compute sums-of squares for reading (in a single line of code)
+ss_read <- sum((d$read - mean(d$read))^2)
+
+6.5553 / sqrt(ss_read*(1 - x1x2_cor^2))
+```
+
+---
+# Challenge
+Can you calculate the standard error for `write` by hand? 
+
+Follow these steps:
+1. Compute the correlation, as in the prior slide
+2. Compute the sums of squares for `write`
+3. Use the code we used before `6.555315 / sqrt(ss_read*(1 - x1x2_cor^2))`,
+   but insert your sums of squares estimate.
+
+---
+# What is the standard error?
+
+--
+The variance of the estimate (standard deviation) over (theoretically) repeated
+samples. 
+
+
+--
+.Large[🧐]
+
+---
+# Simulating the process
+
+[demo]
+
+Note - this is purely for demonstration. Please DO NOT follow along. If you're
+interested in the code, play with it after class and we can chat if you want.
+
+
+--
+### Bootstrapping
+
+![](../img/bootstrap.png)
+
+
+---
+
+.code-bg-red[
+
+```{r boot1}
+set.seed(8675309)
+samples <- replicate(1000, 
+                     d[sample(1:nrow(d),
+                              size = nrow(d),
+                              replace = TRUE), ],
+                     simplify = FALSE)
+```
+]
+
+---
+# First 4 rows of first 2 datasets
+
+.code-bg-red[
+
+```{r print-samples}
+map(samples[1:2], ~head(., 4))
+```
+
+]
+
+---
+# Fit a model to each sample
+
+.code-bg-red[
+
+```{r, fit-models}
+models <- map(samples, ~lm(math ~ read + write, .))
+```
+
+]
+
+---
+
+.code-bg-red[
+
+```{r boot2}
+boot_ests <- map_df(models, 
+                    ~data.frame(coef = coef(.),
+                                param = c("intercept",
+                                          "b1_read",
+                                          "b2_write")), 
+                    .id = "iteration") %>% 
+  spread(param, coef) %>%
+  mutate(iteration = as.numeric(iteration)) %>%
+  arrange(iteration)
+head(boot_ests, 4)
+```
+]
+
+
+---
+# Visualizing the estimates
+
+.code-bg-red[
+
+```{r visualize-uncertainty, echo = FALSE, fig.height = 7}
+pd_boot <- boot_ests %>% 
+  gather(coefficient, estimate, -iteration) 
+
+boot_smry <- pd_boot %>%
+  group_by(coefficient) %>%
+  summarize(upper = mean(estimate) + sd(estimate),
+            lower = mean(estimate) - sd(estimate))
+
+ribbon <- pd_boot %>%
+  left_join(boot_smry) %>%
+  filter(estimate <= upper &
+         estimate >= lower)
+
+vlines <- data_frame(coefficient = c("intercept", 
+                                     "b1_read", 
+                                     "b2_write"),
+                     estimate = coef(m2))
+
+ggplot(pd_boot, aes(estimate)) +
+  geom_histogram(alpha = 0.7) +
+  geom_ribbon(aes(ymin = 0, ymax = Inf), ribbon,
+              alpha = 0.2,
+              fill = "magenta") +
+  geom_vline(aes(xintercept = estimate), vlines,
+             color = "cornflowerblue",
+             size = 1.5) +
+  facet_wrap(~coefficient, scales = "free_x")
+```
+]
+
+---
+# Calculating the standard errors
+
+.code-bg-red[
+
+```{r boot_ests-se}
+boot_ests %>% 
+  summarize(int_sd = sd(intercept),
+            b1_sd  = sd(b1_read),
+            b2_sd  = sd(b2_write))
+```
+]
+
+---
+## Looking back at our parametric estimates
+
+```{r para-ests}
+arm::display(m2, digits = 4)
+```
+
+
+---
+# Another visualization
+(This one is with simple linear regression)
+
+.code-bg-red[
+
+.pull-left[
+
+```{r slope-vis1, echo = FALSE, fig.width = 6.5}
+simple_models <- map(samples, ~lm(math ~ read, .))
+simple_boots <- map_df(simple_models, 
+                    ~data.frame(coef = coef(.),
+                                param = c("intercept",
+                                          "b1_read")), 
+                    .id = "iteration") %>% 
+  spread(param, coef)
+
+ggplot(d, aes(read, math)) +
+  geom_point() +
+  geom_abline(aes(intercept = intercept, 
+                  slope = b1_read), 
+              simple_boots,
+            alpha = 0.05,
+            color = "cornflowerblue") +
+  geom_abline(aes(intercept = coef(m1)[1],
+                  slope = coef(m1)[2]),
+              color = "magenta",
+              size = 1.4)
+```
+
+]
+]
+
+.pull-right[
+
+```{r slope-vis2, echo = FALSE, fig.width = 6.5}
+ggplot(d, aes(read, math)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+]
+
+
+---
+class: inverse middle center
+background-image:url(../img/celebrate.jpg)
+background-size:cover
+
+# Testing for significance
+
+
+---
+# The $t$ statistic
+* The coefficients, divided by their standard error, provides a $t$-distributed
+statistic.
+
+--
+
+  + What's the difference between a $t$ distribution and a normal distribution?
+
+---
+```{r t-normal1, echo = FALSE, fig.height = 9}
+colors <- RColorBrewer::brewer.pal(6, "Accent")
+x <- seq(-3, 3, 0.01)
+plot(x, dnorm(x), 
+     type = "l",
+     bty = "n",
+     col = colors[1],
+     lwd = 4,
+     ylab = "density")
+lines(x, dt(x, 1), col = colors[2], lwd = 4)
+lines(x, dt(x, 2), col = colors[3], lwd = 4)
+lines(x, dt(x, 3), col = colors[4], lwd = 4)
+lines(x, dt(x, 4), col = colors[5], lwd = 4)
+legend("topright",
+       box.lwd = 0, 
+       legend = c("normal",
+                  "df(1)",
+                  "df(2)",
+                  "df(3)",
+                  "df(4)"),
+       lwd = 4,
+       col = colors)
+```
+
+---
+# Fat tails
+* When the $df$ are small, the tails are fatter
+* This implies you need a bigger $t$ to reach $p < 0.05$
+
+
+---
+```{r t-normal2, echo = FALSE, fig.height = 9}
+x <- seq(-3, 3, 0.01)
+plot(x, dnorm(x), 
+     type = "l",
+     bty = "n",
+     col = colors[1],
+     lwd = 5,
+     ylab = "density")
+lines(x, dt(x, 99), col = colors[6], 
+      lwd = 4,
+      lty = 2)
+legend("topright",
+       box.lwd = 0, 
+       legend = c("normal",
+                  "df(99)"),
+       lwd = c(3, 2),
+       col = colors[c(1, 6)])
+```
+
+---
+# Practical takeaways
+1. The size of the SE will depend on $n$ because 
+$s_{y.x} = \sqrt{\frac{ss_{res}}{df}}$ and $df = n - k - 1$ 
+
+--
+1. The size of the SE will depend on the fit to the data because better fit =
+smaller $ss_{res}$
+
+--
+1. Because `coef/se = t`, larger standard errors will result in smaller $t$
+statistics.
+
+--
+1. Smaller sample sizes also require larger $t$ to be significant
+
+
+--
+### How do you get a larger $t$
+
+--
+Account for more variance (bigger effect size), smaller standard errors, bigger
+$n$
+
+---
+# Overall model test
+* The model $R^2$ represents the proportion the residual variance has been
+reduced.
+
+.large[
+$$
+R^2 = \frac{SS\_{reg}}{SS\_{y}}
+$$
+]
+
+* Often we want to know if this reduction is significantly different than zero.
+  We can evaluate this using an $F$ test.
+
+--
+
+.pull-left[
+Using $R^2$
+.large[
+$$
+F = \frac{R^2/k}{(1-R^2)/(n - k - 1)}
+$$
+]
+]
+
+.pull-right[
+or using the sums of squares
+
+.large[
+$$
+F = \frac{SS\_{reg}/df\_{reg}}{SS\_{res}/df\_{res}}
+$$
+]
+]
+
+---
+class: middle right
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/F-distribution_pdf.svg/325px-F-distribution_pdf.svg.png)
+background-size:contain
+
+# F Distribution
+
+---
+# Pop quiz
+
+Can the model $R^2$ be significant even if **none** of the individual
+coefficients are?
+
+--
+### Of course!
+
+<div align = "center">
+<img src = ../img/high-collinearity.png height = 300>
+</div>
+
+.footnote[Figure from Tu, Kellett, Clerehugh, & Gilthorpe (2005): 
+  https://www.nature.com/articles/4812743.pdf?origin=ppub]
+
+---
+class: inverse center
+background-image:url(https://pics.me.me/overconfidence-this-is-going-to-end-in-disaster-and-you-31404205.png)
+background-size:cover
+
+# Confidence intervals
+
+--
+
+Almost always preferable to p-values alone
+
+
+---
+# How do we calculate 95% CIs?
+* Practically: $b \pm 2*s_b$
+
+--
+* Why $2*s_b$?
+
+
+--
+### Actually:
+
+.Large[
+$$
+b \pm t\_{(\frac{\alpha}{2},df)}s\_b
+$$
+]
+
+---
+# Approximating example
+
+```{r display-m2}
+arm::display(m2, digits = 4, detail = TRUE)
+```
+
+--
+
+.pull-left[
+```{r approximate-cis}
+12.8651 - 2*2.8216
+12.8651 + 2*2.8216
+```
+]
+
+
+--
+
+
+.pull-right[
+```{r exact-cis1}
+confint(m2)
+```
+]
+
+---
+The `qt` function returns the exact $t$ value, which in this case is `r round(qt(0.05/2, 197), 6)`. Compare that to a $Z$ value, of `r round(qnorm(0.05/2), 6)` (because we have 197 $df$).
+
+--
+
+.pull-left[
+.code-bg-red[
+```{r ci1}
+12.8651 + qt(0.05/2, 197)*2.8216
+12.8651 - qt(0.05/2, 197)*2.8216
+```
+]
+]
+
+
+.pull-right[
+```{r exact-cis}
+confint(m2)
+```
+]
+
+
+---
+## Want it to match **exactly** exactly?
+
+
+```{r ci2}
+confint(m2)
+```
+.code-bg-red[
+```{r ci3}
+coef(m2)[2] + qt(0.025, m2$df.residual)* summary(m2)$coefficients[2, 2]
+coef(m2)[2] + qt(0.975, m2$df.residual)* summary(m2)$coefficients[2, 2]
+```
+]
+
+---
+# Using the bootstrap estimates
+
+.code-bg-red[
+```{r }
+boot_ests %>% 
+  summarize(int_lower = quantile(intercept, 0.025),
+            int_upper = quantile(intercept, 0.975),
+            b1_lower = quantile(b1_read, 0.025),
+            b1_upper = quantile(b1_read, 0.975),
+            b2_lower = quantile(b2_write, 0.025),
+            b2_upper = quantile(b2_write, 0.975))
+```
+]
+
+---
+# How do we interpret these?
+
+If your model is correct, the interval will contain the true population value
+95% of the time.
+
+--
+
+### Not probability-based
+* Frequentist stats (which this is) assumes a single "true" population value.
+* Our CI comes from the estimated sampling distribution for the point estimate.
+* Probability of the "true" value lying within those bounds is 0/1
+* Thus, literally, "confidence" based - the wider the interval, the more
+confident we can be. 
+
+---
+# p values
+* A very similar process can be used to estimate the exact p value 
+
+
+--
+### What does a p-value represent?
+
+> the probability of obtaining data as extreme, or more extreme, than those 
+  observed if the null hypothesis is correct and the model assumptions are met.
+
+
+
+--
+* If the value is outside the alpha level, it is "significant"
+  + i.e., we can claim that the observed result is unlikely due to random
+    sampling variability
+
+---
+# But
+* The prior slide holds **only if we meet our model-assumptions**
+  + If you don't meet your model assumptions, this is usually what gets messed
+    up first.
+
+---
+# Before we move on
+* This discussion is fairly technical and meant as background
+  + e.g., "Where do these numbers actually come from?"
+
+--
+* Practically, you should be able to
+  + Find and interpret SEs
+  + Estimate and interpret CIs
+  + Correctly interpret *p* values
+
+
+--
+### Let's practice
+
+---
+# Fit the corresponding model
+$$
+read_i = b_0 + b_1(SES_i) + b_2(math_i) + e
+$$
+
+Discuss at your table:
+* What do the coefficients represent
+* What does the standard error for math represent?
+* What does the standard error for the SES-low represent?
+* Interpret the p-values for the SES coefficients
+* Estimate and interpret the 95% CIs for the model
+
+---
+```{r m3}
+d <- d %>%
+  mutate(ses = factor(ses))
+
+m3 <- lm(read ~ ses + math, d)
+arm::display(m3, detail = TRUE)
+confint(m3)
+```
+
+---
+class: inverse center middle
+
+# Lab
