@@ -1,0 +1,688 @@
+---
+title: "MR w/Categorical IVs"
+author: "Daniel Anderson"
+date: "Week 3"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r, setup, include = FALSE}
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+```
+
+# Agenda 
+
+* Reminder on dummy/effect coding
+  + Factors in R
+* Example Scenarios
+* Lab
+
+
+---
+class: inverse middle center
+background-image:url(../img/chalkboard.jpg)
+background-size:cover
+
+# What questions do you have?
+
+---
+# First things first
+Let's get some data!
+
+[demo]
+
+Please follow along. We'll load the `hsb2.sav` file.
+
+```{r include = FALSE}
+library(here)
+library(tidyverse)
+library(rio)
+theme_set(theme_minimal(base_size = 25))
+d <- import(here("data", "hsb2.sav"),
+            setclass = "tbl_df") %>%
+      characterize()
+```
+
+---
+# Categorical Variables
+* So far we've dealt with only continuous IVs
+  + What if we have categorical variables?
+
+
+--
+### In many software...
+Define dummy variables
+
+
+--
+### In R
+Define the categorical variable as a factor!
+
+---
+# Quick dummy coding review
+* Create `k - 1` variables
+
+--
+
+* Each variable defined 0/1
+
+--
+
+* Remember - intercept represents expected value of $y$ when **all** $x_i$
+  predictors are 0. 
+
+--
+
+Imagine we have a vector (variable), *gender*, that takes on the values 
+`"male"`, `"female"`, and `"non-binary"`. 
+
+--
+### What does the intercept represent
+
+$$
+y_i = b_0 + b_1(female) + b_2(nonbinary) + e
+$$
+
+--
+### Now what does the intercept represent
+$$
+y_i = b_0 + b_1(female) + b_2(nonbinary) + b_3(male) + e
+$$
+
+---
+class: center middle
+![](https://media-cdn.sueddeutsche.de/image/sz.1.2716352/640x360?v=1519613542000)
+
+---
+# Regression is flexible
+Any model you fit previously using ANOVA, you can no fit using regression
+* With all categorical variables, the models are formally equivalent
+
+---
+# Defining variables manually
+Generally in R, you'll never have to do this, but just as an exercise
+
+
+```{r dummy-manual}
+head(d)
+d <- d %>%
+  mutate(ses_low = ifelse(ses == "low", 1, 0),
+         ses_middle = ifelse(ses == "middle", 1, 0))
+```
+
+
+---
+# Fit the model
+
+```{r dummy-manual-model}
+m1a <- lm(math ~ ses_low + ses_middle, d)
+arm::display(m1a, detail = TRUE)
+```
+
+
+--
+
+* What does the intercept represent here?
+* What about each slope?
+* What are the p-values testing?
+
+---
+# The R way
+
+```{r cat1a}
+d <- d %>%
+  mutate(ses = factor(ses))
+```
+
+--
+
+```{r cat1b}
+m1b <- lm(math ~ ses, d)
+arm::display(m1b, detail = TRUE)
+```
+
+* Notice the results are **exactly** the same as before. 
+* R has done the dummy-coding for us "automatically"
+
+
+---
+# Change the reference group?
+* What if instead of having "high" as the reference group, we wanted "low"?
+
+```{r cat2a}
+d <- d %>%
+  mutate(ses = relevel(ses, ref = "low"))
+```
+
+--
+
+```{r cat2b}
+m1c <- lm(math ~ ses, d)
+arm::display(m1c, detail = TRUE)
+```
+
+* How do we interpret the intercept now?
+* What about each slope?
+
+---
+# Alternative coding schemes
+* Dummy-coding by far most common
+* Some situations may warrant alternative coding schemes
+
+
+--
+### See the scheme
+
+You can see the coding scheme for any variable with the `contrasts` function.
+
+```{r see-contrasts}
+contrasts(d$ses)
+```
+
+---
+* Note that the reference group is `low` **only** because we defined it that
+  way earlier
+* By default, whatever level appears first in the data becomes the reference
+  group
+
+---
+# Effect or sum coding
+The only real scheme I use regularly outside of dummy-coding
+* If data are balanced (mine rarely are)
+  + Coefficients represents the average difference between the *group* and 
+    *grand* means.
+* If data are unbalanced
+  + Coefficients represents the average difference between the group means and 
+    the **weighted** grand mean (i.e., the mean of the group means).
+  + If there is severe imbalance in the data, this is probably not a good 
+    coding scheme.
+--
+* No direct comparisons between groups
+* Can run model twice to get all tests relative to the grand mean
+
+---
+# The contrasts functions
+
+```{r contr.xxx}
+contr.sum(2)
+contr.sum(5)
+```
+
+---
+```{r cat3}
+contrasts(d$ses) <- contr.sum(3)
+m1c1 <- lm(math ~ ses, d)
+arm::display(m1c1, detail = TRUE)
+```
+wait a minute... What's the reference group here?
+
+---
+```{r see-ref}
+contrasts(d$ses)
+```
+Our approach set the last level to the reference group.
+
+--
+* Define a second variable with an alternative reference to get all 
+  comparisons w/the weighted grand mean.
+* Must explicitly change the order of the levels
+
+```{r all-comp1}
+d <- d %>%
+  mutate(ses_ = factor(ses, 
+                       levels = c("low", "middle", "high")))
+contrasts(d$ses_)
+```
+
+---
+```{r all-comp2}
+contrasts(d$ses_) <- contr.sum(3)
+m1c2 <- lm(math ~ ses_, d)
+
+arm::display(m1c1, detail = TRUE)
+arm::display(m1c2, detail = TRUE)
+```
+
+---
+.pull-left[
+```{r levs1}
+contrasts(d$ses)
+```
+]
+
+.pull-right[
+```{r levs2}
+contrasts(d$ses_)
+```
+]
+
+---
+# Make it a little more clear
+
+```{r contrast-colnames}
+d <- d %>%
+  mutate(ses = factor(ses))
+
+contrasts(d$ses) <- contr.sum(3)
+
+colnames(contrasts(d$ses)) <- levels(d$ses)[-length(levels(d$ses))] #<<
+contrasts(d$ses)
+```
+
+---
+```{r m1c4}
+m1c4 <- lm(math ~ ses, d)
+arm::display(m1c4, detail = TRUE)
+```
+
+--
+
+### Just be careful about interpreting the intercept
+
+---
+# Predicting Groups
+
+```{r pred-group-means1}
+d %>%
+  group_by(ses) %>%
+  summarize(mean_math = mean(math))
+coef(m1c1)
+```
+
+---
+```{r pred-group-means2}
+coef(m1c1)[1] + coef(m1c1)[2]
+coef(m1c1)[1] + coef(m1c1)[3]
+coef(m1c1)[1] - coef(m1c1)[2] - coef(m1c1)[3]
+```
+
+---
+# Quickly
+
+### Factors versus strings
+
+Factors can only store predefined values
+
+```{r fact-levels}
+colors <- factor(c("black", "green", "blue", "blue", "black"))
+colors[6] <- "blue"
+colors
+colors[7] <- "purple"
+colors
+```
+
+---
+# Examples
+In what follows **we** (please follow along) will fit
+* An MR model with two categorical variables
+* An MR model with one categorical variable and one continuous variable
+
+--
+* We will change reference levels and contrast coding in each example to see 
+  how are results are changed.
+
+---
+class: inverse center middle
+# Example 1
+### Two categorical IVs
+
+---
+# The model 
+
+Let's fit a model with the programs type and race predicting reading scores
+
+--
+$$
+read_i = b_0 + b_1(race_i) + b_2(prog_i) + e
+$$
+
+--
+### In code
+
+```
+lm(read ~ race + prog, data = d)
+```
+
+--
+
+### Note the intercept is implied
+The following is exactly equivalent
+
+```
+lm(read ~ 1 + race + prog, data = d)
+```
+
+---
+# Data setup
+* Define the corresponding variables as factors
+
+```{r m2-dataprep}
+d <- d %>%
+  mutate(race = factor(race),
+         prog = factor(prog))
+head(d)
+```
+
+---
+# Look at the variables
+
+.pull-left[
+```{r m2-vis1, fig.width = 6.5}
+ggplot(d, aes(race)) +
+  geom_bar(alpha = 0.7)
+```
+]
+
+.pull-right[
+```{r m2-vis2, fig.width = 6.5}
+ggplot(d, aes(prog)) +
+  geom_bar(alpha = 0.7)
+```
+]
+
+
+---
+# Look some more
+
+.pull-left[
+```{r m2-vis-boxplots-race, fig.width = 6.5}
+ggplot(d, aes(race, read)) +
+  geom_boxplot()
+```
+]
+
+.pull-right[
+```{r m2-vis-boxplots-prog, fig.width = 6.5}
+ggplot(d, aes(prog, read)) +
+  geom_boxplot()
+```
+]
+
+---
+# Look even more
+
+```{r m2-vis-boxplots-facet, fig.height = 6}
+ggplot(d, aes(prog, read)) +
+  geom_boxplot() +
+  facet_wrap(~race) #<<
+```
+
+---
+# Alternative portrayal
+
+```{r m2-vis-boxplots-fill}
+ggplot(d, aes(prog, read, fill = race)) +
+  geom_boxplot() 
+```
+
+---
+# Model fit
+
+```{r m2a-fit}
+m2a <- lm(read ~ race + prog, d)
+arm::display(m2a, detail = TRUE)
+```
+
+--
+### Let's interpret!
+* What does the intercept represent
+* What about each of the coefficients?
+
+---
+# Change reference level
+
+We'll change the reference level for each group to the largest group
+
+```{r m2-refchange}
+d <- d %>%
+  mutate(race = relevel(race, ref = "white"),
+         prog = relevel(prog, ref = "academic"))
+```
+
+--
+.gray[(Notice I didn't actually change the reference group for `prog`)]
+
+---
+# Re-fit
+```{r m2b-fit}
+m2b <- lm(read ~ race + prog, d)
+arm::display(m2b, detail = TRUE)
+```
+
+--
+* What changed
+* What does the intercept represent
+* What about each of the coefficients?
+
+---
+# Change the coding scheme
+
+```{r m2-scheme-change}
+contrasts(d$race) <- contr.sum(4)
+contrasts(d$prog) <- contr.sum(3)
+```
+
+---
+# Model fit
+
+.pull-left[
+```{r contrasts}
+contrasts(d$race)
+contrasts(d$prog)
+```
+]
+
+.pull-right[
+```{r m2c-fit}
+m2c <- lm(read ~ race + prog, d)
+arm::display(m2c, detail = TRUE)
+```
+]
+
+
+--
+* What changed?
+* What does the intercept represent
+* What about each of the coefficients?
+
+---
+# Careful about interpretation
+The intercept is **not** the grand mean, unless the data are balanced. These 
+are not.
+
+```{r imbalance}
+mean(d$read)
+```
+
+---
+# Another complication
+When two categorical variables are in the model, you can't directly recover the
+mean
+
+* Let's try to predict the mean for students coded "hispanic" and "vocation"
+
+---
+
+.code-bg-red[
+
+```{r sample-mean-recover-fail}
+group_means <- d %>%
+  group_by(race, prog) %>%
+  summarize(mean = mean(read))
+
+tail(group_means)
+predict(m2c, newdata = data.frame(race = "hispanic", prog = "vocation"))
+```
+]
+
+---
+# Intercept
+
+The intercept also no longer represents (exactly) the mean of the group means
+
+.code-bg-red[
+
+```{r mean-group-means}
+coef(m2c)[1]
+mean(group_means$mean)
+```
+]
+
+
+--
+### Why?
+To correctly model all means, we need to also model the **interaction** between
+the categorical variables
+
+
+--
+We'll talk about interactions more later. It is not the focus today, but...
+
+---
+
+.code-bg-red[
+
+```{r interaction-recover-means}
+m2d <- lm(read ~ race + prog + race:prog, d)
+arm::display(m2d, detail = TRUE)
+```
+
+]
+
+---
+
+.code-bg-red[
+
+```{r show-mean-recover}
+predict(m2d, newdata = data.frame(race = "hispanic", prog = "vocation"))
+tail(group_means )
+```
+]
+
+---
+class: inverse right
+background-image:url(../img/worry.jpg)
+background-size:cover
+
+# Don't worry
+(for now)
+
+---
+# Example 2
+
+### Hypothesis
+> Students' program type and writing ability will relate to their mathematics
+scores.
+
+
+--
+### The model
+
+$$
+math_i = b_0 + b_1(prog_i) + b_2(write_i) + e
+$$
+
+---
+# Re-dummy
+Remember, we had previously defined `prog` with effect coding. Let's go back to
+dummy coding
+
+```{r m3-dataprep}
+d <- d %>%
+  mutate(prog = factor(prog))
+contrasts(d$prog)
+```
+
+---
+# Model fit
+
+```{r m3a-fit}
+m3a <- lm(math ~ prog + write, d)
+arm::display(m3a, detail = TRUE)
+```
+
+--
+### Let's interpret!
+* What does the intercept represent
+* What about each of the coefficients?
+
+
+---
+# Visualize it
+
+```{r viz-m3a-echo, eval = FALSE, fig.height = 5}
+d <- d %>%
+  mutate(pred_m3a = predict(m3a))
+
+ggplot(d, aes(write, math)) +
+  geom_point() +
+  geom_line(aes(y = pred_m3a, color = prog),
+            size = 1.5)
+```
+
+--
+
+```{r viz-m3a-eval, echo = FALSE, fig.height = 5}
+d <- d %>%
+  mutate(pred_m3a = predict(m3a))
+
+ggplot(d, aes(write, math)) +
+  geom_point() +
+  geom_line(aes(y = pred_m3a, color = prog),
+            size = 1.5)
+```
+
+---
+# Note differences
+
+```{r viz-m3-int-echo, eval = FALSE, fig.height = 5}
+ggplot(d, aes(write, math)) +
+  geom_point() +
+  geom_smooth(aes(color = prog),
+              method = "lm",
+              se = FALSE,
+              size = 1.5)
+```
+
+--
+
+```{r viz-m3-int-eval, echo = FALSE, fig.height = 5}
+ggplot(d, aes(write, math)) +
+  geom_point() +
+  geom_smooth(aes(color = prog),
+              method = "lm",
+              se = FALSE,
+              size = 1.5)
+```
+
+---
+# Change the reference level
+
+```{r mod-3b-transform}
+d <- d %>%
+  mutate(prog = relevel(prog, ref = "vocation"))
+```
+
+### Try re-fitting the model
+
+--
+
+```{r mod-3b}
+m3b <- m3a <- lm(math ~ prog + write, d)
+arm::display(m3b)
+```
+
+---
+class: inverse middle center
+
+# Lab
