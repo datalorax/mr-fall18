@@ -1,0 +1,1300 @@
+---
+title: "Welcome to Multiple Regression!"
+author: "Daniel Anderson"
+date: "Week 1"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css", "ninjutsu.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+# Agenda 
+
+* 👋
+* What we're up to in this class
+* Brief intro to R
+* Review
+  + Variance/covariance
+  + Correlations
+    - And why visualizations are important
+  + Simple linear regression 
+
+---
+# Who am I?
+.pull-left[
+* Research Assistant Professor: Behavioral Research and Teaching
+* Dad (two daughters: 6 and 4)
+* Primary areas of interest
+  + 💗💗R💗💗 and computational research 
+  + Open data, open science, and reproducible workflows
+  + Growth modeling, achievement gaps, and variance between educational institutions
+]
+
+.pull-right[
+![](../img/thefam.jpg)
+]
+
+---
+# Who are you?
+* 40-ish of you would probs take too long for intros
+* Hopefully I'll get to know throughout the term
+
+--
+* Do you know your neighbors? 
+  * Let's take a few minutes for that
+  
+---
+# This class
+* Requirement for most of you, right?
+* Hopefully will be fun/interesting
+
+--
+* We will be using R throughout
+  + Don't be scared, it will be good
+
+--
+* How many people still need to get setup?
+
+---
+# Topic schedule
+### Weeks 1-5
+
+|       Week        | Topic                                              |
+| :---------------: | :------------------------------------------------- |
+| **1<br/>Sep 25**  | Review of simple linear regression and correlation |
+|  **2<br/>Oct 2**  | Multiple regression with continuous variables      |
+|  **3<br/>Oct 9**  | Multiple regression with categorical predictors    |
+| **4<br/>Oct 16**  | Partial and semipartial correlations               |
+| **5<br/>Oct 23**  | Regression diagnostics                             |
+
+---
+# Topic schedule
+### Weeks 6-10
+
+|       Week        | Topic                                              |
+| :---------------: | :------------------------------------------------- |
+| **6<br/>Oct 30**  | Curvilinear and Interaction effects                |
+|  **7<br/>Nov 6**  | Multimodel inference                               |
+| **8<br/>Nov 13**  | Prediction                                         |
+| **9<br/>Nov 20**  | Simulation for inference                           |
+| **10<br/>Nov 27** | Topics beyond the course                           |
+
+
+---
+# Readings
+I'll provide them all
+* Pedhazur 
+  + Old school but thorough 
+  + .gray[MR hasn't really changed since 1997 anyway]
+
+--
+* Gelman & Hill
+  + More advanced, more modern
+
+--
+* Ismay & Kim
+  + Mostly for R
+
+--
+* James et al.
+  + Very modern
+  + Focused on slightly different approach
+
+--
+* APA Manual
+  + 🤷
+
+---
+# 🎉 DataCamp 🎉
+* You should all have received an invite. Contact me if not.
+* Should help with learning R
+* Supplement the instruction in class
+* We'll use it as part of your homework
+
+.pull-left[
+![](../img/dc_flashcards.png)
+]
+
+.pull-right[
+![](../img/dc_topics.png)
+]
+
+---
+# DataCamp assignments
+
+![](../img/assignments.png)
+
+---
+# Labs
+Pretty much every class
+* Scenario-based
+* Will be through R (of course)
+* Will generally require more than just MR
+  + Data visualization
+  + Light programming - maybe?
+  
+---
+# Exercises 
+### 5 at 20 points each
+* Categorical coding
+* Partial and semi-partial correlations
+* Regression diagnostics
+* Interactions
+* Model comparisons
+
+---
+# Final Project
+### Stay tuned: More information to come
+* Will be available two weeks before finals week
+* Due **before midnight**, Tuesday, December 4
+* Will be scenario-based (responding to a reviewer) 
+
+---
+# Grading breakdown
+*	DataCamp: 5 points each = 70 points (22%)
+*	In-Class Labs: 5 points each = 50 points (16%)
+*	Exercises: 5 at 20 points each = 100 points (31%)
+*	Final Project: 100 points (31%)
+
+---
+class: inverse middle center
+background-image: url(../img/chalkboard.jpg)
+background-size: cover
+
+# What makes you nervous about this class?
+
+---
+class: inverse center middle
+background-image:url(../img/hands.jpg)
+background-size:cover
+
+# A few good reminders
+
+---
+class: inverse
+background-image: url(../img/failing.png)
+background-size: contain
+
+---
+class: inverse
+background-image: url(../img/impost-r.png)
+background-size: contain
+
+---
+class:middle
+
+> "The bad news is that whenever you learn a new skill you're going to suck.
+It's going to be frustrating. The good news is that is typical and happens to
+everyone and it is only temporary. You can't go from knowing nothing to
+becoming an expert without going through a period of great frustration and
+great suckiness."
+
+Hadley Wickham
+
+---
+class: inverse center middle
+background-image: url(https://alison.rbind.io/img//headers/purple-sparkle-wide.png)
+background-size:cover
+
+.major-emph-green[Support]
+
+---
+# R-Ladies
+* [R-Ladies global](https://rladies.org)
+* [R-Ladies Portland](https://www.meetup.com/R-Ladies-PDX/)
+
+--
+
+# Twitter [`r icon::fa("twitter")`](https://twitter.com)
+Very active community. Peruse the [#rstats](https://twitter.com/hashtag/rstats?src=hash) 
+hashtag. A few recommendations for follows:
+.pull-left[
+* [Mara Averick](https://twitter.com/dataandme)
+* [R4DS learning community](https://twitter.com/R4DScommunity)
+* [Hadley Wickham](https://twitter.com/hadleywickham)
+* [Jenny Bryan](https://twitter.com/JennyBryan)
+* [Jesse Maegan](https://twitter.com/kierisi)
+* [Claus Wilke](https://twitter.com/ClausWilke)
+* [Josh Rosenberg](https://twitter.com/jrosenberg6432)
+* [Emily Robinson](https://twitter.com/robinson_es)
+]
+
+.pull-right[
+* [Maëlle Salmon](https://twitter.com/ma_salmon)
+* [Colin Fay](https://twitter.com/_ColinFay)
+* [David Robinson](https://twitter.com/drob?lang=en)
+* [Julia Silge](https://twitter.com/juliasilge)
+* [Emi Tanaka](https://twitter.com/statsgen)
+* [Alison Hill](https://twitter.com/apreshill)
+* [Chester Ismay](https://twitter.com/old_man_chester)
+]
+
+---
+# [R4DS](https://www.jessemaegan.com/post/r4ds-the-next-iteration/)
+* Online group of supportive people all trying to learn R 
+* Tidy Tuesday
+  + New data viz with open data each Tuesday. Follow along on Twitter.
+
+--
+
+# [RStudio Community](https://community.rstudio.com)
+* Similar to [stackoverflow](https://stackoverflow.com/questions/tagged/r) but
+friendlier. 
+* Often philosophical questions
+* Opinionated
+* RStudio-philosophy dominant (as is this class)
+
+---
+class: inverse center middle
+background-image: url(https://pbs.twimg.com/media/DKSnpQcWkAEhJ0E.jpg)
+
+.major-emph-green[Welcome to R]
+
+---
+# What is R?
+* A programming language
+* Tremendously powerful and flexible statistical software that happens to be free
+* No point-and-click interface
+* Incredible array of external "packages" available for specialized analyses, data visualizations, or to automate much of the data "munging" process
+
+---
+# Code-based interface
+
+![rstudio](../img/rstudio.png)
+
+---
+# Moving to code/programming
+
+--
+
+.pull-left[
+### Advantages
+* Flexibility
+  + Essentially anything is possible
+* Transparency
+  + Documented history of your analysis
+* Efficiency
+  + Many (most?) tasks can be automated
+]
+
+--
+
+.pull-right[
+### Disadvantages
+* Steep learning curve
+  + Absolutely requires a significant time investment
+  + Equivalent to learning a new language
+* You will lose patience with point-and-click interfaces
+* Likely to become "one of the converted"
+]
+
+---
+# The R Learning Curve
+
+.gray[(as seen by me)]
+
+```{r, echo = FALSE, fig.height = 6.5, fig.width = 12}
+curve(x^3, from = -50, to = 50, lty = 3, col = "cadetblue3", lwd = 3,
+  axes = FALSE, xlab = "Time", ylab = "Learning", 
+  main = "Steepness of the line roughly corresponds to your required effort")
+axis(1, at = seq(-50, 50, 10),  labels = seq(0, 100, 10))
+axis(2, at = seq(-1e5, 1e5, 2e4),  labels = seq(0, 101, 10))
+```
+
+---
+# How to learn R?
+* Three most important ingredients: time, time, and more time
+* A sprinkling of dedication and determination help.
+* Be patient and forgiving with yourself. It will feel slow at first. Most people have not trained themselves to think in this way.
+
+
+---
+# R as a big calculator
+
+```{r calc_add}
+3 + 2
+```
+
+```{r calc_eq}
+(1/-(3/2)^2) / 2^-1/9
+```
+
+---
+# Object Assignment
+ 
+.pull-left[
+
+### Assignment
+```{r ob_assign1}
+a <- 3
+b <- 2
+a + b
+a / (a + b)
+```
+
+]
+
+--
+
+.pull-right[
+### Re-assignment
+
+```{r ob_assign2}
+a <- 3
+a
+a <- 7
+a
+```
+
+]
+
+---
+# Object Assignment (continued)
+
+.pull-left[
+Objects can be of a variety of types.
+
+```{r ob_types}
+string <- "Hello world!"
+logical <- TRUE
+double <- 3.2587021
+Integer <- 6L
+```
+]
+
+.pull-right[
+In this case, we can't exactly do arithmetic with all of these. 
+  For example
+
+```{r, error = TRUE}
+string + double
+```
+But, these objects can be extremely useful in programming.
+]
+
+---
+# Functions and getting help
+
+.pull-left[
+### R functions
+* Anything that carries out an operation in R is a function, even `+`. 
+* Functions (outside of primitive functions) are preceded by `()`
+    + e.g., `sum()`, `lm()`
+]
+
+.pull-right[
+### Getting help
+* `?` can be helpful, but often too advanced early on
+    + Helpful for understanding the formal arguments of a function
+    + Scroll down to the examples first
+* Google is your  best friend
+* Other resources discussed previously
+* Your classmates!
+* Me!
+]    
+
+---
+# Data frames
+
+* Equivalent of a spreadsheet (basically)
+  + I prefer tibbles, you probably will too
+* Access columns with `$`
+
+---
+# mtcars
+* Already in R when you launch
+
+```{r mtcars1}
+head(mtcars)
+mtcars$cyl
+```
+
+---
+# Refer to df each time
+
+```{r mtcars2, error = TRUE}
+mtcars$cyl + mtcars$hp
+mtcars$cyl + hp
+```
+
+---
+# Let's try
+
+[quick intro to R demo]
+
+* Open R, and run the following
+* Be careful about case - must match perfectly
+
+```{r mtcars3, eval = FALSE}
+mtcars
+View(mtcars)
+```
+
+* Use `sum` to sum `hp`
+* Use `mean` to calculate the mean of `mpg`
+
+---
+# Orientation of this course w/R
+* This course will generally be oriented around the *tidyverse*. 
+    + Very conscious decision that I really believe is the correct one.
+    + The *tidyverse* is an alternative to base R functions
+* What we've been doing are part of base R
+* In tidyverse, you usually won't need `$`
+  + Will be helpful today
+
+---
+class: inverse bottom
+background-image: url(../img/alberta.jpg)
+background-size: cover
+
+# Review of some basics
+
+---
+# Assumed knowledge
+
+.pull-left[
+* Dependent vs. independent variables
+* Variable types
+  + Categorical 
+  + Dichotomous 
+  + Dummy 
+  + Continuous 
+* Interval/ratio scales
+
+]
+
+.pull-right[
+* Measures of central tendency
+  + Mean 
+  + Median 
+  + Mode
+* Variability 
+  + Variance
+  + Standard Deviation
+  + Range
+  + Interquartile range
+* ANOVA
+
+]
+
+--
+
+.major-emph-green[Come to office hours if this is confusing]
+
+---
+# Simple linear regression
+* One continuous DV, one IV (of any type)
+
+```{r load-tidyverse, include = FALSE}
+library(tidyverse)
+theme_set(theme_minimal(base_size = 25))
+```
+
+```{r mtcars-scatter, message = FALSE, fig.height = 4, fig.width = 13}
+library(tidyverse)
+
+ggplot(mtcars, aes(x = disp, y = mpg)) +
+  geom_smooth(method = "lm", 
+              se = FALSE) +
+  geom_point(color = "gray40") 
+```
+
+---
+# Stats is mostly about...
+* What are things like generally? 
+  + On average...
+  + Measures of central tendency
+
+--
+* How close are things to average, generally?
+  + Lots of variance around the mean? Not much?
+  + Standard deviations
+
+--
+* How do things go together
+  + If x goes up, does y also go up? (positive correlation)
+  + If x goes up, does y go down? (negative correlation)
+  + If x goes up, does y change at all? (no correlation)
+
+---
+# The mean
+
+Notation of Pedhazur:
+
+.Large[
+$$
+\bar{X} = \frac{\sum_{i=1}^nX_i}{n}
+$$
+]
+
+--
+Thinking about this through R code. Mean of mpg "by hand".
+
+```{r mean1}
+sum(mtcars$mpg) / length(mtcars$mpg)
+```
+
+--
+Does this match the mean R reports?
+
+```{r mean2}
+mean(mtcars$mpg)
+```
+
+---
+# Quick aside
+### Make it a function
+* Copy and paste the code from before
+* Swap out the specific variable for an argument `x`, that could be any variable
+
+```{r fun1}
+my_mean <- function(x) {
+  sum(x) / length(x)
+}
+```
+
+--
+
+### test it out
+
+.pull-left[
+
+```{r funtest1}
+my_mean(mtcars$cyl)
+my_mean(mtcars$disp)
+```
+
+]
+
+.pull-right[
+
+```{r funtest2}
+mean(mtcars$cyl)
+mean(mtcars$disp)
+```
+
+]
+
+
+---
+# Deviation scores
+Difference between a score and the mean of the vector. (don't worry too much
+about the code yet)
+
+```{r deviation}
+mtcars$mean_mpg <- mean(mtcars$mpg)
+mtcars$deviation <- mtcars$mpg - mtcars$mean_mpg
+
+mtcars[c("mpg", "mean_mpg", "deviation")]
+```
+
+---
+# Variability
+* Deviation scores are the essence of variability
+* We'd like to summarize the variability through the deviation scores. What
+should we do?
+
+--
+### Try calculating the mean
+
+```{r mean_dev}
+round(mean(mtcars$deviation), 10)
+```
+
+![](https://media.giphy.com/media/GUhiBgU0DbWsU/giphy.gif)
+
+---
+# Variance
+
+Sum of the **squared** deviations divided by `n - 1`.
+
+.Large[
+$$
+s_x^2 = \frac{\sum_i^{n}(X_i-\overline{X})^{2}}{n-1}
+$$
+]
+
+* Note we use `n - 1` and not `n` to correct for sampling variability. (makes
+it an unbiased estimate)
+* Another (more common) symbol for the variance is $\sigma^2$
+
+---
+# Standard deviation
+
+.Large[
+$$
+s_x = \sqrt{s^{2}}
+$$
+]
+
+The standard deviation is then just the square root of the variance! So, the
+standard deviation is, essentially, the average of the deviations.
+
+* Another (more common) symbol for the standard deviation is $\sigma$
+
+---
+class: inverse middle 
+background-image: url(../img/chalkboard.jpg)
+background-size: cover
+
+# Let's try! 
+
+### Together, we will:
+* Calculate the variance of `mpg` from `mtcars` "by hand" 
+* Transform it to a standard deviation
+* Evaluate if the estimate matches the result from `var(mtcars$mpg)`
+
+[demo]
+
+### On your own:
+* Calculate the variance and standard deviation of `mtcars$displ` "by hand"
+* Super extra bonus kudos if you can turn it into a function
+
+---
+# Transition to correlation
+
+```{r correlations, echo = FALSE, fig.width = 13, fig.height = 8}
+sim <- data_frame(n = 100,
+           means = rep(list(c(100, 100)), 15),
+           error = map(seq(-70, 70, 10), ~
+                         matrix(c(100, ., 
+                                  ., 50), 
+                                byrow = TRUE, 
+                                ncol = 2))) %>% 
+  mutate(sim = pmap(list(n = n,
+                         mu = means,
+                         Sigma = error),
+                    MASS::mvrnorm),
+         sim = map(sim, as.data.frame),
+         cor = map_dbl(error, ~cov2cor(.)[2])) %>% 
+  select(cor, sim) %>% 
+  unnest() %>% 
+  mutate(cor = round(cor, 2))
+
+ggplot(sim, aes(V1, V2)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~cor) +
+  theme(strip.text.x = element_text(size = 16))
+```
+
+---
+.pull-left[
+### Recall the variance
+  .Large[
+$$
+s^{2} = \frac{\sum_i^{n}(X_i-\overline{X})^{2}
+}{n-1}
+$$
+  ]
+]
+
+--
+
+.pull-right[
+### Could be rewritten
+  .Large[
+$$
+s^{2} = \frac{\sum_i^{n}(X_i-\overline{X})(X_i-\overline{X})}
+{n-1}
+$$
+  ]
+]
+
+--
+
+### Covariance
+.Large[
+$$
+s_{xy} = \frac{\sum_i^{n}(X_i-\overline{X})(Y_i-\overline{Y})}{n-1}
+$$
+]
+
+
+---
+# Back to `mtcars`
+* Let's calculate the covariance of `mpg` and `displ`
+
+```{r mtcars_covar1}
+dev_mpg <- mtcars$mpg - mean(mtcars$mpg)
+dev_mpg
+dev_disp <- mtcars$disp - mean(mtcars$disp)
+dev_disp
+```
+
+---
+
+```{r mtcars_covar2}
+multiplied <- dev_mpg * dev_disp
+multiplied
+summed <- sum(multiplied)
+summed
+summed / (length(mtcars$mpg) - 1)
+cov(mtcars$mpg, mtcars$disp)
+```
+
+---
+# But what does this number mean?
+
+![](https://media3.giphy.com/media/3o7btPCcdNniyf0ArS/source.gif)
+
+---
+# Correlations can help
+
+Correlation = covariance(xy) / (sd(x) * sd(y))
+
+--
+
+.Large[.pull-left[
+$$
+r_{xy} = \frac{\frac{\sum_i^{n}(X_i-\overline{X})(Y_i-\overline{Y})}{n-1}}
+{s_xs_y}
+$$
+]]
+
+--
+
+.Large[.pull-right[
+$$
+r\_{xy} = \frac{s\_{xy}}{s\_xs\_y}
+$$
+]]
+
+---
+
+```{r corr-hand}
+cov(mtcars$mpg, mtcars$disp) / 
+  (sd(mtcars$mpg) * sd(mtcars$disp))
+```
+
+
+--
+
+```{r corr-check}
+cor(mtcars$mpg, mtcars$disp)
+```
+
+---
+# Let's talk correlation
+* The previous correlation was -0.85. 
+  + What does this mean? 
+  + What does it look like?
+* Correlations range from -1 to +1
+  + What is the difference between a negative correlation and a positive one?
+
+---
+class: inverse middle center
+background-image: url(w1_files/figure-html/correlations-1.png)
+background-size: contain
+
+
+---
+# Your first ggplot lesson
+Follow along!
+
+[demo]
+
+Making a ggplot scatterplot  between car weight and miles per gallon. (I
+promise, we'll move away from cars after tonight)
+
+---
+# How do we interpret correlations?
+* Think about direction first
+  + What happens to $y$ as $x$ increases?
+* Magnitude takes some judgment
+  + Really will depend on your field/area of investigation
+  + Cohen's guidelines are used pretty regularly
+      + Small: .10
+      + Medium: .30
+      + Large: .50
+
+---
+class: inverse center
+background-image: url(../img/gears.jpg)
+background-size: cover
+# Regression
+
+---
+# Plot it first
+* Let's go back to our ggplot example
+* add `+ geom_smooth()`. What do you see? .gray[(hint: This is not linear
+regression)]
+* Now change to `+ geom_smooth(method = "lm")`. What changed? Can you guess
+  what `lm` stands for?
+* Try one more time, with `+ geom_smooth(method = "lm", se = FALSE)`. What has
+  canged now?
+
+---
+# Regression vs. Correlation
+* Regression is scale dependent
+* Coefficient represents the expected (on average) change in $y$ given a
+  one-unit increase in $x$.
+* Standardized coefficient in simple linear regression = correlation 
+  coefficient.
+
+---
+# The regression model from before
+
+```{r wt-mpg-scatter, fig.width = 13, fig.height = 6}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+---
+# Take a guess
+* What sign will the regression coefficient have (positive/negative)?
+* What do you think the coefficient will be?
+  + What is the average change in $y$ for a one unit increase in $x$ (i.e., the
+  regression line)?
+
+---
+# Let's fit the model!
+
+* `lm` function stands for linear model.
+
+--
+
+```{r first-reg}
+m <- lm(formula = mpg ~ wt, data = mtcars)
+```
+
+* Run the above and nothing happens. 🤨
+
+--
+
+* Have to print `m`, the object you stored the model in.
+
+```{r print-reg-mod}
+m
+```
+
+--
+* Doesn't show us much. How do we get more?
+
+---
+# Evaluating output
+* Use the `summary` function to see more of the model results
+
+```{r summary-reg-mod}
+summary(m)
+```
+
+---
+# Slightly nicer output
+
+```{r arm-reg-mod, message = FALSE}
+library(arm)
+display(m, detail = TRUE)
+```
+
+--
+
+* What does all this mean?
+
+--
+* Remember the regression equation is
+
+$$
+Y_i = a + bX_i + e
+$$
+
+--
+
+* In this case (for the fixed part), we're saying
+
+$$
+mpg = 37.29 + -5.34*wt
+$$
+
+
+---
+
+.Large[
+$$
+mpg = 37.29 + -5.34*wt
+$$
+]
+
+* What does 37.29 represent?
+* What about -5.34?
+
+--
+* This is our prediction for any one car.
+* The amount this is off, overall, is our residual variance.
+* the `predict` function will do this for us automatically (and is extremely
+  useful)
+
+--
+* Using the regression equation above, what `mpg` would we expect for a car 
+  with a weight of 2.62?
+
+---
+# Quickly
+* The `predict` function will use the model you feed it to predict new
+observations.
+* By default, the observations that were used to estimate the model
+
+```{r preds}
+mtcars$predictions <- predict(m)
+head(mtcars)
+```
+
+---
+# Other components
+
+* $R^2$ = proportion of the variability captured by the model
+  + regression sum of squares divided by the total variance
+* Residual standard error = the standard deviation of the errors around the
+regression line (assuming they are normally distributed)
+  + regression sums of squares divided by the residual sum of squares
+
+---
+# Breaking the model down
+* If we know nothing else, our best guess for any individual observation would
+be the mean
+* The deviations from the mean are large. This is our residual variance.
+
+
+```{r plot-mean2, fig.height = 4, fig.width = 13}
+ggplot(mtcars, aes(x = 1, y = mpg)) +
+  geom_point() +
+  geom_hline(yintercept = mean(mtcars$mpg), 
+             color = "cornflowerblue",
+             size = 1.2)
+```
+
+
+---
+# Add a predictor
+* When we add a predictor variable, we can then fit a regression line.
+* Deviations from the line are now smaller (i.e., the variance has been 
+  reduced).
+* The amount (proportion) the variance has been reduced, is $R^2$
+
+
+```{r plot-pred2, fig.height = 4, fig.width = 13}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
+
+---
+# In equation form
+* Residual variance is reduced with a regression line
+* Proportion Variance reduction = $R^2$.
+* First estimate how much is learned **because of the regression model**
+  + $Y' - \overline{Y}$
+    + $\sum(Y' - \overline{Y}) = 0$
+  + $ss_{reg} = \sum (Y' - \overline{Y})^2$
+
+--
+* Next estimate how much of the variance is "left over"
+  + Residual variance = $Y - Y'$
+    + $ss_{res} = \sum (Y - Y')^2$
+
+--
+
+* Finally, estimate the total variance
+  + $\sum y^2 = ss_{reg} + ss_{res}$
+
+--
+
+.large[
+$R^2 = \frac{\sum (Y' - \overline{Y})^2}{(\sum (Y' - \overline{Y})^2) + (\sum (Y - Y'))} = \frac{ss_{reg}}{\sum y^2}$
+]
+
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition1, echo = FALSE, fig.width = 13, fig.height = 7}
+pal <- RColorBrewer::brewer.pal(3, "Set1")
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  ylim(0, 35) 
+```
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition2, echo = FALSE, fig.width = 13, fig.height = 7}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  geom_point(data = mtcars[1, ], 
+             color = pal[1],
+             size = 3) +
+  ylim(0, 35) +
+  annotate("text", 2.62, 22,
+           size = 6,
+           label = "RX4",
+           color = pal[1]) 
+```
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition3, echo = FALSE, fig.width = 13, fig.height = 7}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  geom_point(data = mtcars[1, ], 
+             color = pal[1],
+             size = 3) +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = pal[2]) +
+  ylim(0, 35) +
+  annotate("text", 4.25, 11, 
+           size = 7, 
+           label = "Regression", 
+           color = pal[2]) 
+```
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition4, echo = FALSE, fig.width = 13, fig.height = 7}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  geom_point(data = mtcars[1, ], 
+             color = pal[1],
+             size = 3) +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = pal[2]) +
+  ylim(0, 35) +
+  geom_hline(yintercept = mean(mtcars$mpg),
+             color = pal[3],
+             lwd = 1.4) +
+  annotate("text", 5, 21, 
+           size = 8, 
+           label = "Mean", 
+           color = pal[3]) +
+  annotate("text", 4.25, 11, 
+           size = 7, 
+           label = "Regression", 
+           color = pal[2]) 
+```
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition5, echo = FALSE, fig.width = 13, fig.height = 7}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  geom_point(data = mtcars[1, ], 
+             color = pal[1],
+             size = 3) +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = pal[2]) +
+  ylim(0, 35) +
+  geom_hline(yintercept = mean(mtcars$mpg),
+             color = pal[3],
+             lwd = 1.4) +
+  annotate("text", 5, 21, 
+           size = 8, 
+           label = "Mean", 
+           color = pal[3]) +
+  annotate("text", 4.25, 11, 
+           size = 7, 
+           label = "Regression", 
+           color = pal[2]) +
+  geom_segment(x = 2.55, 
+               xend = 2.55, 
+               y = 0, 
+               yend = mean(mtcars$mpg),
+               color = pal[3], 
+               lty = 3,
+               lwd = 1.2) 
+```
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition6, echo = FALSE, fig.width = 13, fig.height = 7}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  geom_point(data = mtcars[1, ], 
+             color = pal[1],
+             size = 3) +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = pal[2]) +
+  ylim(0, 35) +
+  geom_hline(yintercept = mean(mtcars$mpg),
+             color = pal[3],
+             lwd = 1.4) +
+  annotate("text", 5, 21, 
+           size = 8, 
+           label = "Mean", 
+           color = pal[3]) +
+  annotate("text", 4.25, 11, 
+           size = 7, 
+           label = "Regression", 
+           color = pal[2]) +
+  geom_segment(x = 2.55, 
+               xend = 2.55, 
+               y = 0, 
+               yend = mean(mtcars$mpg),
+               color = pal[3], 
+               lty = 3,
+               lwd = 1.2) +
+  geom_segment(x = 2.55, 
+               xend = 2.55, 
+               y = mean(mtcars$mpg), 
+               yend = predict(m, data.frame(wt = 2.55)),
+               color = pal[2], 
+               lty = 3,
+               lwd = 1.2)
+```
+
+---
+# Graphic decomposition
+
+```{r graphic-decomposition7, echo = FALSE, fig.width = 13, fig.height = 7}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(color = "gray40", size = 2) +
+  geom_point(data = mtcars[1, ], 
+             color = pal[1],
+             size = 3) +
+  geom_smooth(method = "lm", 
+              se = FALSE,
+              color = pal[2]) +
+  ylim(0, 35) +
+  geom_hline(yintercept = mean(mtcars$mpg),
+             color = pal[3],
+             lwd = 1.4) +
+  annotate("text", 5, 21, 
+           size = 8, 
+           label = "Mean", 
+           color = pal[3]) +
+  annotate("text", 4.25, 11, 
+           size = 7, 
+           label = "Regression", 
+           color = pal[2]) +
+  geom_segment(x = 2.55, 
+               xend = 2.55, 
+               y = 0, 
+               yend = mean(mtcars$mpg),
+               color = pal[3], 
+               lty = 3,
+               lwd = 1.2) +
+  geom_segment(x = 2.55, 
+               xend = 2.55, 
+               y = mean(mtcars$mpg), 
+               yend = predict(m, data.frame(wt = 2.55)),
+               color = pal[2], 
+               lty = 3,
+               lwd = 1.2) +
+  geom_segment(x = 2.62, 
+               xend = 2.62, 
+               y = mtcars[1, ]$predictions, 
+               yend = mtcars[1, ]$mpg,
+               color = pal[1], 
+               lty = 3,
+               lwd = 1.2)
+```
+
+---
+# Decomposition
+* Any individual observation is then composed of three components
+  + Mean of $Y$
+  + Difference between the regression equation and the mean of $Y$
+  + Difference between the regression equation and the individual point
+
+--
+$$
+Y = \overline{Y} + (Y' - \overline{Y}) + (Y - Y')
+$$
+
+
+
+---
+### Decomposition for Mazda RX4
+```{r decomposition}
+mtcars[1, ]
+mean(mtcars$mpg)
+```
+
+--
+$$
+Y = \overline{Y} + (Y' - \overline{Y}) + (Y - Y')
+$$
+
+--
+$$
+21 = 20.09 + (23.28 - 20.09) + (21 -23.28)
+$$
+
+--
+$$
+21 = 20.09 + 3.19 + -2.28
+$$
+
+---
+# Residual standard error
+
+.Large[
+$$
+e = \sqrt{\frac{\sum (Y - Y')^2}{df}} =  \sqrt{\frac{ss_{res}}{df}}
+$$
+
+]
+
+* This equation, like all of statistics, tries to estimate the population-level
+  residual variance
+* $df = n - k$
+* We can approximate it (i.e., calculate it for our sample) by calculating the
+  standard deviation of our residuals
+
+---
+# Sample residual deviance
+
+```{r sample-dev}
+mtcars$res <- mtcars$mpg - mtcars$prediction
+head(mtcars)
+```
+
+---
+```{r sample-dev2, fig.width = 13}
+ggplot(mtcars, aes(x = res)) +
+  geom_histogram(bins = 20, alpha = 0.7)
+```
+
+---
+```{r sample-dev3}
+sd(mtcars$res)
+summary(m)$sigma
+```
+
+---
+# Let's do it!
+
+```{r partitioning}
+predictions <- predict(m)
+
+reg <- predictions - mean(mtcars$mpg)
+ss_reg <- sum(reg^2)
+
+res <- mtcars$mpg - predictions
+ss_res <- sum(res^2)
+
+r2 <- ss_reg / (ss_reg + ss_res)
+e <- sqrt(ss_res/30)
+```
+### Run the following
+* Go line by line
+* Try to understand what each line does
+* Does it match your output? from `summary(m)`
+
+---
+# Lab
+* Doubtful there's any time left, but if so, let's do some lab!
+* Make sure to turn in whatever you have through canvas before you leave
