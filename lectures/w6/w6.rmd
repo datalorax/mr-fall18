@@ -1,0 +1,704 @@
+---
+title: "Partial and Semi-Partial Correlations"
+author: "Daniel Anderson"
+date: "Week 6"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r setup, include = FALSE}
+library(here)
+library(tidyverse)
+library(rio)
+
+theme_set(theme_minimal(base_size = 25))
+
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+
+d <- import(here("data", "glo_sim.sav"),
+            setclass = "tbl_df") %>%
+      characterize()
+
+```
+# Agenda 
+* Review Lab
+* A few more notes on model assumptions
+* Partial and semi-partial correlations
+* Lab
+
+---
+class: inverse middle center
+background-image:url(../img/chalkboard.jpg)
+background-size:cover
+
+# What questions do you have?
+
+
+---
+class: inverse middle center
+background-image:url(../img/wood.jpg)
+background-size:cover
+
+# Let's get some data
+
+---
+# Residuals
+Last time, we talked about: 
+
+--
+* ordinary residuals: $Y' - Y$
+
+--
+* Standardized residuals: $e_{Si} = \frac{e_i}{s_{y.x}\sqrt{1 - h_i}}$
+
+
+---
+# Studentized deleted residuals
+
+.Large[
+
+$$
+e\_{Ti} = \frac{e\_i}{s\_{y.x\_{(-i)}}\sqrt{1 - h\_i}}
+$$
+
+]
+
+* Here $s_{y.x_{(-i)}}$ represents the residual standard error when
+  observation $i$ is removed.
+
+
+--
+### My point in showing you this
+* You'll likely see these elsewhere
+* Some people will use these values or standardized residuals in plots against 
+  the fitted values. 
+  
+---
+class: inverse middle
+
+.Large[
+
+> While [standardized residuals] have constant variance, they are no longer uncorrelated with the fitted values or linear combinations of the regressors, so using standardized residuals in plots is not an obvious improvement.
+
+]
+
+\-John Fox
+
+---
+# One benefit
+* Studentized residuals should follow a $T$ distribution, so they can be
+  another used as another method for testing for outliers.
+
+--
+* Use the {car} package (companion for applied regression). Has lots of other good
+  functions as well.
+
+---
+```{r car-t-echo, eval = FALSE}
+library(car) #new library #<<
+m1 <- lm(sex_risk ~ internalizing + externalizing + aces, d)
+qqPlot(m1)
+```
+
+```{r car-t-eval, echo = FALSE, fig.height = 6}
+m1 <- lm(sex_risk ~ internalizing + externalizing + aces, d)
+car::qqPlot(m1)
+```
+
+---
+# Actual tests
+
+(also from {car})
+
+```{r outlier-test-echo, eval = FALSE}
+outlierTest(m1)
+```
+
+```{r outlier-test, echo = FALSE}
+car::outlierTest(m1)
+```
+
+--
+* Ultimately, this is another source of information, but just because an  
+  outlier is "significant", doesn't mean it should be removed. Influence still 
+  matters more.
+
+---
+# dfbeta
+
+Cook's D measures the influence of a particular point on the entire regression.
+
+--
+
+dfbeta measures the influence of a particular point on each coefficient.
+
+--
+
+.Large[
+
+$$
+dfbeta\_{ij} = b\_{(-i)j} - b\_j \text{ for } j = 0, \dots , k
+$$
+
+]
+
+
+---
+
+```{r dfbeta}
+m1_dfb <- dfbeta(m1)
+head(m1_dfb)
+```
+
+---
+# Make it a df
+
+.gray[Note, this may be slightly more complicated if you have missing data]
+
+```{r }
+m1_dfb <- as.data.frame(m1_dfb) %>%
+  janitor::clean_names() %>%
+  mutate(id = d$id) 
+```
+
+---
+# Arrange by a coefficient
+
+```{r dfbeta-arrange1}
+m1_dfb %>% 
+  arrange(desc(intercept)) %>% # Arrange by intercept
+  head()
+```
+
+
+---
+# Arrange by disp
+
+```{r dfbeta-arrange2}
+m1_dfb %>%
+  arrange(desc(internalizing)) %>% # Arrange by internalizing
+  head()
+```
+
+
+---
+# Big picture
+This is just more information that may be useful when diagnosing whether or not
+you have met the assumptions of your model, and/or the influence of outliers on
+your results.
+
+---
+class: middle center
+# Partial and semi-partial correlations
+
+```{r plot, echo = FALSE, message = FALSE, warning = FALSE}
+ggplot(mpg, aes(displ, cty)) +
+  geom_point(color = "gray70", 
+             size = 2) +
+  geom_smooth(aes(color = trans),
+              method = "lm", 
+              se = FALSE,
+              lwd = 2) +
+  scale_color_brewer(palette = "Set2") +
+  guides(color = "none") +
+  labs(x = "", 
+       y = "") +
+  ylim(10, 25)
+```
+
+---
+# Zero-order correlation
+
+Correlation between two variables, without accounting for any other variable
+
+--
+![](../img/zero-order.png)
+
+---
+# Examine zero order correlations
+
+```{r zero-order-corrs}
+d %>%
+  select(sex_risk, internalizing, externalizing, aces) %>%
+  cor()
+```
+
+---
+# Plot 
+Base version, or use {GGally}
+
+```{r pairs-plot-echo, eval = FALSE}
+d %>%
+  select(sex_risk, internalizing, externalizing, aces) %>%
+  pairs()
+```
+
+---
+```{r pairs-plot-eval, echo = FALSE, fig.height = 9}
+d %>%
+  select(sex_risk, internalizing, externalizing, aces) %>%
+  pairs()
+```
+
+---
+background-image:url(../img/multiple-r.png)
+background-size:contain
+
+# Multiple $R$ & $R^2$
+
+---
+class: middle
+background-image:url(../img/partial1.png)
+background-size:contain
+
+# Partial $r$
+
+---
+class: middle
+background-image:url(../img/partial2.png)
+background-size:contain
+
+# Partial $r$
+
+
+---
+# Partial correlations
+
+Represent the *unique* relation between the DV and one IV when common 
+variance from other predictors has been removed (partialed, residualized) 
+from **both** variables. 
+
+--
+* Largely represent what is happening "under the hood"
+
+
+--
+### The problem with partial correlations
+* The denominator differs for each partial correlation
+  + Not directly comparable
+  + $a + e \neq b + e$ 
+
+---
+class: left
+background-image:url(../img/semi-partial1.png)
+background-size:contain
+
+# Semi-partial $r$
+
+---
+class: left
+background-image:url(../img/semi-partial2.png)
+background-size:contain
+
+# Semi-partial $r$
+
+---
+# Semi-partial
+
+Represent the unique relation between the DV and the IV when common variance
+among predictors has been removed (partialed, residualized)
+
+--
+* Same denominator for all predictor variables - directly comparable
+
+--
+* When squared, represents the **unique variance accounted for by the model**.
+This can be powerful.
+
+--
+* Squared value is on the same scale as $R^2$
+
+---
+# Discussion
+
+1. Which do you think is more useful for interpretation?
+2. Will the sum of the squared semipartial correlations always equal
+$R^2$?
+
+---
+class: inverse center middle
+# Estimation
+
+---
+# Going back to our model
+
+$$
+risk_i = b_0 + b_1(internalizing_i) + b_2(externalizing_i) + b_3(aces_i) + e
+$$
+
+--
+### Fit
+
+```{r fit-m1}
+m1 <- lm(sex_risk ~ internalizing + externalizing + aces, d)
+```
+
+---
+
+```{r interpret-m1, highlight.output = 20:21}
+summary(m1, detail = TRUE)
+```
+
+---
+# Compute partial and semipartials
+
+{lmSupport}
+
+```{r lmSupport, highlight.output = 5}
+# install.packages("lmSupport")
+library(lmSupport)
+modelEffectSizes(m1)
+```
+
+---
+# Model interpretation
+* Note the values on the prior slide were squared (this is good, this is
+generally what we want to interpret)
+
+
+--
+### Things you should interpret for all models
+* Coefficients of interest (you can often skip over "control" variables)
+* Significance
+* Confidence intervals
+* Model fit (i.e., $R^2$)
+
+
+--
+In many cases, squared semi-partial correlations can add to the substantive
+interpretation - what is the unique variance accounted for by a specific
+predictor variable?
+
+
+---
+# Example 
+### $R^2$
+The combination of internalizing and externalizing behaviors, along with ACEs
+scores, accounted for approximately 25% of the total variability in sexual risk
+scores, which was significant, $F(3, 115) = 13.07, p < 0.05$. 
+
+---
+# Example (coefficients)
+### Intercept
+The model indicated that girls who exhibited no internalizing or externalizing
+behaviors, and scored a zero on ACEs, would be expected to score -0.43 points 
+on the sexual risk composite variable, on average. 
+
+---
+# Example (coefficients)
+### Internalizing behaviors
+
+The internalizing behaviors measure was not a significant predictor of girls
+sexual risk score, $t(115) = -0.84, p = 0.40$, when controlling for
+externalizing behaviors and ACEs scores. 
+
+---
+# Example (coefficients)
+### Externalizing behaviors
+
+The externalizing measure was significant, $t(115) = 3.69, p < 0.05$,
+indicating that a one unit increase in externalizing behaviors corresponded to,
+on average, a 0.03 unit increase on the sexual risk composite, with a 95%
+confidence interval indicating the true effect may lie between 0.01 and 0.05. 
+Externalizing behavior uniquely accounted for 8.8% of the total variability in
+sexual risk scores, when controlling for internalizing behaviors and ACES
+scores. 
+
+
+---
+# Example (coefficients)
+### ACEs
+
+Finally, the ACEs score was also significant, $t(115) = 3.13, p < 0.05$, 
+indicating that a one unit increase on ACES corresponded to, on average, a
+0.09 unit increase in sexual risk behavior, $95% CI = [0.03, 0.15]$. The ACEs
+measure uniquely accounted for 6.4% of the total variability in sexual risk
+scores, after accounting for internalizing and externalizing behaviors.
+
+
+---
+# What about tables?
+* Generally, if you fit a regression model, you'll want to have a table
+reporting all of this stuff.
+
+
+--
+### My view
+* If your table is detailed enough, don't report all the stats again in text 
+(keep the text mostly on the substantive side)
+
+
+---
+class: right
+background-image:url(../img/mr-table.png)
+background-size:contain
+
+# Example table
+
+---
+# Revised interpretation
+
+Table 3 reports the parameter estimates from the model, which accounted for 25%
+of the total variability in sexual risk behavior scores. Both the externalizing
+behavior and the ACEs measures significantly predicted sexual risk behavior
+scores, while internalizing behaviors was not significant. 
+Externalizing behavior scores uniquely accounted for 8.8% of the total
+variability in sexual risk scores, while ACEs uniquely accounted for 6.4% of 
+the total variability, after accounting for the other variables in the model. 
+As can be seen, the confidence intervals indicated that, while
+significant, there was considerable uncertainty in the ACEs estimate, with 95%
+confidence interval ranging from 0.03 to 0.15. 
+
+---
+# Figures
+* Often it's helpful to include figures, specifically if you can show what your
+model is doing.
+* This particular version is a little complicated
+
+--
+* First, think about what you want to show. How about externalizing behavior
+predicting sexual risk, holding internalizing behaviors constant, and for a
+couple of different levels of ACES (i.e., separate lines for each ACES level we
+choose)?
+
+---
+### Create some data
+
+```{r pred}
+x_axis <- seq(from = 0, to = 45, by = .1)
+
+pred_frame <- data.frame(internalizing = 0, 
+                         externalizing = rep(x_axis, 3),
+                         aces = rep(c(0, 3, 6), 
+                                    each = length(x_axis))) 
+  
+pred_frame <- pred_frame %>%
+  mutate(pred = predict(m1, newdata = pred_frame),
+         aces = as.factor(aces))  # Why change to factor?
+```
+
+---
+```{r show-pred-data}
+head(pred_frame)
+tail(pred_frame)
+```
+
+---
+# Create plot
+First, let's just plot externalizing behavior again sexual risk (something we
+would likely have already done before fitting the model)
+
+```{r pred-plot1, fig.height = 5}
+ggplot(d, aes(externalizing, sex_risk)) +
+  geom_point() 
+```
+
+---
+# Add lines from the model
+
+Notice we change the data source when we add lines, and we change the y-axis.
+
+```{r pred-plot2, fig.height = 4.5}
+ggplot(d, aes(externalizing, sex_risk)) +
+  geom_point() +
+  geom_line(aes(y = pred, color = aces), #<<
+            data = pred_frame) #<<
+```
+
+
+---
+# Also useful - coefficient plots
+* You may have seen these in DataCamp
+* Requires the {broom} library
+* Much easier in this case
+
+```{r tidy}
+library(broom)
+tidy_pd <-  tidy(m1, conf.int = TRUE)
+tidy_pd  
+```
+
+---
+# Plot coefficients w/CIs
+
+```{r coefplot, fig.height = 4.5}
+ggplot(tidy_pd, aes(term, estimate)) +
+  geom_hline(yintercept = 0, 
+             color = "cornflowerblue",
+             size = 2) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = conf.low, 
+                    ymax = conf.high)) +
+  coord_flip()
+```
+
+---
+class: inverse middle
+
+# Revisiting Estimation
+Let's calculate the partial correlation between externalizing behavior and
+sexual risk.
+
+---
+# Step 1
+Residualize the outcome with respect to the other predictors
+
+```{r y-noexternalizing}
+y_noex <- lm(sex_risk ~ internalizing + aces, d)
+```
+
+--
+### Why?
+
+---
+background-image:url(../img/partial3.png)
+background-size:contain
+
+
+--
+# Step 2
+Extract residualized values
+
+```{r y-resids}
+y_res <- residuals(y_noex)
+```
+
+---
+# Step 3
+Residualize the predictor with respect to the other predictors
+
+```{r externalizing-mod}
+ex_mod <- lm(externalizing ~ internalizing + aces, d)
+```
+
+--
+### Why?
+
+---
+background-image:url(../img/partial3.png)
+background-size:contain
+
+
+--
+# Step 4
+Extract residualized values
+
+```{r externalizing-resids}
+ex_res <- residuals(ex_mod)
+```
+
+---
+# Compute correlations
+
+---
+### partial correlation
+
+```{r partial}
+cor(y_res, ex_res)
+```
+
+--
+### semi-partial correlation
+
+```{r semi-partial}
+cor(d$sex_risk, ex_res)
+```
+
+
+--
+* The only difference between the partial and semi-partial correlation
+is whether the residualized predictor is correlated with the raw data for the
+outcome, or the residualized outcome.
+
+--
+* Semi-partial correlations are more interpretable, but will generally always 
+be smaller than the partial correlations (think about the denominator)
+
+
+---
+# Square the values
+* Squaring the semipartial correlation gives us the variance uniquely accounted
+for by the variable.
+* Squaring the partial correlation gives us partial $\eta^2$, which is not
+terrifically interpretable.
+
+--
+
+```{r squared-corrs}
+cor(y_res, ex_res)^2
+cor(d$sex_risk, ex_res)^2
+```
+
+---
+```{r es}
+modelEffectSizes(m1)
+```
+
+---
+## Alternative squared semi-partial $r$ calculation
+A more intuitive way to think about squared semi-partial correlations is by
+thinking about two separate models, one with and without the variable of
+interest.
+
+--
+* What's the difference in $R^2$? That's your squared semi-partial correlation.
+* Let's calculate the squared semi-partial correlation for externalizing
+behaviors again using this method
+
+--
+```{r fit-two-mods}
+reduced_model <- lm(sex_risk ~ internalizing + aces, d)
+full_model <- lm(sex_risk ~ internalizing + externalizing + aces, d)
+```
+
+---
+
+```{r display-mods}
+arm::display(full_model)
+arm::display(reduced_model)
+```
+
+
+---
+# $\Delta R^2$
+
+.Large[
+$$
+0.25 - 0.17 = 0.08
+$$
+
+]
+
+* When you're comparing models and the only difference is **one** variable 
+being included versus not included, $\Delta R^2$ will equal the squared
+semi-partial correlation
+* Take the square root if you (for some reason) want the semi-partial
+correlation.
+* Use `summary` instead of `arm::display` for more decimal places.
+
+---
+# Take home message
+* It's important that you have an intuitive understanding of semi-partial
+correlations in particular (partial correlations less important)
+* $\Delta R^2$ method probably most intuitive
+
+
+--
+### Moving forward
+* We have an entire week devoted to model comparisons. We'll talk about 
+$\Delta R^2$ more then
+
+---
+class: inverse center middle
+# Lab
+
