@@ -1,0 +1,742 @@
+---
+title: "MR w/two continuous IVs"
+author: "Daniel Anderson"
+date: "Week 2"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r, setup, include = FALSE}
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+```
+
+# Agenda 
+
+* A little bit of R
+  * Reading in data
+  * *ggplot2* basics
+* A little more review of simple linear regression
+  * Calculation of intercept & slope
+* Extending the SLR model
+
+
+---
+class: inverse middle center
+background-image:url(../img/chalkboard.jpg)
+background-size:cover
+
+# What questions do you have?
+
+---
+class: inverse bottom center
+background-image:url(../img/r.png)
+background-size:cover
+
+# Let's start out with some R
+
+---
+# Demo
+### Do it with me
+* Create a new project
+  + Place the Rmd file posted to canvas in the directory
+* Add a data folder
+  + Place the `elemapi.sav` data there
+* Import the data into R
+  + Use the `here` library
+* Explore it a bit
+
+---
+class: inverse bottom center
+background-image:url(../img/ggplot2.png)
+background-size:contain
+
+---
+# Some resources
+The *ggplot2* package is one of the most popular R packages. There are a plethora of resources to learn the syntax. 
+
+* Perhaps the most definitive, and indexes all the capabilities of ggplot2, along with multiple examples 
+  + http://docs.ggplot2.org/current/index.html#
+
+* RStudio cheat sheet can also be helpful
+  + https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+
+* R Graphics Cookbook
+  + http://www.cookbook-r.com/Graphs/
+
+---
+# Components
+Every *ggplot* plot has three components
+
+1. data
+  * The data used to produce the plot
+2. aesthetic mappings
+  * between variables and visual properties
+3. layer(s)
+  * usually through the `geom_*` function to produce geometric shape to be
+  rendered
+
+---
+# Basic syntax
+![ggplotBasicSyntax](../img/ggplotBasicSyntax.png)
+
+---
+# Quick demo
+* Couple different geoms
+* Understand common mistakes 
+  + And that it will take some trial & error
+
+If you want, see my other slides [here](http://www.datalorax.com/vita/ds/ds1-slides/w2p1/) and [here](http://www.datalorax.com/vita/ds/ds1-slides/w2p2/)
+
+---
+class: inverse bottom right
+background-image:url(../img/idea.jpg)
+background-size:cover
+
+# Remembering SLR
+
+---
+# The data
+
+```{r message = FALSE, warning = FALSE}
+# Load the libraries
+library(rio)
+library(here)
+library(tidyverse)
+
+# Set the ggplot theme
+theme_set(theme_minimal(base_size = 25))
+
+# load the data
+d <- import(here("data", "elemapi.sav"),
+            setclass = "tbl_df")
+```
+
+---
+```{r show-data}
+d
+
+```
+
+---
+# Research Question
+
+> To what extent does the proportion of students eligible for free or reduced 
+  price lunch at the school predict its overall API rating in the year 2000?
+
+
+--
+* What's the IV? DV?
+
+--
+### The model
+$$
+Y_i = a + bX_i + e
+$$
+
+--
+### In this case...
+$$
+api00\_i = a + b(meals\_i) + e
+$$
+
+--
+We fit the model to estimate $a$ and $b$.
+
+---
+# Fitting the model in R
+
+```{r model1}
+m1 <- lm(api00 ~ meals, d)
+summary(m1)
+```
+
+---
+# Coefficients
+* $a$ = `r round(coef(m1)[1], 2)`
+* $b$ = `r round(coef(m1)[2], 2)`
+
+--
+### What do these mean?
+
+--
+### Anybody remember how we estimate them?
+
+--
+What about $R^2$
+
+---
+# beta
+`covariance(x, y) / variance(x)`
+
+--
+.Large[
+$$
+b = \frac{s\_{xy}}{s\_{xx}}
+$$
+]
+
+--
+
+```{r beta}
+covariance <- cov(d$api00, d$meals, 
+                  use = "complete.obs") 
+variance <- var(d$meals, na.rm = TRUE)
+
+beta <- covariance / variance
+beta
+```
+
+
+---
+# Intercept
+
+`mean(y) - beta*(mean(x))`
+
+--
+.Large[
+$$
+a = \overline{y} - b\overline{x}
+$$
+]
+
+--
+
+```{r intercept1}
+mean(d$api00, na.rm = TRUE) - beta*mean(d$meals, na.rm = TRUE)
+```
+
+--
+
+.Large[.Large[🤨]]
+
+Our intercept was estimated at `r round(coef(m1)[1], 2)`. 
+
+What's going on here?
+
+
+---
+# Remove pairwise missing data
+
+```{r intercept2}
+pairwise <- d %>% 
+  select(api00, meals) %>% 
+  na.omit()
+head(pairwise)
+
+mean(pairwise$api00) - beta*mean(pairwise$meals)
+```
+
+---
+# Your turn
+* Use ggplot to show the relation between `ell` and `api00`
+  + Overlay a **linear** relation
+* Fit the corresponding model
+* In small groups
+  + Discuss what $a$ means
+    + Is this a meaningful value?
+  + Discuss what $b$ means
+
+### If you have extra time
+* Try calculating the intercept/slope "by hand"
+
+---
+class: inverse middle center
+background-image:url(../img/umbrellas.jpg)
+background-size:cover
+
+.major-emph-green[Multiple Regression]
+
+---
+# The general equation
+
+.Large[
+$$
+Y\_i = b\_0 + b\_1(X\_{1i}) + b\_2(X\_{2i}) + ... + b\_k(X\_{ki}) + e
+$$
+]
+
+* Note the change in notation for the intercept
+  + Others use different notation
+
+---
+# The two-predictor case
+
+.Large[
+$$
+Y\_i = b\_0 + b\_1(X\_{1i}) + b\_2(X\_{2i}) + e
+$$
+]
+
+--
+
+* What does the intercept represent now?
+
+--
+
+* What does $b_1$ represent?
+
+--
+* What about $b_2$?
+
+---
+background-image: url(../img/simple-multiple1.png)
+background-size: contain
+
+# SLR vs MR
+
+---
+background-image: url(../img/simple-multiple2.png)
+background-size: contain
+
+# SLR vs MR
+
+---
+background-image: url(../img/simple-multiple3.png)
+background-size: contain
+
+# SLR vs MR
+
+---
+background-image: url(../img/simple-multiple4.png)
+background-size: contain
+
+# SLR vs MR
+
+---
+# Thinking more about shared variance
+* How would the SLR and MR coefficients differ if $r_{x_1x_2} = 0$?
+
+--
+### Answer: Not at all
+
+* This is part of why multiple regression is helpful
+
+---
+background-image:url(../img/shared-var.png)
+background-size:contain
+
+
+---
+# What else does this imply?
+* Unless $r_{x_1x_2} = 0$, $R^2 \neq  r^2_{x1} + r^2_{x2}$
+
+---
+# Let's fit a model
+### Research Question
+
+> To what extent do school API ratings in in the year 2000 relate to the
+proportion of students receiving English language services **after controlling
+for the proportion of students in the school receiving free or reduced price
+lunch**?
+
+
+--
+### The model
+$$
+Y_i = b\_0 + b\_1meals\_i + b\_2ell\_i + e
+$$
+
+---
+# Fitting the model
+
+```{r m2}
+m2 <- lm(api00 ~ meals + ell, d)
+summary(m2)
+```
+
+---
+# Let's interpret
+
+```{r m2-display}
+library(arm)
+display(m2, detail = TRUE)
+```
+
+* What does the intercept mean, in words?
+* What about each of the coefficients?
+* Using this model, what API score would you predict for a school with 50% of
+  students eligible for free or reduced price lunch, and 10% of students
+  receiving ELL services?
+
+---
+# Prediction
+
+"By hand" 
+
+$Y' = 853.61 + -3.01*50 + -1.08*10$
+
+$Y' = `r 853.61 + -3.01*50 + -1.08*10`$
+
+--
+
+With code
+
+```{r pred1}
+pred_frame = tibble(meals = 50,
+                    ell = 10)
+
+predict(m2, newdata = pred_frame)
+```
+
+---
+# Make a range of predictions
+
+```{r pred_frame2}
+pred_frame2 <- tibble(meals = seq(from = 0, to = 100, by = 10),
+                      ell = 10)
+pred_frame2
+```
+
+---
+# Predict for each case
+
+* If we just use `predict`, it will return a *vector*
+
+--
+
+* .Large[🤔] What's a vector again?
+
+--
+
+```{r pred-pre_frame2}
+predict(m2, newdata = pred_frame2)
+```
+
+---
+* Probably easier to see by adding it as a new variable
+
+```{r pred_frame2-add-var}
+pred_frame2$pred <- predict(m2, newdata = pred_frame2)
+
+head(pred_frame2)
+```
+
+---
+# Quick aside
+
+* The {tidyverse} version would be to use `mutate`
+
+```{r mutate}
+library(tidyverse)
+
+pred_frame2 <- pred_frame2 %>%
+  mutate(pred = predict(m2, newdata = pred_frame2))
+
+head(pred_frame2)
+```
+
+--
+
+* Look at the difference in `pred` for each row... what do you notice?
+
+---
+
+```{r lag}
+pred_frame2 %>%
+  mutate(lag = lag(pred),
+         dif = pred - lag)
+```
+
+---
+
+```{r lag2}
+pred_frame2 %>%
+  mutate(lag = lag(pred),
+         dif = pred - lag,
+         dif_per_unit = dif / 10)
+```
+
+--
+
+```{r print-coef}
+coef(m2)
+```
+
+
+---
+### Notice - we kept ell constant
+
+Let's try again, keeping meals constant
+
+```{r pred_frame3}
+pred_frame3 <- tibble(meals = 50,
+                      ell = seq(0, 25, 5))
+head(pred_frame3)
+```
+
+---
+# Make the predictions
+
+```{r pred_frame3-add-var}
+pred_frame3 %>%
+  mutate(pred = predict(m2, newdata = pred_frame3))
+
+```
+
+---
+
+```{r lag3}
+pred_frame3 %>%
+  mutate(pred = predict(m2, newdata = pred_frame3),
+         dif = pred - lag(pred),
+         dif_per_unit = dif / 5)
+```
+
+--
+```{r print-coef2}
+coef(m2)
+```
+
+---
+# Lots of scenarios
+
+* First, make a whole bunch of scenarios
+  + Note, this is not code I would expect you to be able to replicate, this is
+    for instructional purposes only
+
+```{r pred2}
+pred_frame4 = tibble(meals = rep(seq(0, 100, 1), 6),
+                     ell = rep(seq(0, 25, 5), each = 101))
+```
+
+.pull-left[
+```{r head-pred4-1}
+head(pred_frame4)
+```
+]
+
+.pull-right[
+```{r tail-pred4-1}
+tail(pred_frame4)
+```
+
+]
+
+---
+# Make predictions
+
+```{r pred_frame4-add-var}
+pred_frame4 <- pred_frame4 %>%
+  mutate(pred = predict(m2, newdata = pred_frame4))
+```
+
+
+.pull-left[
+```{r head-pred2-2}
+head(pred_frame4)
+```
+]
+
+.pull-right[
+```{r tail-pred2-2}
+tail(pred_frame4)
+```
+
+]
+
+
+---
+# Plot predictions
+
+```{r pred-plot, fig.height = 5.75}
+ggplot(pred_frame4, aes(meals, pred, color = factor(ell))) +
+  geom_line(size = 1.25)
+```
+
+--
+
+Notice all the lines are exactly parallel. That's the model we fit! 
+
+---
+# Regression plane visualization
+
+[demo]
+
+.gray[(this is also not code you're expected to know)]
+
+```{r 3d-plot, eval = FALSE}
+library(rgl)
+colors2 <- RColorBrewer::brewer.pal(2, "Accent")
+
+# Plot 3d scatter
+plot3d(x = d$meals, 
+       y = d$ell, 
+       z = d$api00, 
+       col = colors2[1])
+
+# Overlay the regression plane
+planes3d(coef(m2)["meals"], 
+         coef(m2)["ell"], 
+         -1,
+         coef(m2)["(Intercept)"], 
+         col = colors2[2])
+```
+
+---
+# Calculating MR Slopes
+
+.red[
+.Large[
+$$
+b = \frac{\sum\_{xy}}{\sum\_x^2}
+$$
+]]
+
+--
+
+.Large[
+$$
+ b\_{y1.2}=\frac{(\sum x\_2^2)(\sum x\_1y)-(\sum x_1x_2)(\sum x_2y)}{
+ (\sum x\_1^2)(\sum x\_2^2)-(\sum x\_1x\_2)^2} 
+$$
+]
+
+### Let's label the parts!
+
+--
+Can you predict how $b_{y2.1}$ would be calculated?
+
+
+---
+# Thinking about this more
+
+--
+
+* Basically, we want to evaluate *only* the unique variance between $x_1$ and
+$y$, and $x_2$ and $y$
+
+--
+
+  + In other words, we want to **remove shared variance**
+
+--
+* We can estimate the multiple regression coefficients with multiple simple
+linear regression models
+
+
+---
+# Step 0: Setup the dataframe
+* Remove all missing data from the variables we'll use, so we have a consistent
+data source
+
+```{r listwise-deleted}
+listwise <- d %>% 
+  dplyr::select(api00, meals, ell) %>% 
+  na.omit()
+
+head(listwise)
+```
+
+---
+# Step 1
+We'll focus on $b_{y1.2}$ first
+* Fit a model with $x_1$ predicting $x_2$
+
+--
+### Why?
+
+--
+
+```{r shared1}
+shared1 <- lm(meals ~ ell, listwise)
+display(shared1, detail = TRUE)
+```
+
+---
+# Step 2
+* Extract the residuals from this model
+* Store the residuals as a new variable in the data frame
+
+--
+### Why?
+
+--
+
+```{r extract-resid1}
+listwise <- listwise %>%
+  mutate(resid_x1x2 = residuals(shared1))
+head(listwise)
+```
+
+---
+# Step 3
+### Final step
+
+Can you predict?
+
+--
+* Use the residuals to predict the outcome
+
+```{r model-resid1}
+x1x2_mod <- lm(api00 ~ resid_x1x2, listwise)
+```
+
+--
+
+```{r coefs}
+coef(x1x2_mod)
+coef(m2)
+```
+
+---
+# Example Interpretation
+Remember, we must interpret the model as a whole
+
+--
+
+> A one percent increase in the percentage of students in the school receiving 
+  free or reduced price meal subsidies corresponded to, on average, a 
+  `r -1*round(coef(m2)[2], 2)` point drop in API scores in the year 2000, 
+  **while holding the percentage of students receiving English language
+  services in the school constant**.
+
+---
+# Thinking back to this plot
+
+```{r pred-plot2, fig.height = 5.75, echo = FALSE}
+ggplot(pred_frame4, aes(meals, pred, color = factor(ell))) +
+  geom_line(size = 1.25)
+```
+
+--
+* As long as we stay within a constant level for ELL, the slope is the same, 
+and the expected change is the same. 
+
+--
+* If we vary ELL with meals, the predicted API would be different.
+
+---
+# Another visualization
+If we can use simple linear regression to get the MR coefficients, then we can *visualize* the MR relations more easily.
+
+```{r pred-res1, fig.height = 5}
+ggplot(listwise, aes(resid_x1x2, api00)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+---
+# Or on the scale of the predictor
+
+```{r visreg}
+library(visreg)
+visreg(m2)
+
+```
+
+---
+class: inverse middle
+background-image:url(../img/practice.jpg)
+background-size:cover
+# Let's practice!
+
