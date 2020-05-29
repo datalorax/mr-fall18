@@ -1,0 +1,901 @@
+sid,scid,grade,gender,gifted,eth,frl,wave,reading,math
+402547,1107,3,Male,Non-G/T,White,Non-FRL,1,190,197
+402547,1107,3,Male,Non-G/T,White,Non-FRL,2,185,187
+402547,1107,4,Male,Non-G/T,White,Non-FRL,3,200,191
+402547,1107,4,Male,Non-G/T,White,Non-FRL,3,195,188
+402547,1107,4,Male,Non-G/T,White,Non-FRL,3,162,183
+402547,1107,4,Male,Non-G/T,White,Non-FRL,3,162,177
+402547,1107,5,Male,Non-G/T,White,Non-FRL,6,196,210
+402547,1107,5,Male,Non-G/T,White,Non-FRL,6,225,228
+402547,1107,5,Male,Non-G/T,White,Non-FRL,8,175,190
+404977,1147,3,Male,Non-G/T,Hispanic,FRL,0,179,186
+404977,1147,3,Male,Non-G/T,Hispanic,FRL,1,188,209
+404977,1147,3,Male,Non-G/T,Hispanic,FRL,2,164,190
+404977,1147,3,Male,Non-G/T,Hispanic,FRL,2,181,187
+404977,1147,4,Male,Non-G/T,Hispanic,FRL,3,190,189
+404977,1147,4,Male,Non-G/T,Hispanic,Non-FRL,3,210,200
+404977,1147,5,Male,Non-G/T,Hispanic,FRL,7,165,192
+404977,1147,5,Male,Non-G/T,Hispanic,FRL,8,204,227
+404977,1147,5,Male,Non-G/T,Hispanic,FRL,8,182,192
+429387,1147,3,Female,Non-G/T,Hispanic,FRL,1,193,187
+429387,1087,4,Male,Non-G/T,Hispanic,FRL,3,167,190
+429387,1147,4,Female,Non-G/T,Hispanic,FRL,3,160,176
+429387,1087,4,Male,Non-G/T,Hispanic,FRL,3,167,190
+429387,1087,4,Male,Non-G/T,Hispanic,FRL,4,196,200
+429387,1087,4,Male,Non-G/T,Hispanic,FRL,4,193,205
+429387,1087,4,Male,Non-G/T,Hispanic,FRL,4,192,206
+429387,1087,4,Male,Non-G/T,Hispanic,FRL,5,191,189
+429387,1147,5,Female,Non-G/T,Hispanic,FRL,7,199,199
+436827,1257,4,Female,Non-G/T,Hispanic,FRL,3,183,190
+436827,1237,4,Female,Non-G/T,Hispanic,FRL,3,180,196
+436827,1257,4,Female,Non-G/T,Hispanic,FRL,4,194,193
+436827,1257,4,Female,Non-G/T,Hispanic,FRL,4,179,199
+436827,1237,4,Female,Non-G/T,Hispanic,FRL,4,199,206
+436827,1237,4,Female,Non-G/T,Black,Non-FRL,4,219,201
+436827,1257,4,Female,Non-G/T,Hispanic,FRL,4,179,195
+436827,1257,4,Female,Non-G/T,Hispanic,FRL,5,208,209
+436827,1237,5,Female,Non-G/T,Black or African American,FRL,6,193,218
+500467,1077,3,Male,Non-G/T,Native American,FRL,0,199,187
+500467,1077,3,Male,Non-G/T,Native American,FRL,0,189,170
+500467,1077,3,Male,Non-G/T,Native American,FRL,1,168,169
+500467,1077,3,Male,Non-G/T,Native American,FRL,2,195,208
+500467,1077,4,Male,Non-G/T,Native American,FRL,3,192,197
+500467,1077,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,6,209,214
+500467,1077,5,Male,Non-G/T,Hispanic,FRL,7,217,204
+500467,1077,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,8,211,221
+500467,1077,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,8,219,222
+500657,1077,3,Male,Non-G/T,Native American,FRL,1,195,201
+500657,1077,3,Male,Non-G/T,Hispanic,FRL,1,172,190
+500657,1077,3,Male,Non-G/T,Native American,FRL,1,196,188
+500657,1077,4,Male,Non-G/T,Hispanic,FRL,3,197,197
+500657,1077,4,Male,Non-G/T,Hispanic,FRL,5,203,221
+500657,1077,5,Male,Non-G/T,Hispanic,FRL,6,203,228
+500657,1077,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,7,202,234
+500657,1077,5,Male,Non-G/T,Hispanic,FRL,8,219,220
+500657,1077,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,8,199,212
+502847,1107,3,Female,Non-G/T,White,Non-FRL,1,203,197
+502847,1107,3,Female,Non-G/T,White,Non-FRL,2,191,191
+502847,1107,4,Female,Non-G/T,White,Non-FRL,5,200,214
+502847,1107,4,Female,Non-G/T,White,Non-FRL,5,203,196
+502847,1107,4,Female,Non-G/T,White,Non-FRL,5,203,205
+502847,1107,4,Female,Non-G/T,White,Non-FRL,5,210,209
+502847,1107,5,Female,Non-G/T,White,Non-FRL,6,210,198
+502847,1107,5,Female,Non-G/T,White,Non-FRL,6,200,195
+502847,1107,5,Female,Non-G/T,White,Non-FRL,8,216,241
+504057,1127,3,Male,Non-G/T,Black,Non-FRL,0,192,188
+504057,1127,3,Male,Non-G/T,Black,FRL,0,182,188
+504057,1127,3,Male,Non-G/T,Black,FRL,1,187,190
+504057,1127,3,Male,Non-G/T,Black,FRL,1,177,203
+504057,1127,4,Male,Non-G/T,Black,FRL,3,195,191
+504057,1127,5,Male,Non-G/T,Hispanic,FRL,6,201,211
+504057,1127,5,Male,Non-G/T,Hispanic,FRL,7,197,201
+504057,1127,5,Male,Non-G/T,Hispanic,FRL,8,196,211
+504057,1127,5,Male,Non-G/T,Hispanic,FRL,8,218,216
+504197,1257,3,Male,Non-G/T,Asian,Non-FRL,2,194,208
+504197,1257,3,Male,Non-G/T,Hispanic,FRL,2,191,205
+504197,1257,4,Male,Non-G/T,Hispanic,FRL,3,197,191
+504197,1257,4,Male,Non-G/T,Hispanic,FRL,4,204,195
+504197,1257,5,Male,Non-G/T,White,FRL,7,202,193
+504197,1257,5,Female,Non-G/T,Hispanic,Non-FRL,7,215,230
+504197,1257,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,7,184,195
+504197,1257,5,Female,Non-G/T,Hispanic,FRL,8,238,237
+504197,1257,5,Female,Non-G/T,Hispanic,FRL,8,204,206
+505267,1177,3,Female,Non-G/T,Hispanic,FRL,1,186,186
+505267,1177,3,Female,Non-G/T,Hispanic,FRL,2,196,195
+505267,1177,4,Female,Non-G/T,Hispanic,FRL,4,200,207
+505267,1177,4,Female,Non-G/T,Hispanic,FRL,5,216,216
+505267,1177,4,Female,Non-G/T,Hispanic,FRL,5,213,218
+505267,1177,4,Female,Non-G/T,Hispanic,FRL,5,217,219
+505267,1177,4,Female,Non-G/T,Hispanic,FRL,5,207,227
+505267,1177,5,Female,Non-G/T,Hispanic,FRL,6,215,206
+505267,1177,5,Female,Non-G/T,Hispanic,Non-FRL,7,199,202
+505957,1147,3,Male,Non-G/T,Hispanic,FRL,1,188,186
+505957,1147,3,Male,Non-G/T,Native Hawaiian or Other Pacific Islander,FRL,1,181,190
+505957,1147,3,Male,Non-G/T,Hispanic,FRL,2,199,197
+505957,1147,4,Male,Non-G/T,Hispanic,FRL,3,191,202
+505957,1147,4,Male,Non-G/T,Hispanic,FRL,5,195,215
+505957,1147,4,Male,Non-G/T,Hispanic,FRL,5,215,227
+505957,1147,4,Male,Non-G/T,Hispanic,FRL,5,208,206
+505957,1147,4,Male,Non-G/T,Hispanic,FRL,5,215,228
+505957,1147,5,Male,Non-G/T,Hispanic,FRL,7,194,199
+508127,1177,3,Female,Non-G/T,Hispanic,FRL,0,186,175
+508127,1177,3,Female,Non-G/T,Hispanic,FRL,0,183,186
+508127,1177,3,Female,Non-G/T,Hispanic,FRL,0,186,182
+508127,1177,3,Female,Non-G/T,Hispanic,FRL,2,203,192
+508127,1177,4,Female,Non-G/T,Hispanic,FRL,3,218,202
+508127,1177,4,Female,Non-G/T,Hispanic,FRL,3,192,196
+508127,1177,4,Female,Non-G/T,Hispanic,FRL,4,199,199
+508127,1177,4,Female,Non-G/T,Hispanic,FRL,4,184,185
+508127,1177,5,Female,Non-G/T,Hispanic,FRL,6,194,191
+508487,1177,3,Female,Non-G/T,Native American,Non-FRL,0,179,179
+508487,1177,3,Female,Non-G/T,Hispanic,Non-FRL,0,191,199
+508487,1177,3,Female,Non-G/T,Hispanic,Non-FRL,2,189,208
+508487,1177,4,Female,Non-G/T,Hispanic,FRL,3,203,198
+508487,1177,4,Female,Non-G/T,Hispanic,Non-FRL,4,222,217
+508487,1177,5,Female,Non-G/T,American Indian or Alaskan Native,FRL,6,209,230
+508487,1177,5,Female,Non-G/T,Asian,FRL,6,208,209
+508487,1177,5,Female,Non-G/T,American Indian or Alaskan Native,FRL,7,207,214
+508487,1177,5,Female,Non-G/T,Hispanic,Non-FRL,8,207,207
+509127,1087,4,Male,Non-G/T,Hispanic,FRL,3,186,198
+509127,1087,4,Male,Non-G/T,Hispanic,FRL,3,209,208
+509127,1087,4,Male,Non-G/T,Hispanic,FRL,4,192,187
+509127,1087,4,Male,Non-G/T,Hispanic,FRL,5,192,203
+509127,1087,4,Male,Non-G/T,Hispanic,FRL,5,187,203
+509127,1087,5,Male,Non-G/T,Hispanic,FRL,6,199,208
+509127,1087,5,Male,Non-G/T,Hispanic,FRL,7,191,205
+509127,1087,5,Male,Non-G/T,Hispanic,FRL,7,230,225
+509127,1087,5,Male,Non-G/T,Hispanic,FRL,7,211,217
+509397,1187,3,Male,Non-G/T,White,FRL,0,199,197
+509397,1187,3,Male,Non-G/T,White,FRL,1,195,199
+509397,1187,3,Male,Non-G/T,White,FRL,1,185,193
+509397,1187,4,Male,Non-G/T,White,FRL,4,215,218
+509397,1187,4,Male,Non-G/T,White,FRL,4,215,211
+509397,1187,4,Male,Non-G/T,White,FRL,5,191,201
+509397,1187,5,Male,Non-G/T,Black or African American,FRL,6,204,207
+509397,1187,5,Male,Non-G/T,White,FRL,6,200,211
+509397,1187,5,Male,Non-G/T,White,FRL,6,201,216
+511867,1257,3,Male,Non-G/T,Hispanic,FRL,0,176,199
+511867,1257,3,Male,Non-G/T,Asian,Non-FRL,0,201,196
+511867,1257,3,Male,Non-G/T,Asian,FRL,0,189,191
+511867,1257,3,Male,Non-G/T,Hispanic,FRL,1,159,167
+511867,1257,3,Male,Non-G/T,Hispanic,FRL,1,163,173
+511867,1257,3,Male,Non-G/T,Hispanic,FRL,2,158,171
+511867,1257,4,Male,Non-G/T,Hispanic,FRL,4,176,197
+511867,1257,4,Male,Non-G/T,Asian,FRL,4,190,193
+511867,1257,5,Male,Non-G/T,Hispanic,FRL,6,209,213
+512397,1217,3,Male,G/T,White,Non-FRL,0,189,208
+512397,1217,3,Female,Non-G/T,Native American,Non-FRL,0,182,180
+512397,1217,3,Male,G/T,White,Non-FRL,1,201,210
+512397,1217,3,Male,G/T,White,Non-FRL,1,187,194
+512397,1217,3,Female,Non-G/T,Native American,FRL,1,206,196
+512397,1217,3,Female,Non-G/T,White,FRL,2,202,200
+512397,1217,3,Female,Non-G/T,White,FRL,2,196,209
+512397,1217,4,Male,G/T,White,Non-FRL,4,217,232
+512397,1217,4,Female,Non-G/T,Native American,Non-FRL,5,203,207
+513017,1237,3,Female,Non-G/T,Black,Non-FRL,1,202,202
+513017,1237,3,Female,Non-G/T,Hispanic,FRL,1,196,199
+513017,1237,4,Female,Non-G/T,Black,Non-FRL,3,203,212
+513017,1237,4,Female,Non-G/T,Black,FRL,3,204,186
+513017,1237,4,Female,Non-G/T,Black,Non-FRL,4,216,199
+513017,1237,4,Female,Non-G/T,Black,Non-FRL,5,216,212
+513017,1237,5,Female,Non-G/T,Black or African American,Non-FRL,6,221,221
+513017,1237,5,Female,Non-G/T,Black or African American,Non-FRL,6,218,210
+513017,1237,5,Female,Non-G/T,Black or African American,Non-FRL,7,214,215
+514107,1247,3,Male,Non-G/T,White,Non-FRL,2,222,210
+514107,1247,4,Male,Non-G/T,White,Non-FRL,3,228,223
+514107,1247,4,Male,Non-G/T,White,Non-FRL,4,210,208
+514107,1247,4,Male,Non-G/T,White,Non-FRL,4,213,206
+514107,1247,5,Male,Non-G/T,White,Non-FRL,6,213,213
+514107,1247,5,Male,Non-G/T,White,Non-FRL,6,213,213
+514107,1247,5,Male,Non-G/T,White,Non-FRL,6,219,223
+514107,1247,5,Male,Non-G/T,White,Non-FRL,7,214,210
+514107,1247,5,Male,Non-G/T,White,Non-FRL,7,212,212
+514167,1247,3,Male,Non-G/T,Hispanic,FRL,1,188,188
+514167,1247,3,Male,Non-G/T,Black,FRL,1,195,178
+514167,1247,3,Male,Non-G/T,Black,FRL,2,205,207
+514167,1247,3,Male,Non-G/T,Black,FRL,2,199,190
+514167,1237,4,Male,Non-G/T,Hispanic,FRL,3,205,209
+514167,1237,4,Male,Non-G/T,Hispanic,FRL,3,198,204
+514167,1237,4,Male,Non-G/T,Hispanic,FRL,3,195,204
+514167,1237,4,Male,Non-G/T,Hispanic,FRL,3,207,213
+514167,1237,4,Male,Non-G/T,Hispanic,FRL,3,205,218
+514207,1247,3,Male,Non-G/T,Hispanic,FRL,0,196,197
+514207,1247,3,Male,Non-G/T,Hispanic,FRL,1,159,187
+514207,1247,3,Male,Non-G/T,Black,FRL,2,189,205
+514207,1247,3,Male,Non-G/T,Black,FRL,2,189,168
+514207,1247,3,Male,Non-G/T,Black,FRL,2,205,203
+514207,1247,4,Male,Non-G/T,Black,FRL,3,200,197
+514207,1247,4,Male,Non-G/T,Black,FRL,4,195,204
+514207,1587,5,Male,Non-G/T,White,Non-FRL,7,211,229
+514207,1587,5,Male,G/T,White,Non-FRL,8,228,239
+516127,1267,3,Female,G/T,White,Non-FRL,0,215,215
+516127,1267,3,Female,Non-G/T,White,Non-FRL,0,196,191
+516127,1267,3,Female,G/T,White,Non-FRL,1,227,211
+516127,1267,3,Female,G/T,White,Non-FRL,2,221,211
+516127,1267,3,Female,G/T,White,Non-FRL,2,228,225
+516127,1267,4,Female,G/T,White,Non-FRL,3,221,217
+516127,1267,5,Female,G/T,White,Non-FRL,7,212,228
+516127,1267,5,Female,G/T,White,Non-FRL,8,220,237
+516127,1267,5,Female,G/T,White,Non-FRL,8,239,245
+516627,1267,3,Male,G/T,White,Non-FRL,2,225,226
+516627,1267,3,Male,G/T,White,Non-FRL,2,213,209
+516627,1267,3,Male,Non-G/T,White,Non-FRL,2,209,201
+516627,1267,4,Male,G/T,White,Non-FRL,3,221,218
+516627,1267,4,Male,G/T,White,Non-FRL,3,190,211
+516627,1267,4,Male,G/T,White,Non-FRL,5,219,227
+516627,1267,5,Male,G/T,White,Non-FRL,6,219,224
+516627,1267,5,Male,G/T,White,Non-FRL,6,219,230
+516627,1267,5,Male,G/T,White,Non-FRL,8,225,228
+517967,1277,3,Male,Non-G/T,Black,FRL,0,185,183
+517967,1277,3,Male,Non-G/T,Black,FRL,1,155,168
+517967,1277,4,Male,Non-G/T,Hispanic,Non-FRL,4,198,201
+517967,1277,5,Male,Non-G/T,Two or More,FRL,6,221,221
+517967,1277,5,Male,Non-G/T,Two or More,FRL,6,221,221
+517967,1277,5,Male,Non-G/T,Hispanic,Non-FRL,7,213,215
+517967,1277,5,Male,Non-G/T,Hispanic,Non-FRL,7,219,230
+517967,1277,5,Male,Non-G/T,Two or More,FRL,7,221,231
+517967,1277,5,Male,Non-G/T,Two or More,FRL,8,214,204
+521987,1587,3,Female,Non-G/T,Hispanic,FRL,0,197,187
+521987,1587,3,Female,Non-G/T,Hispanic,FRL,0,185,178
+521987,1587,3,Female,Non-G/T,Hispanic,FRL,2,209,205
+521987,1587,4,Female,Non-G/T,Black,Non-FRL,3,179,195
+521987,1587,4,Female,Non-G/T,Hispanic,FRL,4,222,220
+521987,1587,4,Female,Non-G/T,Black,Non-FRL,4,212,196
+521987,1587,5,Female,Non-G/T,Hispanic,FRL,7,207,213
+521987,1587,5,Female,Non-G/T,Two or More,Non-FRL,7,212,216
+521987,1587,5,Female,Non-G/T,Hispanic,FRL,8,225,244
+524927,1247,3,Male,Non-G/T,Native American,FRL,0,192,191
+524927,1247,3,Male,Non-G/T,Black,FRL,0,189,191
+524927,1247,3,Male,Non-G/T,Native American,FRL,2,201,194
+524927,1247,3,Male,Non-G/T,Native American,FRL,2,190,198
+524927,1247,3,Male,Non-G/T,Native American,FRL,2,182,208
+524927,1247,4,Male,Non-G/T,Native American,FRL,3,201,205
+524927,1247,4,Male,Non-G/T,American Indian or Alaskan Native,FRL,3,189,202
+524927,1247,4,Male,Non-G/T,American Indian or Alaskan Native,FRL,5,198,205
+524927,1247,5,Male,Non-G/T,Hispanic,Non-FRL,6,171,187
+525787,1197,3,Male,Non-G/T,White,FRL,2,200,208
+525787,1197,4,Male,Non-G/T,White,FRL,3,199,200
+525787,1197,4,Male,Non-G/T,White,FRL,4,210,209
+525787,1197,4,Male,Non-G/T,White,FRL,5,192,202
+525787,1197,4,Male,Non-G/T,White,FRL,5,175,193
+525787,1197,5,Male,Non-G/T,White,FRL,6,195,221
+525787,1197,5,Male,Non-G/T,White,FRL,7,200,204
+525787,1197,5,Male,Non-G/T,White,FRL,8,194,197
+525787,1197,5,Male,G/T,White,FRL,8,227,226
+527137,1127,3,Female,G/T,White,FRL,2,222,234
+527137,1127,3,Female,G/T,White,FRL,2,206,206
+527137,1127,4,Female,G/T,White,FRL,3,210,209
+527137,1127,4,Female,G/T,White,FRL,3,211,205
+527137,1127,4,Female,G/T,White,FRL,4,221,221
+527137,1127,4,Female,G/T,White,Non-FRL,5,234,235
+527137,1127,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,6,163,171
+527137,1127,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,7,165,180
+527137,1127,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,8,196,196
+527417,1127,3,Male,Non-G/T,Black,FRL,0,161,173
+527417,1127,3,Male,Non-G/T,Black,FRL,0,186,184
+527417,1127,3,Male,Non-G/T,Black,Non-FRL,2,206,211
+527417,1127,3,Male,Non-G/T,Black,FRL,2,177,204
+527417,1127,3,Male,Non-G/T,Black,FRL,2,199,198
+527417,1127,4,Male,Non-G/T,Black,FRL,3,177,189
+527417,1127,4,Male,Non-G/T,Black,FRL,3,188,199
+527417,1127,4,Male,Non-G/T,Black,FRL,4,169,183
+527417,1127,5,Male,Non-G/T,Black or African American,FRL,8,211,201
+531927,1267,3,Female,Non-G/T,Hispanic,FRL,0,188,181
+531927,1267,3,Female,Non-G/T,Hispanic,FRL,1,207,201
+531927,1267,3,Female,Non-G/T,Hispanic,FRL,1,198,194
+531927,1207,4,Male,Non-G/T,Black or African American,FRL,3,158,185
+531927,1267,4,Female,Non-G/T,Hispanic,FRL,4,206,196
+531927,1207,4,Male,Non-G/T,Hispanic,FRL,4,188,188
+531927,1207,4,Male,Non-G/T,Hispanic,FRL,5,191,204
+531927,1207,5,Male,Non-G/T,Hispanic,FRL,8,220,245
+531927,1207,5,Male,Non-G/T,Hispanic,FRL,8,193,198
+560867,1167,3,Female,Non-G/T,Hispanic,FRL,1,201,197
+560867,1107,4,Male,G/T,Hispanic,FRL,3,214,223
+560867,1107,4,Male,G/T,Hispanic,FRL,3,214,215
+560867,1107,4,Male,Non-G/T,White,Non-FRL,5,225,240
+560867,1107,5,Male,Non-G/T,White,Non-FRL,6,206,217
+560867,1107,5,Male,Non-G/T,White,Non-FRL,6,213,198
+560867,1107,5,Male,Non-G/T,White,Non-FRL,7,205,224
+560867,1087,5,Male,Non-G/T,Hispanic,FRL,7,212,205
+560867,1087,5,Male,Non-G/T,Hispanic,FRL,8,216,229
+600937,1257,3,Male,Non-G/T,White,FRL,1,210,204
+600937,1257,3,Male,Non-G/T,White,Non-FRL,2,218,220
+600937,1257,3,Male,Non-G/T,White,FRL,2,193,206
+600937,1257,4,Male,Non-G/T,White,FRL,3,162,178
+600937,1257,4,Male,Non-G/T,White,FRL,3,162,180
+600937,1257,4,Male,Non-G/T,White,FRL,5,229,226
+600937,1257,5,Male,Non-G/T,White,FRL,7,176,191
+600937,1257,5,Male,Non-G/T,White,FRL,8,179,198
+600937,1257,5,Male,Non-G/T,Hispanic,FRL,8,193,214
+600987,1087,3,Male,Non-G/T,Hispanic,Non-FRL,2,204,214
+600987,1247,4,Male,Non-G/T,Hispanic,FRL,3,184,189
+600987,1247,4,Male,Non-G/T,White,FRL,3,185,202
+600987,1247,4,Male,Non-G/T,White,FRL,3,192,187
+600987,1087,4,Male,Non-G/T,Hispanic,Non-FRL,4,205,209
+600987,1087,4,Male,Non-G/T,Hispanic,Non-FRL,4,201,215
+600987,1247,4,Male,Non-G/T,White,FRL,5,210,221
+600987,1247,5,Male,Non-G/T,White,FRL,7,197,212
+600987,1247,5,Male,Non-G/T,White,Non-FRL,8,231,231
+601277,1087,3,Male,Non-G/T,Hispanic,FRL,1,201,209
+601277,1087,3,Male,Non-G/T,Hispanic,FRL,1,193,202
+601277,1087,3,Male,Non-G/T,Hispanic,FRL,2,187,184
+601277,1087,3,Male,Non-G/T,Hispanic,FRL,2,204,216
+601277,1087,4,Male,Non-G/T,Hispanic,FRL,4,205,221
+601277,1087,4,Male,Non-G/T,Hispanic,FRL,4,187,187
+601277,1087,5,Male,Non-G/T,Black,FRL,6,202,186
+601277,1087,5,Male,Non-G/T,Hispanic,FRL,6,204,209
+601277,1087,5,Male,Non-G/T,Hispanic,FRL,6,205,212
+601287,1087,3,Female,Non-G/T,Hispanic,FRL,0,193,198
+601287,1087,3,Female,Non-G/T,Hispanic,FRL,1,196,203
+601287,1087,3,Female,Non-G/T,Hispanic,FRL,1,196,199
+601287,1087,3,Female,Non-G/T,Hispanic,FRL,1,175,183
+601287,1087,4,Female,Non-G/T,Hispanic,FRL,4,216,219
+601287,1087,5,Female,Non-G/T,Hispanic,FRL,6,202,204
+601287,1087,5,Female,Non-G/T,Hispanic,FRL,6,227,215
+601287,1087,5,Female,Non-G/T,Hispanic,FRL,8,194,220
+601287,1087,5,Female,Non-G/T,Hispanic,FRL,8,205,205
+603047,1117,3,Female,Non-G/T,Hispanic,FRL,0,196,193
+603047,1117,3,Female,Non-G/T,Hispanic,FRL,1,198,198
+603047,1117,3,Female,Non-G/T,Hispanic,FRL,1,163,179
+603047,1117,3,Female,Non-G/T,Hispanic,FRL,1,198,204
+603047,1117,3,Male,Non-G/T,Hispanic,FRL,2,194,218
+603047,1117,4,Female,Non-G/T,Hispanic,FRL,3,192,198
+603047,1117,4,Female,Non-G/T,Hispanic,FRL,4,205,204
+603047,1117,4,Female,Non-G/T,Hispanic,FRL,4,214,215
+603047,1117,5,Female,Non-G/T,Hispanic,FRL,8,194,202
+603267,1117,3,Male,Non-G/T,Hispanic,FRL,0,187,184
+603267,1117,3,Male,Non-G/T,Hispanic,FRL,1,173,196
+603267,1117,3,Male,Non-G/T,Hispanic,FRL,2,199,203
+603267,1207,3,Male,Non-G/T,White,FRL,2,182,191
+603267,1117,4,Male,Non-G/T,Hispanic,Non-FRL,3,189,202
+603267,1117,4,Male,Non-G/T,Hispanic,FRL,3,169,199
+603267,1117,4,Male,Non-G/T,Hispanic,FRL,3,185,191
+603267,1117,4,Male,Non-G/T,Hispanic,FRL,5,214,227
+603267,1117,5,Male,Non-G/T,Hispanic,FRL,8,200,223
+605087,1147,3,Female,Non-G/T,Hispanic,FRL,0,191,188
+605087,1147,3,Male,Non-G/T,Hispanic,FRL,0,194,203
+605087,1147,3,Male,Non-G/T,Hispanic,FRL,0,192,196
+605087,1147,3,Male,Non-G/T,Hispanic,FRL,1,205,205
+605087,1147,3,Male,Non-G/T,Hispanic,FRL,1,197,198
+605087,1147,3,Male,Non-G/T,Hispanic,FRL,1,203,202
+605087,1147,3,Male,Non-G/T,Hispanic,FRL,2,208,206
+605087,1147,3,Female,Non-G/T,Hispanic,FRL,2,187,199
+605087,1147,3,Female,Non-G/T,Hispanic,FRL,2,205,202
+606897,1157,3,Male,G/T,Asian,Non-FRL,2,200,229
+606897,1157,3,Male,Non-G/T,White,Non-FRL,2,190,197
+606897,1157,4,Male,Non-G/T,Black or African American,FRL,3,182,176
+606897,1157,4,Male,Non-G/T,Black or African American,FRL,4,185,209
+606897,1157,4,Male,Non-G/T,Black or African American,FRL,4,185,195
+606897,1157,4,Male,G/T,Asian,Non-FRL,4,218,236
+606897,1157,4,Male,Non-G/T,Black or African American,FRL,4,195,202
+606897,1157,4,Male,Non-G/T,Black or African American,FRL,5,194,198
+606897,1157,5,Male,Non-G/T,White,Non-FRL,7,192,207
+608747,1177,3,Male,Non-G/T,Black or African American,FRL,0,204,199
+608747,1177,3,Male,Non-G/T,Black,FRL,0,201,186
+608747,1177,3,Male,Non-G/T,Black or African American,FRL,2,200,204
+608747,1177,4,Male,Non-G/T,Black or African American,FRL,5,190,197
+608747,1177,4,Male,Non-G/T,Black,FRL,5,216,217
+608747,1147,4,Female,Non-G/T,Hispanic,FRL,5,203,210
+608747,1147,5,Female,Non-G/T,Native Hawaiian or Other Pacific Islander,FRL,6,214,217
+608747,1147,5,Female,Non-G/T,Hispanic,FRL,7,211,209
+608747,1147,5,Female,Non-G/T,Hispanic,FRL,7,217,224
+608997,1127,3,Male,Non-G/T,Hispanic,FRL,1,181,187
+608997,1127,3,Male,Non-G/T,Hispanic,FRL,2,191,205
+608997,1127,3,Male,Non-G/T,Hispanic,FRL,2,182,194
+608997,1127,4,Male,Non-G/T,Two or More,FRL,3,194,209
+608997,1127,4,Male,Non-G/T,Two or More,FRL,3,191,200
+608997,1127,4,Male,Non-G/T,Black or African American,FRL,5,200,203
+608997,1127,4,Male,Non-G/T,Black or African American,FRL,5,200,202
+608997,1127,5,Male,Non-G/T,Hispanic,FRL,8,217,215
+608997,1127,5,Male,Non-G/T,Hispanic,FRL,8,214,212
+609057,1187,3,Female,Non-G/T,Hispanic,FRL,0,198,197
+609057,1187,3,Female,Non-G/T,Hispanic,FRL,2,197,201
+609057,1187,4,Female,Non-G/T,Hispanic,FRL,3,197,201
+609057,1187,4,Female,Non-G/T,Hispanic,FRL,3,197,205
+609057,1187,4,Female,Non-G/T,Hispanic,FRL,5,204,218
+609057,1187,4,Female,Non-G/T,Hispanic,FRL,5,196,204
+609057,1187,4,Female,Non-G/T,Hispanic,FRL,5,193,201
+609057,1187,5,Female,Non-G/T,Hispanic,FRL,6,205,207
+609057,1187,5,Female,Non-G/T,Black or African American,FRL,7,207,223
+609637,1187,3,Male,Non-G/T,Black,FRL,2,168,191
+609637,1187,4,Male,Non-G/T,Black or African American,FRL,3,159,180
+609637,1187,4,Male,Non-G/T,Black or African American,FRL,4,191,196
+609637,1187,4,Male,Non-G/T,White,FRL,4,201,198
+609637,1187,5,Male,Non-G/T,Black or African American,FRL,6,180,199
+609637,1187,5,Male,Non-G/T,Black or African American,FRL,6,197,194
+609637,1187,5,Male,Non-G/T,Black or African American,FRL,6,181,199
+609637,1187,5,Male,Non-G/T,Black or African American,FRL,8,186,205
+609637,1187,5,Male,Non-G/T,Black or African American,FRL,8,173,199
+610427,1117,3,Male,Non-G/T,Hispanic,FRL,2,210,209
+610427,1117,4,Female,Non-G/T,Hispanic,FRL,4,184,190
+610427,1117,4,Female,Non-G/T,Hispanic,FRL,4,200,204
+610427,1117,4,Male,Non-G/T,Hispanic,FRL,5,215,228
+610427,1117,4,Male,Non-G/T,Hispanic,FRL,5,210,213
+610427,1117,4,Female,Non-G/T,Hispanic,FRL,5,197,201
+610427,1117,4,Male,Non-G/T,Hispanic,FRL,5,214,228
+610427,1117,5,Male,Non-G/T,Hispanic,FRL,6,184,204
+610427,1117,5,Female,Non-G/T,Hispanic,FRL,6,200,208
+612007,1217,3,Male,Non-G/T,Black or African American,FRL,1,203,203
+612007,1217,4,Female,Non-G/T,Hispanic,FRL,3,193,206
+612007,1217,4,Female,Non-G/T,Hispanic,FRL,5,214,223
+612007,1217,4,Male,Non-G/T,White,FRL,5,203,208
+612007,1277,5,Male,Non-G/T,Hispanic,FRL,6,182,215
+612007,1277,5,Male,Non-G/T,Hispanic,FRL,7,233,234
+612007,1277,5,Male,Non-G/T,White,FRL,7,211,204
+612007,1277,5,Male,Non-G/T,White,FRL,7,220,229
+612007,1277,5,Male,Non-G/T,White,FRL,8,226,239
+613677,1237,3,Female,Non-G/T,Black,FRL,0,156,183
+613677,1237,3,Female,Non-G/T,Black,FRL,2,209,216
+613677,1237,3,Female,Non-G/T,White,FRL,2,201,210
+613677,1237,4,Female,Non-G/T,Hispanic,FRL,3,177,185
+613677,1237,4,Female,Non-G/T,Hispanic,FRL,4,178,181
+613677,1237,4,Female,Non-G/T,Hispanic,FRL,5,206,228
+613677,1237,5,Female,Non-G/T,Hispanic,FRL,7,199,212
+613677,1237,5,Female,Non-G/T,Black or African American,FRL,8,220,218
+613677,1237,5,Female,Non-G/T,Hispanic,FRL,8,204,214
+614317,1247,3,Male,Non-G/T,Hispanic,FRL,0,184,195
+614317,1247,3,Male,Non-G/T,Hispanic,FRL,0,180,182
+614317,1247,3,Male,Non-G/T,Hispanic,FRL,1,153,170
+614317,1247,3,Male,Non-G/T,Hispanic,FRL,1,197,189
+614317,1247,4,Male,Non-G/T,Hispanic,FRL,4,178,190
+614317,1247,4,Female,Non-G/T,Hispanic,FRL,5,216,211
+614317,1247,5,Male,Non-G/T,Hispanic,FRL,6,198,209
+614317,1247,5,Male,Non-G/T,Hispanic,FRL,7,181,185
+614317,1247,5,Male,Non-G/T,Hispanic,FRL,8,183,198
+614937,1077,3,Female,Non-G/T,Hispanic,FRL,1,179,184
+614937,1077,3,Female,Non-G/T,Hispanic,FRL,2,191,187
+614937,1187,4,Female,Non-G/T,White,Non-FRL,3,200,211
+614937,1187,4,Female,Non-G/T,Black,Non-FRL,3,220,212
+614937,1077,4,Female,Non-G/T,Hispanic,FRL,4,205,206
+614937,1077,4,Female,Non-G/T,Hispanic,FRL,5,207,213
+614937,1077,4,Female,Non-G/T,Hispanic,FRL,5,204,224
+614937,1077,4,Female,Non-G/T,Hispanic,FRL,5,213,221
+614937,1187,5,Female,Non-G/T,Hispanic,FRL,7,211,221
+615037,1257,3,Male,Non-G/T,Hispanic,Non-FRL,0,175,185
+615037,1257,3,Male,Non-G/T,Hispanic,FRL,1,192,200
+615037,1257,4,Female,Non-G/T,Hispanic,FRL,3,211,212
+615037,1257,4,Male,Non-G/T,Hispanic,FRL,4,210,212
+615037,1257,4,Male,Non-G/T,Hispanic,FRL,5,203,202
+615037,1257,4,Male,Non-G/T,Hispanic,FRL,5,169,194
+615037,1257,4,Male,Non-G/T,Hispanic,FRL,5,169,194
+615037,1257,5,Female,Non-G/T,Hispanic,Non-FRL,6,204,209
+615037,1257,5,Male,Non-G/T,Hispanic,FRL,8,194,207
+615767,1257,3,Female,Non-G/T,Black or African American,FRL,1,184,182
+615767,1257,3,Female,Non-G/T,Black,FRL,2,203,194
+615767,1257,4,Male,Non-G/T,Hispanic,Non-FRL,3,205,215
+615767,1257,4,Female,Non-G/T,Black or African American,FRL,3,173,184
+615767,1257,4,Male,Non-G/T,Hispanic,Non-FRL,4,198,203
+615767,1257,4,Female,Non-G/T,Black,FRL,5,213,215
+615767,1257,4,Female,Non-G/T,Black or African American,FRL,5,208,221
+615767,1257,4,Male,Non-G/T,Hispanic,Non-FRL,5,208,215
+615767,1257,5,Male,Non-G/T,Hispanic,Non-FRL,6,204,202
+615827,1257,3,Female,Non-G/T,Hispanic,FRL,0,161,168
+615827,1257,3,Male,Non-G/T,Native American,FRL,0,187,202
+615827,1257,3,Female,Non-G/T,Hispanic,FRL,1,201,196
+615827,1257,3,Female,G/T,White,Non-FRL,2,225,233
+615827,1257,4,Female,Non-G/T,Hispanic,FRL,4,185,190
+615827,1257,4,Female,Non-G/T,Hispanic,Non-FRL,4,215,210
+615827,1257,4,Female,Non-G/T,Hispanic,FRL,5,203,189
+615827,1257,5,Female,Non-G/T,Hispanic,FRL,7,195,194
+615827,1257,5,Female,Non-G/T,Hispanic,FRL,8,215,217
+617797,1277,3,Female,Non-G/T,Hispanic,FRL,0,181,195
+617797,1277,3,Male,Non-G/T,Hispanic,Non-FRL,0,182,187
+617797,1277,3,Male,Non-G/T,Hispanic,Non-FRL,2,218,208
+617797,1277,3,Male,Non-G/T,Hispanic,Non-FRL,2,208,204
+617797,1277,4,Male,Non-G/T,Hispanic,FRL,4,207,204
+617797,1277,5,Male,Non-G/T,American Indian or Alaskan Native,Non-FRL,6,219,214
+617797,1277,5,Male,Non-G/T,Hispanic,Non-FRL,7,218,230
+617797,1277,5,Male,Non-G/T,Hispanic,Non-FRL,7,223,221
+617797,1277,5,Male,Non-G/T,Hispanic,Non-FRL,7,217,233
+624727,1207,3,Male,Non-G/T,Black,FRL,0,172,192
+624727,1117,3,Male,Non-G/T,White,FRL,0,199,188
+624727,1117,3,Male,Non-G/T,Hispanic,FRL,0,169,171
+624727,1117,3,Male,Non-G/T,White,FRL,2,177,198
+624727,1207,3,Male,Non-G/T,Black,FRL,2,205,212
+624727,1117,3,Male,Non-G/T,White,FRL,2,174,198
+624727,1207,4,Female,Non-G/T,Hispanic,FRL,3,175,185
+624727,1147,4,Female,Non-G/T,Hispanic,FRL,5,189,206
+624727,1147,5,Male,Non-G/T,Native American,FRL,7,216,226
+625757,1277,3,Female,Non-G/T,White,FRL,1,183,184
+625757,1277,3,Female,Non-G/T,White,FRL,2,219,216
+625757,1277,3,Female,Non-G/T,White,FRL,2,208,203
+625757,1277,3,Female,Non-G/T,White,FRL,2,218,215
+625757,1277,4,Female,Non-G/T,White,FRL,3,219,214
+625757,1277,4,Female,Non-G/T,White,FRL,4,222,225
+625757,1277,4,Female,Non-G/T,White,FRL,4,207,206
+625757,1277,4,Female,Non-G/T,White,FRL,5,209,214
+625757,1277,5,Female,Non-G/T,White,FRL,8,217,224
+631977,1207,3,Male,Non-G/T,White,FRL,0,211,197
+631977,1207,3,Male,Non-G/T,White,Non-FRL,0,212,204
+631977,1207,3,Male,Non-G/T,Hispanic,FRL,1,206,203
+631977,1207,3,Male,Non-G/T,Hispanic,FRL,1,201,202
+631977,1207,3,Male,Non-G/T,Hispanic,FRL,1,201,198
+631977,1207,4,Male,Non-G/T,Hispanic,FRL,3,198,186
+631977,1207,4,Male,Non-G/T,White,FRL,3,190,190
+631977,1207,4,Male,Non-G/T,Hispanic,FRL,4,201,213
+631977,1207,5,Male,Non-G/T,Asian,FRL,6,216,209
+638977,1077,3,Male,Non-G/T,Hispanic,FRL,1,188,200
+638977,1077,4,Female,Non-G/T,Hispanic,FRL,3,157,169
+638977,1077,4,Male,Non-G/T,Hispanic,FRL,5,215,218
+638977,1077,4,Female,Non-G/T,Hispanic,FRL,5,206,215
+638977,1077,5,Male,Non-G/T,Hispanic,FRL,6,206,203
+638977,1077,5,Female,Non-G/T,Hispanic,FRL,6,207,211
+638977,1077,5,Male,Non-G/T,White,Non-FRL,7,232,209
+638977,1077,5,Female,Non-G/T,Hispanic,FRL,8,220,236
+638977,1077,5,Male,Non-G/T,Hispanic,FRL,8,157,183
+650327,1267,3,Male,Non-G/T,Black,FRL,0,191,196
+650327,1267,3,Male,G/T,White,Non-FRL,1,220,206
+650327,1267,3,Male,Non-G/T,Black,Non-FRL,2,208,206
+650327,1247,4,Female,Non-G/T,Hispanic,FRL,5,185,184
+650327,1267,4,Male,Non-G/T,Two or More,FRL,5,208,214
+650327,1247,5,Female,Non-G/T,American Indian or Alaskan Native,FRL,6,206,210
+650327,1247,5,Female,Non-G/T,Hispanic,FRL,7,215,215
+650327,1247,5,Female,Non-G/T,Hispanic,FRL,7,228,210
+650327,1247,5,Female,Non-G/T,Hispanic,FRL,7,202,236
+690077,1207,3,Male,Non-G/T,Hispanic,Non-FRL,1,164,183
+690077,1107,3,Male,G/T,White,FRL,1,212,213
+690077,1207,3,Male,Non-G/T,Hispanic,Non-FRL,2,186,202
+690077,1207,4,Male,Non-G/T,Hispanic,Non-FRL,3,186,198
+690077,1107,4,Female,Non-G/T,White,Non-FRL,4,221,223
+690077,1207,4,Male,Non-G/T,Hispanic,Non-FRL,5,155,178
+690077,1207,5,Male,Non-G/T,Hispanic,FRL,7,187,207
+690077,1207,5,Male,Non-G/T,Hispanic,FRL,7,205,202
+690077,1207,5,Female,Non-G/T,Hispanic,FRL,8,236,226
+700117,1077,3,Female,Non-G/T,Hispanic,FRL,2,208,206
+700117,1077,3,Male,Non-G/T,Hispanic,FRL,2,173,184
+700117,1077,4,Female,Non-G/T,Hispanic,FRL,3,199,207
+700117,1077,4,Male,Non-G/T,American Indian or Alaskan Native,FRL,5,210,225
+700117,1077,5,Male,Non-G/T,Hispanic,FRL,6,214,217
+700117,1077,5,Male,Non-G/T,Hispanic,FRL,6,213,220
+700117,1077,5,Female,Non-G/T,Hispanic,FRL,6,198,201
+700117,1077,5,Male,Non-G/T,Hispanic,FRL,8,210,236
+700117,1077,5,Male,Non-G/T,Hispanic,FRL,8,214,238
+700187,1077,3,Female,Non-G/T,American Indian or Alaskan Native,Non-FRL,0,181,182
+700187,1077,3,Female,Non-G/T,American Indian or Alaskan Native,FRL,0,191,184
+700187,1077,3,Female,Non-G/T,American Indian or Alaskan Native,FRL,1,196,204
+700187,1077,4,Male,G/T,Hispanic,FRL,5,206,224
+700187,1077,4,Male,G/T,Hispanic,FRL,5,220,236
+700187,1077,5,Male,G/T,Hispanic,FRL,6,206,215
+700187,1077,5,Male,G/T,Hispanic,Non-FRL,7,239,252
+700187,1077,5,Female,Non-G/T,American Indian or Alaskan Native,Non-FRL,7,208,217
+700187,1077,5,Male,G/T,Hispanic,FRL,7,227,228
+701057,1087,3,Female,Non-G/T,Hispanic,FRL,0,171,175
+701057,1087,3,Female,Non-G/T,Hispanic,FRL,1,192,195
+701057,1087,3,Male,Non-G/T,Hispanic,FRL,2,215,203
+701057,1247,4,Male,Non-G/T,Hispanic,FRL,4,195,198
+701057,1247,4,Male,Non-G/T,Hispanic,FRL,5,192,197
+701057,1247,4,Male,Non-G/T,Hispanic,FRL,5,189,195
+701057,1247,5,Female,Non-G/T,Hispanic,FRL,6,185,190
+701057,1247,5,Female,Non-G/T,Hispanic,FRL,7,215,215
+701057,1247,5,Female,Non-G/T,Hispanic,FRL,8,193,216
+701607,1087,3,Male,Non-G/T,Hispanic,FRL,0,183,186
+701607,1087,3,Male,Non-G/T,Hispanic,FRL,0,173,175
+701607,1087,3,Male,Non-G/T,Hispanic,FRL,0,172,174
+701607,1087,3,Male,Non-G/T,Hispanic,FRL,0,164,177
+701607,1087,3,Male,Non-G/T,Hispanic,FRL,0,185,192
+701607,1087,4,Male,Non-G/T,Hispanic,FRL,3,208,213
+701607,1087,5,Male,Non-G/T,Hispanic,FRL,6,193,197
+701607,1087,5,Male,Non-G/T,Hispanic,FRL,8,203,216
+701607,1087,5,Male,Non-G/T,Hispanic,FRL,8,221,226
+703557,1117,3,Male,Non-G/T,Hispanic,FRL,0,186,186
+703557,1117,3,Male,Non-G/T,Hispanic,FRL,1,205,205
+703557,1197,4,Male,Non-G/T,Hispanic,FRL,4,202,205
+703557,1117,5,Male,Non-G/T,Hispanic,FRL,6,203,202
+703557,1117,5,Male,Non-G/T,Hispanic,FRL,6,205,217
+703557,1117,5,Male,Non-G/T,Hispanic,FRL,6,205,220
+703557,1117,5,Male,Non-G/T,Hispanic,FRL,7,220,222
+703557,1117,5,Male,Non-G/T,Hispanic,FRL,8,216,233
+703557,1117,5,Male,Non-G/T,Hispanic,FRL,8,216,233
+708557,1177,3,Male,Non-G/T,Black or African American,FRL,2,190,191
+708557,1177,4,Male,Non-G/T,Black or African American,FRL,3,166,185
+708557,1177,4,Male,Non-G/T,Black or African American,FRL,3,203,197
+708557,1177,4,Male,G/T,Hispanic,Non-FRL,4,216,222
+708557,1587,4,Female,Non-G/T,Black or African American,FRL,4,218,215
+708557,1177,4,Male,Non-G/T,Black or African American,FRL,4,199,206
+708557,1177,4,Male,Non-G/T,Black or African American,Non-FRL,5,211,210
+708557,1177,5,Male,Non-G/T,Hispanic,FRL,6,199,208
+708557,1177,5,Male,Non-G/T,Black or African American,FRL,7,205,203
+711107,1207,3,Male,G/T,White,Non-FRL,1,214,209
+711107,1207,4,Female,Non-G/T,Black or African American,FRL,4,209,211
+711107,1207,4,Male,G/T,White,Non-FRL,5,222,229
+711107,1207,4,Female,Non-G/T,Black or African American,FRL,5,211,212
+711107,1207,4,Male,G/T,White,Non-FRL,5,215,221
+711107,1207,5,Male,G/T,White,FRL,6,210,241
+711107,1207,5,Male,G/T,White,Non-FRL,7,228,236
+711107,1207,5,Male,G/T,White,FRL,7,211,235
+711107,1207,5,Male,G/T,White,Non-FRL,8,227,258
+712377,1217,3,Female,Non-G/T,White,Non-FRL,0,197,191
+712377,1217,3,Male,Non-G/T,White,Non-FRL,0,202,196
+712377,1217,3,Female,Non-G/T,White,Non-FRL,0,189,190
+712377,1217,3,Male,Non-G/T,White,Non-FRL,1,201,211
+712377,1277,4,Female,Non-G/T,Hispanic,FRL,4,217,209
+712377,1277,5,Female,Non-G/T,White,Non-FRL,6,205,212
+712377,1277,5,Female,Non-G/T,White,Non-FRL,7,210,218
+712377,1277,5,Female,Non-G/T,White,Non-FRL,7,206,227
+712377,1277,5,Male,Non-G/T,White,Non-FRL,8,222,247
+713307,1237,3,Male,Non-G/T,Hispanic,FRL,0,185,193
+713307,1237,4,Female,Non-G/T,Black or African American,FRL,4,202,221
+713307,1237,4,Male,Non-G/T,Hispanic,FRL,5,182,209
+713307,1237,5,Male,Non-G/T,Hispanic,FRL,7,185,215
+713307,1237,5,Male,Non-G/T,Hispanic,FRL,7,210,226
+713307,1237,5,Male,Non-G/T,Hispanic,FRL,7,183,197
+713307,1237,5,Male,Non-G/T,Hispanic,FRL,7,212,224
+713307,1237,5,Female,Non-G/T,Black or African American,FRL,8,209,214
+713307,1237,5,Female,Non-G/T,Black or African American,FRL,8,208,223
+713527,1237,3,Female,Non-G/T,Hispanic,FRL,0,188,176
+713527,1237,3,Male,Non-G/T,Hispanic,FRL,0,176,185
+713527,1237,3,Male,Non-G/T,Hispanic,FRL,1,191,199
+713527,1237,3,Male,Non-G/T,Hispanic,FRL,1,173,181
+713527,1237,3,Male,Non-G/T,Hispanic,FRL,1,209,209
+713527,1237,3,Male,Non-G/T,Hispanic,FRL,2,187,187
+713527,1237,4,Male,Non-G/T,Hispanic,FRL,4,184,198
+713527,1237,5,Male,Non-G/T,Hispanic,FRL,6,194,198
+713527,1237,5,Male,Non-G/T,Hispanic,FRL,7,213,223
+714087,1247,3,Female,Non-G/T,Hispanic,FRL,0,187,188
+714087,1247,3,Female,Non-G/T,Hispanic,FRL,2,218,211
+714087,1247,4,Female,Non-G/T,Hispanic,FRL,3,208,199
+714087,1247,4,Male,Non-G/T,American Indian or Alaskan Native,FRL,3,189,168
+714087,1247,4,Male,Non-G/T,Hispanic,Non-FRL,5,192,191
+714087,1247,4,Male,Non-G/T,Hispanic,FRL,5,212,233
+714087,1247,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,7,219,226
+714087,1247,5,Male,Non-G/T,Hispanic,FRL,7,215,210
+714087,1247,5,Female,Non-G/T,Hispanic,FRL,8,195,198
+715167,1107,3,Female,G/T,Hispanic,FRL,0,160,193
+715167,1107,3,Female,G/T,Hispanic,FRL,2,215,217
+715167,1107,4,Female,G/T,Hispanic,FRL,3,206,208
+715167,1107,4,Female,G/T,Hispanic,FRL,5,209,216
+715167,1107,4,Female,G/T,Hispanic,FRL,5,209,228
+715167,1107,4,Female,G/T,Hispanic,FRL,5,209,223
+715167,1107,5,Female,G/T,Asian,Non-FRL,6,213,220
+715167,1107,5,Female,G/T,White,Non-FRL,6,213,224
+715167,1107,5,Female,G/T,White,Non-FRL,8,243,259
+715407,1257,3,Female,Non-G/T,Hispanic,FRL,1,192,208
+715407,1257,3,Female,Non-G/T,Hispanic,FRL,2,181,179
+715407,1257,3,Male,Non-G/T,American Indian or Alaskan Native,FRL,2,186,188
+715407,1257,4,Female,Non-G/T,Hispanic,FRL,3,183,180
+715407,1257,4,Female,Non-G/T,Hispanic,FRL,4,191,186
+715407,1257,4,Female,Non-G/T,Hispanic,FRL,4,195,191
+715407,1257,4,Female,Non-G/T,Hispanic,FRL,5,217,212
+715407,1257,5,Female,Non-G/T,Hispanic,FRL,8,212,216
+715407,1257,5,Female,Non-G/T,Hispanic,FRL,8,189,188
+717267,1277,3,Female,G/T,Hispanic,Non-FRL,0,211,205
+717267,1277,3,Male,Non-G/T,Hispanic,FRL,0,191,199
+717267,1277,3,Male,Non-G/T,Hispanic,FRL,1,181,184
+717267,1277,3,Male,Non-G/T,Hispanic,FRL,2,198,211
+717267,1277,4,Male,Non-G/T,Black or African American,FRL,4,204,194
+717267,1277,4,Female,G/T,Hispanic,Non-FRL,5,228,230
+717267,1277,4,Male,Non-G/T,Black or African American,FRL,5,206,209
+717267,1277,5,Female,G/T,Hispanic,Non-FRL,6,215,218
+717267,1277,5,Female,G/T,Hispanic,Non-FRL,7,215,227
+717477,1277,3,Male,Non-G/T,American Indian or Alaskan Native,Non-FRL,0,177,173
+717477,1277,3,Male,Non-G/T,Hispanic,Non-FRL,0,191,186
+717477,1277,3,Female,Non-G/T,White,FRL,1,194,197
+717477,1277,3,Male,Non-G/T,American Indian or Alaskan Native,Non-FRL,1,174,196
+717477,1277,3,Male,Non-G/T,White,Non-FRL,1,216,200
+717477,1277,4,Male,Non-G/T,Hispanic,Non-FRL,3,197,198
+717477,1277,4,Male,Non-G/T,Hispanic,Non-FRL,4,200,193
+717477,1277,5,Female,Non-G/T,White,FRL,6,212,216
+717477,1277,5,Female,Non-G/T,White,FRL,7,228,229
+722117,1587,4,Female,G/T,White,Non-FRL,5,218,230
+722117,1587,4,Male,G/T,White,Non-FRL,5,229,234
+722117,1587,5,Male,G/T,White,Non-FRL,6,228,230
+722117,1587,5,Female,G/T,White,Non-FRL,6,201,210
+722117,1587,5,Female,G/T,White,Non-FRL,6,213,219
+722117,1587,5,Female,G/T,White,Non-FRL,7,235,248
+722117,1587,5,Male,G/T,White,Non-FRL,7,220,218
+722117,1587,5,Female,G/T,White,Non-FRL,8,221,237
+722117,1587,5,Male,G/T,White,Non-FRL,8,239,248
+731037,1127,3,Male,Non-G/T,Black,FRL,0,159,174
+731037,1127,3,Male,Non-G/T,Hispanic,FRL,2,185,188
+731037,1127,3,Male,Non-G/T,Hispanic,FRL,2,184,178
+731037,1127,4,Female,Non-G/T,Hispanic,FRL,3,199,196
+731037,1127,4,Male,Non-G/T,Hispanic,FRL,3,188,201
+731037,1127,4,Male,Non-G/T,Hispanic,Non-FRL,5,198,214
+731037,1127,5,Male,Non-G/T,Hispanic,FRL,7,200,205
+731037,1127,5,Female,Non-G/T,Black or African American,FRL,7,198,183
+731037,1127,5,Female,Non-G/T,White,FRL,8,213,230
+735017,1187,3,Male,Non-G/T,Hispanic,FRL,0,181,189
+735017,1187,3,Male,Non-G/T,Hispanic,FRL,1,187,197
+735017,1187,3,Male,Non-G/T,Hispanic,FRL,1,205,194
+735017,1187,4,Female,Non-G/T,Hispanic,FRL,3,213,196
+735017,1187,4,Female,Non-G/T,Hispanic,FRL,3,213,213
+735017,1187,4,Female,Non-G/T,Hispanic,FRL,4,214,219
+735017,1187,4,Female,Non-G/T,Hispanic,FRL,4,194,192
+735017,1187,4,Male,Non-G/T,Hispanic,Non-FRL,5,198,221
+735017,1187,4,Female,Non-G/T,Hispanic,FRL,5,199,195
+736027,1247,3,Male,Non-G/T,White,Non-FRL,0,175,184
+736027,1247,3,Male,Non-G/T,White,FRL,1,196,191
+736027,1247,3,Male,Non-G/T,White,Non-FRL,1,212,200
+736027,1257,4,Male,Non-G/T,White,Non-FRL,4,200,207
+736027,1257,5,Male,Non-G/T,White,Non-FRL,6,217,217
+736027,1257,5,Male,Non-G/T,White,FRL,6,205,210
+736027,1257,5,Male,Non-G/T,White,Non-FRL,7,213,225
+736027,1257,5,Male,Non-G/T,White,Non-FRL,8,213,217
+736027,1257,5,Male,Non-G/T,White,Non-FRL,8,218,237
+791127,1107,3,Female,Non-G/T,Hispanic,FRL,0,194,202
+791127,1107,3,Female,Non-G/T,Hispanic,FRL,0,164,178
+791127,1107,3,Female,Non-G/T,Hispanic,Non-FRL,0,195,202
+791127,1107,3,Female,Non-G/T,Hispanic,FRL,0,200,197
+791127,1107,3,Female,Non-G/T,Hispanic,FRL,1,185,191
+791127,1107,3,Female,Non-G/T,Hispanic,FRL,1,196,176
+791127,1107,3,Female,Non-G/T,Hispanic,FRL,2,191,209
+791127,1107,3,Female,Non-G/T,Hispanic,Non-FRL,2,199,210
+791127,1107,4,Female,Non-G/T,Hispanic,FRL,3,178,187
+10001327,1207,3,Male,Non-G/T,Black or African American,FRL,0,203,199
+10001327,1207,3,Male,Non-G/T,Black or African American,FRL,1,173,191
+10001327,1207,3,Male,Non-G/T,Black or African American,FRL,1,173,184
+10001327,1207,4,Male,Non-G/T,Black,FRL,3,189,196
+10001327,1207,4,Male,Non-G/T,Black or African American,FRL,4,203,211
+10001327,1207,4,Male,Non-G/T,Black or African American,FRL,4,200,203
+10001327,1207,4,Male,Non-G/T,Black or African American,FRL,5,212,212
+10001327,1207,5,Male,Non-G/T,Black or African American,FRL,6,200,199
+10001327,1207,5,Male,Non-G/T,Black or African American,FRL,7,207,202
+10001357,1207,3,Male,Non-G/T,Black or African American,FRL,1,176,203
+10001357,1207,3,Male,Non-G/T,Black or African American,FRL,1,196,189
+10001357,1207,4,Male,Non-G/T,Black or African American,FRL,3,207,208
+10001357,1207,4,Male,Non-G/T,Black or African American,FRL,3,201,209
+10001357,1207,4,Male,Non-G/T,Black or African American,FRL,3,208,212
+10001357,1207,4,Male,Non-G/T,Black or African American,FRL,4,200,203
+10001357,1207,4,Male,Non-G/T,Black or African American,FRL,4,206,208
+10001357,1207,4,Male,Non-G/T,Black or African American,FRL,5,202,213
+10001357,1207,5,Male,Non-G/T,Black or African American,FRL,7,210,218
+10001797,1237,3,Female,Non-G/T,Hispanic,FRL,1,196,193
+10001797,1237,3,Female,Non-G/T,Hispanic,FRL,1,196,198
+10001797,1237,3,Female,Non-G/T,Hispanic,FRL,2,200,214
+10001797,1237,3,Female,Non-G/T,Hispanic,FRL,2,182,187
+10001797,1237,4,Female,Non-G/T,Hispanic,FRL,3,208,194
+10001797,1237,4,Female,Non-G/T,Hispanic,FRL,4,195,195
+10001797,1237,4,Female,Non-G/T,Hispanic,FRL,5,186,201
+10001797,1237,4,Female,Non-G/T,Hispanic,FRL,5,199,204
+10001797,1237,5,Female,Non-G/T,Hispanic,FRL,8,213,226
+10006897,1117,3,Female,Non-G/T,Hispanic,FRL,0,170,179
+10006897,1117,3,Female,Non-G/T,Hispanic,FRL,0,172,182
+10006897,1117,4,Female,Non-G/T,Hispanic,FRL,3,198,203
+10006897,1117,4,Female,Non-G/T,Hispanic,FRL,3,203,205
+10006897,1117,4,Female,Non-G/T,Hispanic,FRL,3,206,198
+10006897,1117,4,Female,Non-G/T,Hispanic,FRL,5,209,214
+10006897,1117,4,Female,Non-G/T,Hispanic,FRL,5,196,194
+10006897,1117,5,Male,Non-G/T,Hispanic,FRL,7,182,179
+10006897,1117,5,Male,Non-G/T,Hispanic,FRL,8,213,212
+10015197,1127,3,Male,Non-G/T,Hispanic,FRL,0,174,180
+10015197,1127,3,Male,Non-G/T,Hispanic,FRL,0,174,187
+10015197,1127,3,Male,Non-G/T,Hispanic,FRL,1,156,140
+10015197,1127,4,Male,Non-G/T,Hispanic,FRL,3,169,173
+10015197,1127,4,Female,G/T,Hispanic,FRL,3,205,199
+10015197,1127,5,Male,Non-G/T,Hispanic,FRL,6,188,198
+10015197,1127,5,Male,Non-G/T,Hispanic,FRL,6,200,209
+10015197,1127,5,Male,Non-G/T,Hispanic,FRL,7,201,215
+10015197,1127,5,Male,Non-G/T,Hispanic,FRL,8,202,222
+10017277,1187,3,Male,Non-G/T,White,FRL,0,157,175
+10017277,1187,3,Male,Non-G/T,Hispanic,FRL,1,177,185
+10017277,1187,3,Male,Non-G/T,White,Non-FRL,2,217,217
+10017277,1187,3,Male,Non-G/T,Hispanic,FRL,2,200,192
+10017277,1197,3,Male,Non-G/T,White,FRL,2,210,204
+10017277,1147,4,Male,Non-G/T,Hispanic,FRL,3,191,191
+10017277,1147,4,Male,Non-G/T,White,FRL,4,184,202
+10017277,1147,4,Female,Non-G/T,Hispanic,FRL,4,208,209
+10017277,1147,4,Male,Non-G/T,Hispanic,FRL,5,195,210
+10020897,1087,3,Female,Non-G/T,White,Non-FRL,1,210,209
+10020897,1087,3,Female,Non-G/T,White,FRL,1,209,213
+10020897,1187,3,Male,Non-G/T,Hispanic,FRL,1,180,192
+10020897,1087,3,Female,Non-G/T,White,FRL,1,205,196
+10020897,1157,3,Male,Non-G/T,Hispanic,Non-FRL,1,181,184
+10020897,1087,3,Female,Non-G/T,White,Non-FRL,2,159,181
+10020897,1157,3,Male,Non-G/T,Hispanic,FRL,2,161,201
+10020897,1157,4,Male,Non-G/T,Hispanic,FRL,3,191,208
+10020897,1187,4,Male,Non-G/T,Hispanic,FRL,4,198,204
+10021237,1187,3,Male,Non-G/T,Hispanic,FRL,1,168,185
+10021237,1207,3,Male,Non-G/T,Hispanic,FRL,1,177,180
+10021237,1207,3,Male,Non-G/T,Black or African American,Non-FRL,2,200,192
+10021237,1187,3,Male,Non-G/T,Hispanic,FRL,2,200,203
+10021237,1187,4,Male,Non-G/T,Hispanic,FRL,4,215,213
+10021237,1187,4,Male,Non-G/T,Black,FRL,4,194,200
+10021237,1207,4,Male,Non-G/T,Black,FRL,5,190,188
+10021237,1187,4,Male,Non-G/T,Black,FRL,5,207,206
+10021237,1207,4,Male,Non-G/T,Black or African American,FRL,5,228,226
+10036397,1247,3,Male,G/T,Black or African American,FRL,0,180,198
+10036397,1247,3,Male,G/T,Black or African American,FRL,1,206,206
+10036397,1177,3,Female,Non-G/T,Black,Non-FRL,1,217,189
+10036397,1247,3,Female,G/T,Black or African American,FRL,2,241,233
+10036397,1197,3,Male,Non-G/T,Hispanic,FRL,2,207,218
+10036397,1197,4,Female,Non-G/T,Hispanic,Non-FRL,3,209,204
+10036397,1247,4,Male,G/T,Native American,Non-FRL,3,223,214
+10036397,1247,4,Female,Non-G/T,Native American,Non-FRL,3,174,187
+10036397,1197,5,Female,Non-G/T,Asian,FRL,6,209,188
+10039207,1127,4,Female,Non-G/T,Black or African American,FRL,3,189,195
+10039207,1187,4,Male,Non-G/T,White,Non-FRL,4,213,212
+10039207,1187,4,Female,Non-G/T,White,Non-FRL,4,213,224
+10039207,1127,4,Female,Non-G/T,Black or African American,FRL,5,198,200
+10039207,1187,5,Male,G/T,Hispanic,FRL,6,208,225
+10039207,1127,5,Female,Non-G/T,Black or African American,FRL,7,185,199
+10039207,1127,5,Female,Non-G/T,Black or African American,FRL,7,184,179
+10039207,1127,5,Female,Non-G/T,Black or African American,FRL,7,185,199
+10039207,1187,5,Female,Non-G/T,Hispanic,FRL,8,217,224
+10041877,1207,3,Male,G/T,Hispanic,Non-FRL,0,216,203
+10041877,1207,3,Male,G/T,Hispanic,Non-FRL,0,191,194
+10041877,1207,3,Female,Non-G/T,Hispanic,FRL,0,187,200
+10041877,1207,3,Female,Non-G/T,Hispanic,FRL,1,199,204
+10041877,1207,4,Female,Non-G/T,Hispanic,FRL,3,189,202
+10041877,1207,4,Male,G/T,Hispanic,Non-FRL,4,202,215
+10041877,1207,5,Female,Non-G/T,Hispanic,FRL,6,196,212
+10041877,1207,5,Male,G/T,Hispanic,Non-FRL,7,178,179
+10041877,1207,5,Female,Non-G/T,Hispanic,FRL,8,215,241
+10042597,1237,3,Male,Non-G/T,Hispanic,FRL,0,187,189
+10042597,1237,4,Female,Non-G/T,Hispanic,FRL,3,208,212
+10042597,1257,4,Male,Non-G/T,Hispanic,FRL,3,201,205
+10042597,1257,4,Male,Non-G/T,Hispanic,FRL,3,188,195
+10042597,1257,4,Female,Non-G/T,Hispanic,Non-FRL,5,187,202
+10042597,1237,4,Female,Non-G/T,Hispanic,FRL,5,201,219
+10042597,1257,5,Male,Non-G/T,Hispanic,FRL,6,182,195
+10042597,1237,5,Male,Non-G/T,Hispanic,FRL,7,201,195
+10042597,1237,5,Female,Non-G/T,Hispanic,FRL,8,215,230
+10046947,1257,3,Female,Non-G/T,American Indian or Alaskan Native,FRL,0,155,158
+10046947,1257,3,Male,Non-G/T,American Indian or Alaskan Native,FRL,0,199,204
+10046947,1257,3,Male,Non-G/T,Native American,FRL,0,165,177
+10046947,1257,3,Female,Non-G/T,Native American,FRL,1,183,174
+10046947,1257,4,Female,Non-G/T,American Indian or Alaskan Native,FRL,3,179,180
+10046947,1257,4,Male,Non-G/T,American Indian or Alaskan Native,FRL,4,194,189
+10046947,1257,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,6,198,196
+10046947,1257,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,7,204,199
+10046947,1257,5,Male,Non-G/T,American Indian or Alaskan Native,FRL,7,174,194
+10057287,1257,3,Male,Non-G/T,Black or African American,FRL,0,178,179
+10057287,1237,3,Female,Non-G/T,Hispanic,FRL,0,159,187
+10057287,1237,3,Female,Non-G/T,Hispanic,FRL,0,182,186
+10057287,1257,3,Male,Non-G/T,Black or African American,FRL,1,175,184
+10057287,1237,3,Female,Non-G/T,Hispanic,FRL,1,173,180
+10057287,1257,4,Male,Non-G/T,Black or African American,FRL,3,169,180
+10057287,1237,4,Female,Non-G/T,Hispanic,FRL,3,185,192
+10057287,1237,5,Female,Non-G/T,Hispanic,FRL,6,206,209
+10057287,1257,5,Male,Non-G/T,Black or African American,FRL,8,201,226
+10059117,1087,3,Female,G/T,White,Non-FRL,0,201,211
+10059117,1087,3,Female,G/T,White,FRL,2,214,221
+10059117,1087,3,Female,G/T,White,FRL,2,214,211
+10059117,1087,3,Female,G/T,White,Non-FRL,2,214,210
+10059117,1087,4,Female,G/T,White,FRL,4,218,235
+10059117,1087,4,Female,G/T,White,Non-FRL,4,229,238
+10059117,1087,4,Female,G/T,White,FRL,5,228,239
+10059117,1087,5,Female,G/T,White,Non-FRL,6,224,221
+10059117,1087,5,Female,G/T,White,Non-FRL,8,238,259
+10059357,1087,3,Female,Non-G/T,White,FRL,1,205,204
+10059357,1087,3,Female,Non-G/T,Native American,FRL,2,188,191
+10059357,1087,3,Female,Non-G/T,American Indian or Alaskan Native,FRL,2,191,184
+10059357,1087,3,Female,Non-G/T,White,FRL,2,193,178
+10059357,1087,4,Female,Non-G/T,White,FRL,3,213,201
+10059357,1087,4,Female,Non-G/T,White,FRL,3,193,191
+10059357,1087,5,Female,Non-G/T,Asian,FRL,6,203,204
+10059357,1087,5,Female,Non-G/T,Asian,FRL,6,205,209
+10059357,1087,5,Female,Non-G/T,White,FRL,6,209,213
+10070757,1587,4,Male,Non-G/T,Hispanic,Non-FRL,5,211,221
+10070757,1277,4,Male,Non-G/T,White,FRL,5,205,222
+10070757,1587,5,Male,Non-G/T,White,Non-FRL,6,216,213
+10070757,1277,5,Male,Non-G/T,White,FRL,6,220,215
+10070757,1277,5,Male,Non-G/T,White,FRL,6,216,216
+10070757,1277,5,Male,Non-G/T,White,FRL,6,203,216
+10070757,1277,5,Male,Non-G/T,Black or African American,FRL,7,194,201
+10070757,1587,5,Male,Non-G/T,White,Non-FRL,8,227,236
+10070757,1277,5,Male,Non-G/T,White,FRL,8,202,190
+10078787,1237,3,Female,Non-G/T,Hispanic,FRL,1,200,199
+10078787,1237,3,Female,Non-G/T,Hispanic,FRL,2,212,206
+10078787,1237,3,Male,Non-G/T,Hispanic,FRL,2,207,208
+10078787,1237,5,Female,Non-G/T,Hispanic,FRL,6,213,207
+10078787,1237,5,Female,Non-G/T,Hispanic,FRL,6,214,210
+10078787,1237,5,Female,Non-G/T,Hispanic,FRL,7,213,236
+10078787,1237,5,Female,Non-G/T,Hispanic,FRL,7,200,210
+10078787,1237,5,Female,Non-G/T,Hispanic,Non-FRL,8,163,180
+10078787,1237,5,Female,Non-G/T,Hispanic,FRL,8,203,234
+10082687,1147,3,Male,Non-G/T,Hispanic,FRL,2,197,206
+10082687,1147,3,Male,Non-G/T,Hispanic,FRL,2,197,200
+10082687,1077,4,Male,Non-G/T,Hispanic,FRL,3,202,203
+10082687,1077,4,Female,Non-G/T,Hispanic,Non-FRL,5,200,216
+10082687,1147,4,Male,Non-G/T,Hispanic,FRL,5,213,229
+10082687,1147,5,Female,G/T,White,Non-FRL,6,232,238
+10082687,1147,5,Female,G/T,White,Non-FRL,7,212,220
+10082687,1147,5,Male,Non-G/T,Hispanic,FRL,7,212,221
+10082687,1077,5,Female,Non-G/T,Hispanic,FRL,8,215,220
+10084197,1157,3,Male,Non-G/T,White,FRL,2,193,191
+10084197,1157,3,Male,Non-G/T,White,FRL,2,206,202
+10084197,1207,4,Female,Non-G/T,Hispanic,FRL,4,206,205
+10084197,1207,4,Female,G/T,White,FRL,5,218,233
+10084197,1177,4,Male,Non-G/T,White,FRL,5,203,199
+10084197,1177,4,Male,Non-G/T,White,FRL,5,189,199
+10084197,1197,4,Male,Non-G/T,White,FRL,5,214,216
+10084197,1207,5,Male,Non-G/T,Hispanic,FRL,6,216,227
+10084197,1197,5,Male,Non-G/T,Hispanic,FRL,8,222,227
+10086587,1127,3,Male,Non-G/T,Hispanic,FRL,0,194,207
+10086587,1127,3,Female,Non-G/T,Hispanic,FRL,0,188,191
+10086587,1127,3,Female,Non-G/T,Hispanic,FRL,1,176,181
+10086587,1127,3,Female,Non-G/T,Hispanic,FRL,1,180,192
+10086587,1127,3,Male,Non-G/T,Hispanic,FRL,2,184,186
+10086587,1117,4,Female,Non-G/T,Black or African American,FRL,3,205,200
+10086587,1117,4,Female,Non-G/T,Black or African American,Non-FRL,5,212,219
+10086587,1117,5,Female,Non-G/T,Asian,Non-FRL,6,201,211
+10086587,1127,5,Female,Non-G/T,White,FRL,8,231,236
+10089117,1177,3,Female,Non-G/T,American Indian or Alaskan Native,FRL,2,212,208
+10089117,1127,4,Male,Non-G/T,White,FRL,4,200,178
+10089117,1127,4,Female,Non-G/T,American Indian or Alaskan Native,FRL,5,189,207
+10089117,1127,5,Female,Non-G/T,White,FRL,6,202,209
+10089117,1197,5,Female,Non-G/T,Two or More,Non-FRL,7,219,234
+10089117,1197,5,Female,Non-G/T,American Indian or Alaskan Native,FRL,8,195,198
+10089117,1127,5,Female,Non-G/T,White,FRL,8,205,200
+10089117,1127,5,Male,Non-G/T,White,FRL,8,190,220
+10089117,1197,5,Female,Non-G/T,White,Non-FRL,8,215,222

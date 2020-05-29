@@ -1,0 +1,32 @@
+---
+title: "About adoption.csv"
+author: "Daniel Anderson"
+date: "10/14/2018"
+output: html_document
+---
+
+# The adoption.csv data
+These data have been simulated from real data on adoption and child behavior
+problems. These particular data were simulated from when the children with 18
+months old. The variables are as follows:
+
+* **id**: Numeric identification variable for each child in the study
+* **openness**: Composite of adoptive mother's and father's openness to 
+	adopting the child.
+* **prenatal_drug**: Identifies whether or not the birth mother used drugs
+  while pregnant with the child.
+* **distresslim**: A scaled numeric variable measuring the amount of distress
+	the child displays to limitation. The variable should have a mean of 0 and
+	standard deviation of 1. In this sample, the mean is slightly higher and the
+	variability is slightly less.
+* **distressnov**: A scaled numeric variable measuring the amount of distress
+	the child displays to novel situations. The variable should have a mean of 0
+	and standard deviation of 1. In this sample, the mean is slightly higher and
+	the variability is slightly less.
+* **struc_parenting**: A numeric score representing adoptive parents score as
+	they progress through a structured parenting task with their adoptive child.
+	Higher scores represent parents enforcing more structure.
+* **bm_psychopathology**: A composite variable representing a psychopathology
+	rating for the birth mothers.
+* **behav_prob_score**: The behavior problems score for the child at 18 months
+	old (the outcome).
