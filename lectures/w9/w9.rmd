@@ -1,0 +1,865 @@
+---
+title: "Dealing with collinearity and non-linearity"
+author: "Daniel Anderson"
+date: "Week 9"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r setup, include = FALSE}
+library(here)
+library(tidyverse)
+library(rio)
+
+theme_set(theme_minimal(base_size = 25))
+
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+```
+
+# Agenda 
+* Review interactions exercise
+* Review the concept of (multi)collinearity
+* Introduce collinearity diagnostic tools
+  + Tolerance
+  + Variance Inflation Factor
+* Discuss nonlinearity
+  + Polynomial approaches
+  + Transformations (e.g., log)
+
+---
+class: inverse middle center
+background-image:url(../img/chalkboard.jpg)
+background-size:cover
+
+# What questions do you have?
+
+
+---
+class: inverse middle
+background-image:url(../img/wood.jpg)
+background-size:cover
+
+# Let's get setup
+
+### Tonight, we'll work with multiple data sources
+* elemapi.sav (re-download if you already have it)
+* mtcars (but it's part of base R so don't worry)
+* simdata
+
+
+---
+# elemapi
+
+```{r load-elemapi}
+elemapi <- import(here("data", "elemapi.sav"),
+                  setclass = "tbl_df") %>%
+  characterize()
+
+head(elemapi)
+```
+
+---
+# Multicollinearity
+Are two (or more) variables proxies for the same thing?
+
+--
+```{r cor}
+elemapi %>%
+  select(api00, meals, ell, mobility, acs_k3, acs_46, emer, enroll) %>%
+  cor(use = "complete.obs") %>%
+  round(2)
+```
+
+---
+# Cutoffs
+* If we get above .7, we're probably getting pretty concerned. 
+
+* Above .9, really concerned
+
+
+--
+* Why can't we just include them anyway?
+
+---
+class: inverse bottom middle
+background-image:url(../img/high-collinearity.png)
+background-size:contain
+
+# Recall from Week 4
+
+
+---
+# An analogy
+### A model with low collinearity 
+ <img src="https://images-na.ssl-images-amazon.com/images/I/71A9Od4XGUL._SY550_.jpg" height="400px"/>
+
+---
+### A model with high collinearity
+![](https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQawZYbvNjnJTTpanejBbxTa9mPlBKvwXvA-uccC7nA6MFSSXv2AuQcYLiCI1Gt5Ho62Bro3Q&usqp=CAY)
+
+---
+# An example
+
+```{r mtcars-cor}
+mtcars %>%
+  cor() %>%
+  round(2)
+```
+
+---
+# Why we have to be careful
+
+```{r mod}
+m <- lm(mpg ~ hp + cyl + disp, mtcars)
+arm::display(m, detail = TRUE)
+```
+
+--
+Wait... none of these things significantly relate to miles per gallon?
+
+---
+# Single models
+
+```{r }
+hp_mod <- lm(mpg ~ hp, mtcars)
+summary(hp_mod)$r.squared
+cyl_mod <- lm(mpg ~ cyl, mtcars)
+summary(cyl_mod)$r.squared
+disp_mod <- lm(mpg ~ disp, mtcars)
+summary(disp_mod)$r.squared
+```
+
+--
+# 🤨
+
+---
+class: inverse bottom middle
+background-image:url(../img/high-collinearity.png)
+background-size:contain
+
+---
+# Variance inflation
+* Notice what (multi)collinearity does to the standard errors
+
+
+```{r standard-errors1}
+arm::display(m, digits = 4)
+```
+
+---
+
+```{r standard-errors2}
+arm::display(hp_mod, digits = 4)
+arm::display(cyl_mod, digits = 4)
+```
+
+---
+```{r standard-errors3}
+arm::display(disp_mod, digits = 4)
+```
+
+---
+# High collinearity...
+
+--
+* Leads to larger standard errors
+
+
+--
+* Larger confidence intervals
+
+
+--
+* smaller $t$ values
+
+
+--
+### Overall this leads to
+
+--
+* More uncertainty of the estimated effects (why? We're not as sure what's
+  contributing to the observed score)
+
+
+--
+* Less likelihood of detecting significant effects
+
+---
+# Why is this happening?
+
+### Recall the standard error of the estimate
+This is for the two predictor variable case
+.Large[
+$$
+s\_{b\_{y1.2}} = \frac{s\_{y.x}}{\sqrt{\sum x\_1^2(1-r\_{x\_1x\_2}^2)}}
+$$
+]
+
+
+* Look at the denominator here...
+
+
+--
+* You're multiplying the variance in $x_1$ by $1 -$ the correlation between the
+  variables
+
+
+---
+# Collinearity
+* If there is no correlation, the variance is unaltered, which means...
+
+
+--
+* The denominator ends up being larger, which means...
+
+
+--
+* The overall value will be smaller
+
+
+--
+* In other words, the standard error is smallest when the correlation with the
+  other variables in the model is zero
+
+---
+# Let's confirm this
+* Is this just a statistical nicety? 
+* What if we  use the bootstrap method. Do we see the same thing?
+
+---
+
+.code-bg-red[
+
+```{r boot1}
+set.seed(8675309)
+samples <- replicate(2500, 
+                     mtcars[sample(1:nrow(mtcars),
+                              size = nrow(mtcars),
+                              replace = TRUE), ],
+                     simplify = FALSE)
+```
+]
+
+
+--
+
+.code-bg-red[
+```{r, fit-models}
+models <- map(samples, ~lm(mpg ~ hp + cyl + disp, .))
+```
+]
+
+
+--
+.code-bg-red[
+
+```{r boot2}
+boot_se <- map_df(models, 
+                    ~data.frame(coef = coef(.),
+                                param = c("intercept",
+                                          "b1_hp",
+                                          "b2_cyl",
+                                          "b3_disp")), 
+                    .id = "iteration") %>% 
+  tbl_df() %>%
+  group_by(param) %>%
+  summarize(se   = sd(coef)) %>%
+  spread(param, se)
+```
+]
+
+---
+# Compare estimates
+
+```{r }
+boot_se
+arm::display(m, digits = 4)
+```
+
+--
+Our model is unstable because the predictors are highly collinear
+
+---
+# Diagnosing collinearity
+* Looking zero-order correlations can help... .bolder[but it's not enough!]
+
+
+--
+* Two well-respected diagnostic tools
+  + Tolerance
+  + Variance inflation factor
+
+---
+# Tolerance
+* Tolerance = Variance in a predictor variable $i$ **not** accounted for by the
+  other variables
+
+--
+
+From our example, let's calculate the tolerance of $hp$
+--
+
+```{r }
+hp_tol_mod <- lm(hp ~ cyl + disp, mtcars)
+1 - summary(hp_tol_mod)$r.squared
+```
+
+---
+# Variance Inflation Factor
+
+Even better (from my view)
+* Essentially, how much has the variance of the estimate (the standard
+  error) increased because of the collinearity?
+
+--
+* Ranges from $1 \dots \infty$
+
+--
+* Interpreted as the factor by which the variance is increased (e.g., a value
+  of 5 means the variance is 5 times larger)
+
+---
+# VIF
+
+.Large[
+$$
+VIF = \frac{1}{tol}
+$$
+]
+
+--
+VIF for hp
+
+```{r vif-hp}
+1 / (1 - summary(hp_tol_mod)$r.squared)
+```
+
+---
+# Calculating VIF 
+
+* You could fit all of the different models, but that's a lot of work. Instead,
+we can use the `vif` function from the `car` package.
+
+```{r car-vif}
+car::vif(m)
+```
+
+--
+### Want tolerance?
+
+```{r car-tol}
+ 1 / car::vif(m)
+```
+
+---
+# Decision rules of 👍
+
+### Tolerance
+* Ranges from 0-1
+* Lower values = more concern/higher collinearity
+* (generally less used; Pedhazur says they were first used because they were
+	easier to compute)
+
+--
+
+### VIF
+* Lower values are better (minimum of 1.0)
+* Some use values of 3-5 as concerning, others 10
+* Values of 10 or more are **definitely** concerning
+
+
+---
+# What to do?
+
+* First, evaluate the impact of collinearity
+
+	+ substantively changing results?
+
+
+--
+* Next, consider removing a predictor variable
+	+ If they're mostly measuring the same thing, why bother with both?
+
+
+--
+* If removing is unsatisfactory, consider creating a composite variable
+	+ mean
+	+ PCA/EFA
+
+---
+class: inverse center middle
+# Modeling non-linearity
+
+---
+# Thinking about functional form
+* What does "functional form" mean?
+
+
+--
+* Theoretically there exists some underlying, "true", population-level function
+	relating a variable/set of variables to an outcome.
+
+
+--
+* The functional form = the form (shape) of this theoretical function
+
+
+--
+* Functional forms can be linear... or not. We need to evaluate and account for
+	functional form appropriately.
+
+---
+# A bivariate example
+
+### Linear?
+
+```{r quad, fig.height = 4.75}
+d <- import(here("data", "simdata.csv"),
+            setclass = "tbl_df")
+ggplot(d, aes(x, y)) +
+	geom_point() +
+	geom_smooth()
+```
+
+---
+# How do we model this?
+
+To model it linearly, we fit the model
+
+.Large[
+$$
+y\_i = b\_0 + b\_1(x\_i) + e
+$$
+]
+
+### In code
+
+
+```{r eval = FALSE}
+linear <- lm(y ~ 1 + x, data = d)
+```
+
+--
+
+To model it with a curve, with one bend
+
+
+.Large[
+$$
+y\_i = b\_0 + b\_1(x\_i) + b\_2(x\_i^2) + e
+$$
+]
+
+---
+# Two ways to model a quadratic
+
+* First, create a variable that is the squared version of the variable
+
+```{r squared-var}
+d <- d %>%
+	mutate(x2 = x^2)
+d
+```
+
+---
+# Include term in model
+
+```{r quad1}
+q1 <- lm(y ~ x + x2, d)
+arm::display(q1, detail = TRUE)
+```
+
+---
+# Visualize it
+
+```{r q1-fitted-plot, fig.height = 4.5}
+d <- d %>%
+	mutate(fitted_q1 = fitted(q1)) 
+
+ggplot(d, aes(x, y)) +
+	geom_point() +
+	geom_line(aes(y = fitted_q1),
+	          color = "magenta", 
+	          size = 2)
+```
+
+---
+# Why is this working?
+
+```{r squared-df1}
+data_frame(x = 0:10,
+           x2 = x^2,
+           b1 = coef(q1)[2],
+           b2 = coef(q1)[3])
+```
+
+---
+```{r squared-df2}
+data_frame(x = 0:10,
+           x2 = x^2,
+           b1 = coef(q1)[2],
+           b2 = coef(q1)[3],
+           y_hat = x*b1 + x2*b2)
+```
+
+---
+# Method 2
+
+```{r q2-fit}
+q2 <- lm(y ~ poly(x, 2, raw = TRUE), d)
+arm::display(q2, detail = TRUE)
+```
+
+--
+```{r q1-display-again}
+arm::display(q1, detail = TRUE)
+```
+
+---
+* What's this `raw = TRUE` about? let's try without
+
+--
+
+```{r orthogonal}
+q2o <- lm(y ~ poly(x, 2), d)
+arm::display(q2o)
+```
+# 😳
+
+--
+* Without `raw = TRUE`, it will fit with orthogonal polynomials.
+* This is actually probably a good thing, but I tend to not use it.
+
+---
+# Wait... what about collinearity
+
+--
+
+```{r collinear-q1}
+car::vif(q1)
+```
+# 😳
+
+--
+```{r cor-squared}
+cor(d$x, d$x2)
+```
+
+# 😬
+
+---
+# Look back at estimates
+
+```{r q1-display}
+arm::display(q1, digits = 4)
+```
+
+# 🤔
+
+---
+# How much do we care?
+
+--
+* In this case, probably not at all
+
+
+--
+* We will **never** interpret one variable in isolation (many people will try,
+	don't fall into this trap)
+
+* This is also partly why orthogonal polynomials may be preferable
+
+---
+# Want to fix it anyway?
+### Center
+
+```{r center-quadratic}
+d <- d %>%
+	mutate(xc = x - mean(x),
+	       x2c = xc^2)
+cor(d$xc, d$x2c)
+```
+(usually not quite that dramatic)
+
+
+---
+# Refit
+
+```{r refit-centered-quadratic}
+q1c <- lm(y ~ xc + x2c, d)
+arm::display(q1c, detail = TRUE, digits = 4)
+```
+
+--
+* So we've reduced the standard error, BUT... remember, we interpret these as a
+	set of variables
+
+
+--
+* In more advanced models, centering helps stabilize the model overall
+
+---
+# Revisiting VIF
+
+```{r vars}
+vcov(q1)
+vcov(q1c)
+```
+
+---
+```{r vif-by-hand}
+vcov(q1)[2, 2] /
+vcov(q1c)[2, 2]
+car::vif(q1)
+```
+
+---
+# One more quick note
+
+```{r se-increase1}
+summary(q1)$coefficients[, "Std. Error"]["x"] 
+summary(q1c)$coefficients[, "Std. Error"]["xc"]
+```
+
+--
+
+```{r se-increase2}
+summary(q1)$coefficients[, "Std. Error"]["x"] /
+summary(q1c)$coefficients[, "Std. Error"]["xc"]
+```
+
+---
+# SE increase
+Rather than thinking about the variance increase, we can consider the SE
+increase
+
+.Large[
+$\sqrt{VIF} =$ amount SE is increased
+]
+
+--
+
+```{r se-increase3}
+sqrt(car::vif(q1))
+```
+
+---
+# Less clear in practice
+
+```{r depression, fig.height = 6}
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_smooth() 
+```
+
+---
+# Fit quadratic
+
+```{r q3}
+q3 <- lm(api00 ~ poly(mobility, 2, raw = TRUE), elemapi)
+arm::display(q3, detail = TRUE)
+```
+
+---
+# Visualize it
+
+```{r q3-visualize-echo, eval = FALSE}
+elemapi <- elemapi %>%
+	mutate(fitted_q3 = fitted(q3))
+
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_line(aes(y = fitted_q3),
+	          color = "magenta",
+	          size = 2)
+
+```
+
+---
+class: middle
+
+```{r q3-visualize-eval, echo = FALSE}
+elemapi <- elemapi %>%
+	mutate(fitted_q3 = fitted(q3))
+
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_line(aes(y = fitted_q3),
+	          color = "magenta",
+	          size = 2)
+
+```
+
+---
+# Is it worth it?
+### Compare models
+
+```{r }
+linear_api <- lm(api00 ~ mobility, elemapi)
+anova(linear_api, q3)
+sundry::aic_weights(linear_api, q3)
+```
+
+
+---
+# Higher-level polynomials
+* Model more than one curve
+
+```{r cubic}
+cubic1 <- lm(api00 ~ poly(mobility, 3, raw = TRUE), elemapi)
+arm::display(cubic1, detail = TRUE)
+```
+
+---
+# Visualize it
+
+```{r visualize-cubic-echo, eval = FALSE}
+elemapi <- elemapi %>%
+	mutate(fitted_cubic1 = fitted(cubic1))
+
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_line(aes(y = fitted_cubic1),
+	          color = "magenta",
+	          size = 2)
+```
+
+---
+class: middle
+
+```{r visualize-cubic-eval, echo = FALSE}
+elemapi <- elemapi %>%
+	mutate(fitted_cubic1 = fitted(cubic1))
+
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_line(aes(y = fitted_cubic1),
+	          color = "magenta",
+	          size = 2)
+```
+
+### We're overfit
+
+
+---
+# Quickly
+### Transformations
+
+```{r hist-raw, fig.height = 6}
+ggplot(elemapi, aes(mobility)) +
+	geom_histogram()
+```
+
+---
+```{r hist-log}
+ggplot(elemapi, aes(log(mobility))) +
+	geom_histogram()
+```
+
+---
+# Log
+
+```{r log}
+elemapi <- elemapi %>%
+	mutate(log_mobility = log(mobility)) 
+
+elemapi %>%
+	select(mobility, log_mobility)
+```
+
+---
+# Visualizing the transformation
+
+```{r linear-transform}
+ggplot(elemapi, aes(mobility, log_mobility)) +
+	geom_point()
+
+```
+
+---
+# Fit model
+
+```{r log-fit}
+l1 <- lm(api00 ~ log_mobility, elemapi)
+arm::display(l1, detail = TRUE)
+```
+
+---
+# Visualize it
+
+```{r visualize-log-echo, eval = FALSE}
+elemapi <- elemapi %>%
+	mutate(fitted_l1 = fitted(l1))
+
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_line(aes(y = fitted_l1),
+	          color = "magenta",
+	          size = 2)
+```
+
+---
+class: middle
+
+```{r visualize-log-eval, echo = FALSE}
+elemapi <- elemapi %>%
+	mutate(fitted_l1 = fitted(l1))
+
+ggplot(elemapi, aes(mobility, api00)) +
+	geom_point() +
+	geom_line(aes(y = fitted_l1),
+	          color = "magenta",
+	          size = 2)
+```
+
+---
+# Compare models
+
+```{r compare-mods}
+sundry::aic_weights(q3, cubic1, l1)
+```
+
+# 🤷‍♂️
+
+--
+
+Preference parsimony
+
+---
+# Conclusions
+
+* (multi-)collinearity can inflate standard errors and result in unstable 
+	models
+
+
+--
+* Centering can help (often a lot)
+
+
+--
+* Functional form is important to investigate
+	+ Aside from meeting model assumptions, can often lead to new/different
+		substantive conclusions.
+
+
+--
+* Many different approaches to modeling functional form 
+	+ Polynomials common, can be extreme in their predictions in the tails
+	+ Transformation (log, log10, exponentiation, etc.) perhaps less common, but
+		very useful
+
+---
+class: inverse center middle
+# Lab
+
+
