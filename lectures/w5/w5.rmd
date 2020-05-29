@@ -1,0 +1,896 @@
+---
+title: "Model assumptions & Diagnostics"
+author: "Daniel Anderson"
+date: "Week 5"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r setup, include = FALSE}
+library(here)
+library(tidyverse)
+library(rio)
+
+theme_set(theme_minimal(base_size = 25))
+
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+
+d <- import(here("data", "hsb2.sav"),
+            setclass = "tbl_df") %>%
+      characterize()
+```
+# Agenda 
+* Model Assumptions 
+  + LINE acronym for assumptions
+  + Importance of exploring and visualizing your data first 
+* Model Diagnostics
+* Outliers
+* Lab
+
+
+---
+class: inverse center middle
+
+# Model Assumptions
+
+![](http://imgs.xkcd.com/comics/when_you_assume.png)
+
+.footnote[credit: xkcd]
+
+---
+# .red[LINE]
+
+* **.red[L]**inearity
+* **.red[I]**ndependence of residual errors
+* Multivariate **.red[N]**ormality
+* **.red[E]**qual variance of residual errors (homoscedasticity)
+
+---
+# The issue
+
+<div align = "center">
+<img src = ../img/anscombe-quartet.png height = 500>
+</div>
+
+---
+# Even better
+
+![](https://d2f99xq7vri1nk.cloudfront.net/DinoSequentialSmaller.gif)
+
+.footnote[https://www.autodeskresearch.com/publications/samestats]
+
+--
+### Take home message
+Look at your data!
+
+
+---
+# .red[L]inearity
+
+
+### Load the simulated data
+
+```{r sim-nonlin-load, echo = FALSE}
+sim_data <- import(here("data", "simdata.csv"),
+                   setclass = "tbl_df")
+```
+
+```{r smoothed, echo = FALSE}
+ggplot(sim_data, aes(x, y)) +
+  geom_point() +
+  geom_smooth() 
+```
+
+
+---
+# .red[I]ndependence of Observations
+
+.pull-left[
+* Important x-variable omitted 
+* Functional form not modeled correctly
+]
+
+.pull-right[
+![](../img/dependent-resids.png)
+]
+
+
+---
+# Multivariate .red[N]ormality
+
+![](https://scipython.com/static/media/uploads/blog/multivariate_gaussian/bivariate_gaussian.png)
+
+---
+![](https://i.stack.imgur.com/B4cuc.png)
+
+---
+![](https://i.stack.imgur.com/qqG5Y.png)
+
+---
+# Multivariate Outliers
+### Example
+
+> In a longitudinal study, you find that the number of letters kindergarten
+students can .blue[name] and .blue[provide the correct sound for] both
+predict their .red[later (third grade) reading ability].
+
+
+
+--
+### What's a multivariate outlier?
+
+An unexpected observation for the **combination** of variables
+
+
+--
+e.g., low letter names, extremely high letter sounds, very low later reading achievement
+
+(we'll talk more about outliers in a bit)
+
+
+---
+# .red[E]qual residual variance
+### Homoscedasticity
+
+```{r echo = FALSE, fig.height = 6}
+x <- 50:200
+var <- 5 + x/1.5
+sim2_df <- map2_df(x, var, 
+                   ~data.frame(sim = rnorm(10, .x, .y), 
+                               x   = .x)) 
+
+ggplot(sim2_df, aes(x, sim)) +
+    geom_point() +
+    geom_smooth(method = "lm",
+                color = "magenta")
+```
+
+---
+# Let's fit a model
+Why is a common variance  assumed? Let's fit the following model and look at
+the output.
+
+$$
+read_i = b_0 + b_1(write_i) + b_2(program_i) + e_i
+$$
+
+---
+### Set Academic as reference group
+
+```{r relevel}
+d <- d %>%
+  mutate(prog = factor(prog),
+         prog = relevel(prog, ref = "academic"))
+```
+
+--
+
+```{r fit-mod}
+m1 <- lm(read ~ write + prog, d)
+```
+
+--
+
+```{r m1-summary}
+arm::display(m1, detail = TRUE)
+```
+
+### Where's our estimate of the variation around the regression line?
+
+
+---
+class: inverse
+background-image:url(../img/magnify.jpg)
+background-size:cover
+
+# Diagnosing Assumptions
+
+---
+# .red[L]inearity
+
+
+### Load the simulated data
+
+```{r sim-nonlin}
+sim_data <- import(here("data", "simdata.csv"),
+                   setclass = "tbl_df")
+sim_data
+```
+---
+## Plot linear/nonlinear smooths
+
+```{r lin, fig.height = 5}
+ggplot(sim_data, aes(x, y)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(method = "lm",
+              color = "magenta")
+```
+
+---
+# Let's think about this model
+
+$$
+math_i = b_0 + b_1(write_i) + b_2(read_i) + e_i
+$$
+
+--
+### Fit it
+
+```{r m2}
+m2 <- lm(math ~ write + read, d)
+```
+
+---
+# Do we meet linear assumption?
+
+.pull-left[
+
+```{r linearity-eval1, fig.width = 8}
+ggplot(d, aes(write, math)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(method = "lm",
+              color = "magenta")
+```
+]
+
+.pull-left[
+
+```{r linearity-eval2, fig.width = 8}
+ggplot(d, aes(read, math)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(method = "lm",
+              color = "magenta")
+
+```
+]
+
+
+---
+class: inverse middle
+# Note
+This is good evidence, but doesn't guarantee that our MR model
+meets the assumptions
+
+---
+# .red[I]ndependence of residual errors
+
+> Plots of residuals versus fitted values and versus each of the predictors in
+turn are the most basic diagnostic graphs.
+
+--
+
+# Residuals
+
+### Ordinary residuals
+
+You tell me - what are ordinary residuals?
+
+--
+
+$$
+Y_i - Y'_i
+$$
+
+Plot these against our fitted values... what would we expect to see?
+
+
+--
+No relation
+
+
+---
+### Extract ordinary residuals
+
+```{r extract-resids}
+resids <- residuals(m1)
+```
+
+--
+### Compute fitted values
+
+```{r fitted}
+fitted_vals <- fitted(m1)
+```
+
+--
+(note `fitted(m1)` will return the same thing as `predict(m1)`. The `predict`
+is function can just do a lot of other things too)
+
+---
+# Plot the values
+
+First put them in a data frame
+
+```{r diag-plot-df}
+m1_pd <- data_frame(fitted = fitted_vals,
+                    residuals = resids)
+```
+
+---
+# Pass to `ggplot`
+
+```{r diag-plot1, fig.height = 4.5}
+ggplot(m1_pd, aes(fitted, residuals)) +
+  geom_point() +
+  geom_smooth()
+```
+
+### Do you see any relation?
+
+
+---
+# Quick aside
+* `ggplot2::fortify` will extract this info for you automatically.
+
+```{r pd}
+pd <- fortify(m1)
+head(pd)
+```
+
+---
+
+```{r diag-plot2}
+ggplot(pd, aes(.fitted, .resid)) +
+  geom_point() +
+  geom_smooth()
+```
+
+---
+
+## Let's try with our non-linear model
+
+```{r resid-inspect2-echo, eval = FALSE}
+sim_mod <- lm(y ~ x, sim_data)
+
+ggplot(sim_mod, aes(.fitted, .resid)) +
+  geom_point() +
+  geom_smooth()
+```
+
+--
+Notice you can actually skip the fortify part and it will do it internally
+
+---
+class: center middle
+
+```{r resid-inspect2-eval, echo = FALSE}
+# Fit model
+sim_mod <- lm(y ~ x, sim_data)
+
+# Store residuals and fitted (predicted) values
+sim_data <- sim_data %>%
+  mutate(resids = residuals(sim_mod),
+         fitted = fitted(sim_mod))
+
+# Plot the relation
+ggplot(sim_data, aes(fitted, resids)) +
+  geom_point() +
+  geom_smooth()
+```
+
+---
+class: inverse middle center
+
+![](https://media.giphy.com/media/QSMBLRAHZTLkQ/giphy.gif)
+### How that plot should make you feel
+
+---
+## What if we model it correctly?
+
+.code-bg-red[
+
+```{r correct-curvelin-echo, eval = FALSE}
+# Model curvilinear trend (we'll talk about this more later)
+sim_mod2 <- lm(y ~ x + I(x^2), sim_data)
+
+ggplot(sim_mod2, aes(.fitted, .resid)) +
+  geom_point() +
+  geom_smooth() 
+```
+]
+
+---
+class: center middle
+
+```{r correct-curvelin-eval, echo = FALSE}
+sim_mod2 <- lm(y ~ x + I(x^2), sim_data)
+
+ggplot(sim_mod2, aes(.fitted, .resid)) +
+  geom_point() +
+  geom_smooth() 
+```
+
+---
+# Automated methods
+
+```{r diag-auto, fig.height = 5}
+plot(sim_mod2, which = 1)
+```
+
+--
+* There are 4 different plot produced automatically by calling `plot` on a
+regression model. Use `which` to select a specific plot.
+* See the ggplot versions [here](https://ggplot2.tidyverse.org/reference/fortify.lm.html) 
+using `fortify`.
+
+
+---
+# .red[N]ormality
+### Univariate distributions
+
+```{r hist1, fig.height = 6}
+ggplot(d, aes(read)) +
+  geom_histogram(alpha = 0.7)
+```
+
+---
+# Univariate distributions
+
+```{r hist2, fig.height = 6}
+ggplot(d, aes(write)) +
+  geom_histogram(alpha = 0.7)
+```
+
+---
+# Univariate distributions
+
+```{r hist3, fig.height = 6}
+ggplot(d, aes(math)) +
+  geom_histogram(alpha = 0.7)
+```
+
+---
+# Quicker view
+(other similar functions exists)
+
+.pull-left[
+
+```{r ggscatmat-echo, eval = FALSE}
+library(GGally) #<<
+ggscatmat(d, 
+          columns = c("math", 
+                      "read", 
+                      "write"))
+```
+]
+
+.pull-right[
+
+```{r ggscatmat-eval, echo = FALSE, fig.width = 6.5}
+library(GGally)
+ggscatmat(d, 
+          columns = c("math", 
+                      "read", 
+                      "write"))
+```
+]
+
+---
+# After fitting the model
+Look at residuals again, but this time against a (theoretical) normal 
+distribution.
+
+```{r ggplot-qq, fig.height = 4.5}
+ggplot(m2, aes(sample = .stdresid)) +
+  geom_qq(color = "gray60",
+          size = 4) +
+  stat_qq_line()
+```
+
+---
+# Or automatically
+
+```{r base-qq}
+plot(m2, which = 2)
+```
+
+---
+# Note on qq-plots
+Preferable to looking *just* at univariate distributions because they help you
+understand if you're meeting **multivariate** normality
+
+
+
+---
+# .red[E]qual variance of residual errors
+### Homoscedasticity
+* Inspect plots of simple linear regressions before full model
+* Evaluate residuals against fitted models
+
+
+--
+### Overall
+The variance around the regression line should be relatively constant. If it's
+not, you likely have an omitted variable
+
+
+---
+class: inverse middle center
+
+# Outliers
+
+
+---
+# Biggest take home message
+### Not all outliers are created equal
+* What matters is how much an outlier **influences** your regression model.
+* Some "severe" outliers may have little influence on the regression line at all
+* Others may result in dramatic changes to the substantive inferences you make
+
+
+--
+### Dealing with influential outliers
+* Consider if the outliers are "real" or data entry errors
+* Consider the population you want to generalize to
+* Are they outliers? Or evidence of a nonlinear trend?
+
+--
+* Best practice for dealing with real outliers (from the viewpoint of me) is to
+report results with AND without the outliers included
+
+
+---
+# Outlier?
+
+```{r echo = FALSE}
+sim_data3 <- map_df(0:10, ~data.frame(x = ., 
+                         y = rnorm(10, ., 2))) %>% 
+  mutate(y = ifelse(y < 0, 0, y)) 
+
+outlier1 <- data.frame(x = 15, y = 15)
+
+ggplot(sim_data3, aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_point(data = outlier1, 
+               color = "cornflowerblue",
+               size = 10) 
+```
+
+---
+# Point included
+
+```{r outlier1-excluded, echo = FALSE}
+ggplot(bind_rows(sim_data3, outlier1), aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(method = "lm", size = 3)
+```
+
+---
+# Point excluded
+
+```{r outlier1-included, echo = FALSE}
+ggplot(sim_data3, aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(method = "lm", size = 3)
+```
+
+
+---
+# Shown together
+
+```{r outlier1-plot, echo = FALSE}
+ggplot(bind_rows(sim_data3, outlier1), aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(method = "lm", size = 3) +
+    geom_smooth(data = sim_data3,
+                method = "lm", 
+                color = "magenta",
+                linetype = "dashed",
+                size = 3)
+```
+
+
+---
+# Outlier?
+
+```{r outlier2, echo = FALSE}
+outlier2 <- data.frame(x = 5, y = 15)
+
+ggplot(sim_data3, aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_point(data = outlier2, 
+               color = "cornflowerblue",
+               size = 10) 
+```
+
+---
+# Compare regressions
+
+```{r outlier2-plot, echo = FALSE}
+ggplot(bind_rows(sim_data3, outlier2), aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(method = "lm", size = 3) +
+    geom_smooth(data = sim_data3,
+                method = "lm", 
+                color = "magenta",
+                linetype = "dashed",
+                size = 3)
+```
+
+
+---
+# Outlier?
+
+```{r outlier3, echo = FALSE}
+outlier3 <- data.frame(x = 5, y = 50)
+
+ggplot(sim_data3, aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_point(data = outlier3, 
+               color = "cornflowerblue",
+               size = 10) 
+```
+
+---
+# Compare regressions
+
+```{r outlier3-plot, echo = FALSE}
+ggplot(bind_rows(sim_data3, outlier3), aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(method = "lm", size = 3) +
+    geom_smooth(data = sim_data3,
+                method = "lm", 
+                color = "magenta",
+                linetype = "dashed", 
+                size = 3)
+```
+
+---
+# Outlier?
+
+```{r outlier4, echo = FALSE}
+outlier4 <- data.frame(x = 0, y = 50)
+
+ggplot(sim_data3, aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_point(data = outlier4, 
+               color = "cornflowerblue",
+               size = 10) 
+```
+
+---
+# Compare regressions
+
+```{r outlier4-plot, echo = FALSE}
+ggplot(bind_rows(sim_data3, outlier4), aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(method = "lm", size = 3) +
+    geom_smooth(data = sim_data3,
+                method = "lm", 
+                color = "magenta",
+                linetype = "dashed", 
+                size = 3)
+```
+
+---
+# Sample size
+* Generally, as sample size increases, the influnce of outliers becomes less
+
+--
+* In this case, we have a sample of `r nrow(sim_data3) + 1`. It was still
+relatively hard to get the line to change by a single point.
+
+---
+# Outlier points (plural)?
+
+```{r outlier5, echo = FALSE}
+outlier5 <- data.frame(x = c(10, 12, 13, 15), 
+                       y = c(18, 20, 25, 35))
+
+ggplot(sim_data3, aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_point(data = outlier5, 
+               color = "cornflowerblue",
+               size = 10) 
+
+```
+
+---
+
+```{r outlier5-plot, echo = FALSE}
+ggplot(bind_rows(sim_data3, outlier5), aes(x, y)) +
+    geom_point(color = "gray", size = 6) +
+    geom_smooth(size = 4) +
+    geom_smooth(data = sim_data3,
+                method = "lm", 
+                color = "magenta",
+                linetype = "dashed", 
+                size = 3)
+```
+
+---
+# Measuring influence
+
+--
+### Leverage
+
+* Also called hat values
+* High values indicate high "leverage" on the regression line/plane/space
+* Bounded between 0/1 (in models with an intercept)
+
+--
+
+.Large[
+$$
+h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum(x_i - \bar{x})^2}
+$$
+
+]
+
+---
+# Inspect leverage values
+
+```{r leverage-plot, fig.height = 5}
+d <- d %>%
+  mutate(leverage = hatvalues(m2))
+
+ggplot(d, aes(id, leverage)) +
+  geom_label(aes(label = id))
+```
+
+--
+Note you could use the fortified object here too, but I like to tag them with
+the IDs with `geom_label`.
+
+---
+# Fit model w/without id 103
+Use the `subset` function
+
+
+```{r remove103}
+m2_no103 <- lm(math ~ write + read, d,
+               subset = id != 103)
+coef(m2_no103)
+coef(m2)
+```
+ 
+### Are our results substantively changed?
+
+---
+# Standardized residuals
+* Not a measure of influence
+
+.Large[
+$$
+e\_{Si} = \frac{e\_i}{s\_{y.x}\sqrt{1 - h\_i}}
+$$
+]
+
+* These are the residuals we use with QQ plots
+
+--
+* Really poor rule-of-thumb: Remove outliers where $e_{Si} \geq 3$. (don't do
+this)
+
+---
+# Cook's Distance
+* Measure of "how different" the regression line/plane/space is when the
+observation is/is not included
+
+--
+Conceptually
+
+.Large[
+$$
+b\_{(-i)} - b
+$$
+]
+
+Where $b_{(-i)}$ represents the coefficient estimate with observation $i$ 
+omitted. 
+
+--
+
+.Large[
+$$
+D\_i = \frac{e\_{Si}^2}{k + 1} \times \frac{h\_i}{1 - h\_i}
+$$
+]
+
+---
+# Evaluating Cook's D
+
+```{r cook-d-plot, fig.height = 5}
+d <- d %>%
+  mutate(cook_d = cooks.distance(m2))
+
+ggplot(d, aes(id, cook_d)) +
+  geom_label(aes(label = id))
+```
+
+---
+## Remove the two most influential cases
+
+```{r remove-cd}
+m2_rem_cd <- lm(math ~ write + read, d,
+               subset = id != 126 & id != 167)
+coef(m2_rem_cd)
+coef(m2)
+```
+
+--
+* This changes our intercept by more than a point. Does this matter? May want
+to investigate further
+
+--
+* Also probably best to remove outliers one at a time, versus in chunks. (but
+if the chunks aren't affecting it, you're probably safe)
+
+
+---
+
+```{r cd-read}
+ggplot(d, aes(read, math)) +
+  geom_point(size = 4) +
+  geom_label(data = filter(d, id == 126 | id == 167),
+             aes(label = id))
+```
+
+---
+
+```{r cd-write}
+ggplot(d, aes(write, math)) +
+  geom_point(size = 4) +
+  geom_label(data = filter(d, id == 126 | id == 167),
+             aes(label = id))
+```
+
+---
+# Another look
+
+```{r visreg, fig.height = 5.7}
+library(visreg) 
+
+par(mfrow = c(2, 2))
+visreg(m2)
+visreg(m2_rem_cd)
+``` 
+
+---
+# Important to keep in mind
+* No one plot can diagnose everything
+* Avoid rules of thumb
+* You can always report more than one result if the outliers are influential
+
+--
+### Other methods
+* Studentized deleted residuals rather than normal or standardized residuals
+  + Basically same as standardized, but w/observation not included in  
+  $s\_{y.x}$
+
+--
+* $dfbeta$ is similar to Cook's D but for each coefficient individually. 
+
+--
+* Often evaluate leverage and Cook's D together.
+
+---
+
+```{r leverage-distance}
+ggplot(m1, aes(.hat, .cooksd)) +
+  geom_abline(slope = seq(0, 3, by = 0.5), colour = "gray80") +
+  geom_smooth(se = FALSE) +
+  geom_point()
+```
+
+
+---
+class: inverse center middle
+# Lab
+
+
+
+
