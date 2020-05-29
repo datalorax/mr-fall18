@@ -1,0 +1,762 @@
+---
+title: "Multi-model inference"
+author: "Daniel Anderson"
+date: "Week 8"
+output:
+  xaringan::moon_reader:
+    css: ["default", "uo", "uo-fonts", "hygge", "custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-dune-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r setup, include = FALSE}
+library(here)
+library(tidyverse)
+library(rio)
+
+theme_set(theme_minimal(base_size = 25))
+
+knitr::opts_chunk$set(fig.width = 13, 
+                      message = FALSE, 
+                      warning = FALSE)
+options(pillar.sigfig = 7)
+```
+
+# Agenda 
+* Review Exercise
+* Introducing multi-model comparisons
+  + Revisiting squared semi-partial correlations from a multi-model approach
+  + Testing differences between models
+* A brief foray into information criteria
+* More model comparisons
+  + Comparing blocks of predictors
+  + Thinking more about interactions
+* Lab
+
+---
+class: inverse middle center
+background-image:url(../img/chalkboard.jpg)
+background-size:cover
+
+# What questions do you have?
+
+
+---
+class: inverse middle
+background-image:url(../img/wood.jpg)
+background-size:cover
+
+# Let's get setup
+
+### Tonight, we'll work with multiple data sources
+* benchmarks.xlsx
+* diagnostics.sav
+* glo_sim.sav
+
+---
+# Revisiting $ssr$
+
+--
+### First, let's fit a model
+
+```{r hsb}
+benchmarks <- import(here("data", "benchmarks.xlsx"),
+              setclass = "tbl_df") 
+
+m1 <- lm(rdg_spr ~ rdg_fall, benchmarks)
+arm::display(m1, detail = TRUE)
+```
+
+--
+### Pop Quiz
+What would the squared semipartial correlation for `rdg_fall` be here?
+
+---
+# It's $R^2$!
+(which is actually $r^2$ in this case)
+
+--
+```{r lmSupport}
+library(lmSupport)
+modelEffectSizes(m1)
+```
+
+---
+# Multi-model comparison
+* Let's think about the previous example from a multi-model comparison
+perspective.
+
+--
+* We want to compare how much **additional** variance is accounted for by the
+model with the inclusion of `rdg_fall`. 
+
+--
+* What does that mean?
+
+--
+* Compare the difference between a model with no predictors
+
+--
+* What does it mean for a model to have no independent variables? What would we
+be estimating?
+
+--
+.Large[
+$$
+rdg\_{spr} = b\_0 + e
+$$
+]
+
+---
+
+```{r m0_fit}
+m0 <- lm(rdg_spr ~ 1, benchmarks)
+arm::display(m0, detail = TRUE, digits = 4)
+```
+
+--
+What does the intercept represent here?
+
+
+--
+The grand mean for the outcome.
+
+```{r mean}
+mean(benchmarks$rdg_spr)
+```
+
+---
+# Pop Quiz
+What would the fitted values (predictions from the model for our observed 
+cases) be for this model be?
+
+--
+```{r fitted}
+benchmarks %>%
+  mutate(m0_fitted = fitted(m0))
+```
+
+---
+# Why do we care?
+* We can use it as a basis of comparison.
+
+Let's look back at our output from `m1`
+
+---
+```{r m1-display, highlight.output = 18}
+summary(m1)
+```
+
+---
+# Comparing models
+We can use the `anova` function to compare models
+
+```{r m0-m1-compare, highlight.output = 7}
+anova(m0, m1)
+```
+
+--
+Notice that the $F$ test is exactly the same!
+
+---
+# Okay so... who cares?
+
+.center[
+![](https://i.gifer.com/3JFT.gif)
+]
+
+--
+* We can get a direct test of significance for squared semi-partial correlations
+
+--
+* We can test if **blocks** of variables significantly reduce the residual
+variance 
+
+--
+* We can directly compare parallel slopes models with non-parallel slopes 
+  models (i.e., interactions)
+
+---
+## Let's think about a slightly more complicated model
+
+```{r }
+m2 <- lm(rdg_spr ~ rdg_fall + sped, benchmarks)
+arm::display(m2)
+```
+
+---
+# Look at the difference in $R^2$
+
+```{r r2-diff}
+summary(m1)$r.squared
+summary(m2)$r.squared
+```
+
+--
+### What's the unique variance accounted for by `sped`?
+
+```{r sped-ssr}
+summary(m2)$r.squared - summary(m1)$r.squared
+```
+
+--
+Is this value different than zero?
+
+---
+# Compare models
+
+```{r m1-m2-compare}
+anova(m1, m2)
+```
+
+
+--
+### Challenge
+* Can you calculate (any method you want) and test the significance of
+$\Delta R^2$ for `rdg_fall`?
+
+---
+
+```{r sped-mod}
+sped_mod <- lm(rdg_spr ~ sped, benchmarks)
+summary(m2)$r.squared - summary(sped_mod)$r.squared
+modelEffectSizes(m2)
+```
+
+---
+```{r sped-mod-m2-compare}
+anova(m2, sped_mod)
+```
+
+---
+# How important is this?
+In many ways, this is just a different test of the coefficient (using an $F$
+test versus a $t$ test)
+
+--
+
+```{r scipen-off, echo = FALSE}
+options(scipen = 999)
+```
+
+```{r compare-pvals}
+anova(m2, sped_mod)$`Pr(>F)`[2]
+summary(m2)$coefficients["rdg_fall", "Pr(>|t|)"]
+```
+
+```{r scipen-on, echo = FALSE}
+options(scipen = 2)
+```
+
+--
+So we're getting the exact same probability estimate, just using different
+criteria and different tests.
+
+
+---
+class: inverse center middle
+
+# A brief foray into information criteria
+
+
+---
+# Comparing models
+* Often we may have a set of models we are comparing, and we want to know
+  which is "best".
+  + Side note "best" can depend on context
+
+
+--
+### Three guiding principles
+1. Simplicity and parsimony: "Shave away all but what is necessary"
+2. Multiple working hypotheses
+  + Rather than a null hypothesis, consider comparing competing theories
+3. Strength of Evidence
+
+---
+# Akaike Information Criteria
+
+* Rather complicated, and rather useful
+
+--
+
+.Large[
+
+$$
+AIC = -2 \times log(L(\hat{\theta}|data)) + 2 \times K
+$$
+
+]
+
+--
+Luckily, R provides a handy-dandy function to calculate it for you.
+
+```{r aic}
+AIC(m0)
+AIC(m1)
+AIC(m2)
+```
+
+---
+# What do these values mean?
+
+
+* Wholly uninterpretable on their own 
+
+
+--
+* Difference between the values are interpretable and can be useful when
+  comparing competing models 
+    + perhaps representing different theories
+
+--
+* Lower AIC values = better fit to the model
+
+--
+* The $2 \times K$ part represents a penalization for model complexity
+
+  + As you add variables to model, this value will increase, and so will AIC,
+    unless there is a corresponding reduction in, essentially, residual 
+    variance
+
+
+---
+# Guidelines $\Delta AIC$ interpretation
+
+Recommendations by Burnham and Anderson (2002)
+
+.gray[That Anderson is not me, obvi]
+
+
+--
+First, rescale the AIC values such that the lowest AIC value is zero
+
+.gray[Note, we're basically centering here]
+
+.Large[
+$$
+\Delta\_i = AIC\_i - AIC\_{min}
+$$
+]
+
+
+
+1. $\Delta_i \leq 2$: "Substantial support" (i.e., not much difference in
+   the models)
+2. $4 \leq \Delta_i \leq 7$: "Considerably less support" (i.e., gray zone)
+3. $\Delta_i \gt 10$: "Essentially no support" (i.e., reject this model in 
+   favor of the model where $\Delta_i = 0$)
+
+
+---
+# AIC weights
+
+.Large[
+$$
+w\_i = \frac{exp(-\Delta\_i/2)}{\sum exp(-\Delta\_i/2)}
+$$
+]
+
+--
+What do these end up looking like? Proportions!
+
+
+--
+From Burnham and Anderson
+> interpreted as the probability that model i is, in fact, the K-L best model for the data
+
+Where K-L is the Kullback-Leibler information
+
+
+---
+# Evaluating our candidate models
+```{r m012-compare}
+anova(m0, m1, m2)
+```
+
+---
+# Calculate $\Delta AIC$ values
+
+### Compare model 0 and 1
+```{r m01-aic-compare}
+AIC(m1) - AIC(m0)
+```
+
+--
+### Compare model 1 and 2
+```{r m12-aic-compare}
+AIC(m2) - AIC(m1)
+```
+
+---
+# Weights calculation
+* A couple different packages, I like mine best
+
+```{r sundry-install, eval = FALSE}
+# You may have to install {remotes} first
+install.packages("remotes")
+remotes::install_github("datalorax/sundry")
+```
+
+--
+```{r aic-compare}
+sundry::aic_weights(m0, m1, m2)
+```
+
+---
+class: inverse bottom right
+background-image:url(../img/bricks.jpg)
+background-size:cover
+
+# Blocks of predictors
+
+---
+# Load the diagnostics data
+```{r diag}
+diag <- import(here("data", "diagnostics.sav"),
+               setclass = "tbl_df") %>% 
+  characterize()
+
+head(diag)
+```
+
+
+---
+# Enter predictors in blocks
+Predict youngest child weight
+* Couple of ways we could think about entering the data in blocks.
+  + By respondent (i.e., do mother responses contribute beyond father what 
+    father responses contribute?)
+  + By variable (e.g., "family" weight, height, etc.)
+  
+
+--
+Let's enter by block for respondent, using weight, height, and age as 
+predictors
+
+---
+# Competing theories
+This is totally made up, but let's pretend there are different camps of people
+who think:
+
+--
+1. Father's weight matters most for predicting a child's weight 
+
+--
+1. Mother's weight matters most for predicting a child's weight 
+
+--
+1. Parents contribute jointly in the prediction of a child's weight 
+
+--
+1. The weight of all family members contribute jointly in the prediction of a
+   child's weight
+
+
+--
+### We can compare these competing theories!
+
+---
+# Control block
+
+First, let's control for the age/height of the individual child, so we can see
+how much family characteristics contribute beyond the individual's
+characteristics.
+
+```{r block-predictor1, highlight.output = 8}
+yc_mod <- lm(ycweight ~ ycage + ycheight, diag)
+arm::display(yc_mod, detail = TRUE)
+```
+
+---
+# Father Only Block 
+
+```{r block-predictor2, highlight.output = 12}
+father_mod <- lm(ycweight ~ ycage + ycheight + 
+                            fage + fheight + fweight,
+                 data = diag)
+arm::display(father_mod, detail = TRUE)
+```
+
+---
+# Alternative syntax
+
+```{r father-mod-update}
+father_mod <- update(yc_mod, ~ . + fage + fheight + fweight)
+```
+
+---
+# Mother Only Block
+```{r block-predictor3, highlight.output = 12}
+mother_mod <- lm(ycweight ~ ycage + ycheight + 
+                            mage + mheight + mweight,
+                 data = diag)
+arm::display(mother_mod, detail = TRUE)
+```
+
+
+---
+### Compare
+```{r compare-father-mother}
+anova(father_mod, yc_mod)
+anova(mother_mod, yc_mod)
+```
+
+
+---
+```{r compare-father-mother-aic}
+sundry::aic_weights(father_mod, mother_mod, yc_mod)
+```
+
+---
+# Parent Block
+```{r block-predictor4, highlight.output = 15}
+parent_mod <- lm(ycweight ~ ycage + ycheight + 
+                            fage  + fheight  + fweight +
+                            mage  + mheight  + mweight, 
+                 data = diag)
+arm::display(parent_mod, detail = TRUE)
+```
+
+---
+# Compare
+```{r compare-parent}
+anova(yc_mod, parent_mod)
+```
+
+---
+```{r compare-parent-aic}
+sundry::aic_weights(yc_mod, father_mod, mother_mod, parent_mod)
+```
+
+
+---
+# Family Block 
+```{r block-predictor5}
+family_mod <- lm(ycweight ~ ycage + ycheight +
+                            fage  + fheight  + fweight +
+                            mage  + mheight  + mweight +
+                            ocage + ocheight + ocweight, 
+                 data = diag)
+```
+
+---
+```{r family-block-display, highlight.output = 18}
+arm::display(family_mod, detail = TRUE)
+```
+
+---
+# Compare
+```{r compare-family}
+anova(yc_mod, family_mod)
+```
+
+---
+```{r compare-family-aic}
+sundry::aic_weights(yc_mod, father_mod, mother_mod, 
+                    parent_mod, family_mod)
+```
+
+---
+# What to do from here?
+* Remember, we're not talking about this from an exploratory lens, but rather, 
+  competing theories. 
+
+
+--
+* The Akaike weights provide us with our primary finding here, which is somewhat
+  inconclusive, although most of the evidence points to the model including 
+  mother information with the youngest child being the best fit
+
+
+--
+* What if this process led to other ideas for competing models?
+
+
+ 
+--
+We could fit them, but it would be **Highly** exploratory. Generally, the 
+models you fit **should be defined a priori**. Otherwise 🎣
+
+
+---
+class: inverse middle center
+# Interactions
+
+---
+## Let's fit the ELL interaction model again
+Last class we fit the model
+
+$$
+Rdg\_{spr\_i} = b\_0 + b\_1(Rdg\_{fall\_i}) + b\_2(ELL\_i) + b\_3(ELL \times Rdg\_{fall\_i})  + e
+$$
+
+--
+First, center `rdg_fall` so the intercept(s) make sense
+
+```{r prep}
+benchmarks <- benchmarks %>%
+  mutate(rdg_fall_c = rdg_fall - mean(rdg_fall))
+```
+
+
+---
+# Let's look back at the plot for this model
+
+```{r ell-plot, fig.height = 5}
+ggplot(benchmarks, aes(rdg_fall, rdg_spr)) +
+  geom_point(color = "gray70") +
+  geom_smooth(aes(color = ell),
+              method = "lm")
+```
+
+---
+# Fit the model
+
+```{r ell-interaction}
+ell_int <- lm(rdg_spr ~ rdg_fall_c + ell + rdg_fall_c:ell, benchmarks)
+arm::display(ell_int, detail = TRUE, digits = 3)
+```
+
+--
+### How would you evaluate if the interaction was "worth it"?
+
+---
+# Compare to a parallel slopes models
+
+--
+### Fit parallel slopes model
+```{r ell-parallel}
+ell_parallel <- lm(rdg_spr ~ rdg_fall_c + ell, benchmarks)
+arm::display(ell_parallel, detail = TRUE)
+```
+
+--
+Before we actually compare, what's your guess? Which model will display the
+better statistical fit?
+
+---
+```{r ell-compare}
+anova(ell_parallel, ell_int)
+```
+
+--
+```{r ell-weights}
+sundry::aic_weights(ell_parallel, ell_int)
+```
+
+---
+# Another example
+
+```{r }
+glo <- import(here("data", "glo_sim.sav"),
+              setclass = "tbl_df") %>%
+  characterize()
+
+head(glo)
+```
+
+
+---
+# Block 1: Control variables
+
+```{r glo-control}
+glo_m1 <- lm(sex_risk ~ age + 
+                        parent_education + parent_income + 
+                        parent_eth + parent_race + 
+                        teen_eth + teen_race,
+             data = glo)
+```
+
+--
+### If you want to see the coefficients, you'll need to fit the model yourself
+
+---
+# Block 2: Main effects
+
+```{r glo-main-effects}
+glo_m2 <- lm(sex_risk ~ internalizing + externalizing + aces +
+                        age + 
+                        parent_education + parent_income + 
+                        parent_eth + parent_race + 
+                        teen_eth + teen_race,
+             data = glo)
+```
+
+---
+# Block 3: Interactions
+
+```{r glo-interactions}
+glo_m3 <- lm(sex_risk ~ internalizing + externalizing + aces +
+                        internalizing:aces + externalizing:aces +
+                        age + 
+                        parent_education + parent_income + 
+                        parent_eth + parent_race + 
+                        teen_eth + teen_race,
+             data = glo)
+```
+
+---
+# Compare models
+
+.gray[In reality we'd have probably looked at the coefficients by now too]
+
+```{r compare-glo12}
+anova(glo_m1, glo_m2)
+```
+
+---
+```{r compare-aic-glo12}
+sundry::aic_weights(glo_m1, glo_m2)
+```
+
+---
+# Compare to interaction model
+
+```{r compare-glo23}
+anova(glo_m2, glo_m3)
+```
+
+---
+```{r compare-aic-glo23}
+sundry::aic_weights(glo_m1, glo_m2, glo_m3)
+
+```
+
+---
+# A note on over-fitting
+* In this case, we have a whole lot of parameters 
+  ($k = $`r length(glo_m3$coefficients)`), particularly for only `r nrow(glo)`
+  cases.
+* Our model is likely overfit. Entering variables in blocks does not prevent
+  overfitting.
+
+---
+# Take home messages
+* Fitting multiple models can be a powerful method for testing
+competing/alternative theories
+
+--
+* Comparing competing models can be an efficient way to evaluate interactions
+  + Particularly true for categorical variables (i.e., what to do if one of the
+  interaction term is significant and another is not)
+
+--
+* Information criteria can help aid model comparisons, and actually have
+stronger theoretical foundations than $p$ values.
+
+---
+# Next week
+* We'll talk about predictive modeling
+* Themes of information criteria will carry-forward
+* We'll finally meet/discuss the infamous "adjusted" $R^2$
+
+---
+class: inverse center middle
+# Lab
+Focused mostly on comparing models with/without interactions
+
